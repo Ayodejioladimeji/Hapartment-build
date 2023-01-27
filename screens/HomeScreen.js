@@ -1,0 +1,169 @@
+import React, { useCallback } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
+
+import colors from "../assets/colors/colors";
+import MyStatusBar from "../common/MyStatusBar";
+import AroundYou from "../components/AroundYou";
+import HomepageHeader from "../components/HomepageHeader";
+import LagosListings from "../components/LagosListings";
+import NewListings from "../components/NewListings";
+import SearchComponent from "../components/SearchComponent";
+import SearchCard from "../common/SearchCard";
+import UserApi from "../api/UserApi";
+import { useSelector } from "react-redux";
+import Loader2 from "../common/Loader2";
+
+//
+
+const HomeScreen = ({ navigation }) => {
+  const { all_listings } = useSelector((state) => state.property);
+  const { alllistingloading } = useSelector((state) => state.loading);
+  // initialize font family
+  const [fontsLoaded] = useFonts({
+    "Lobster-Regular": require("../assets/fonts/Lobster-Regular.ttf"),
+    "AlfaSlabOne-Regular": require("../assets/fonts/AlfaSlabOne-Regular.ttf"),
+    "NunitoSans-Regular": require("../assets/fonts/NunitoSans-Regular.ttf"),
+    "NunitoSans-Black": require("../assets/fonts/NunitoSans-Black.ttf"),
+    "NunitoSans-Bold": require("../assets/fonts/NunitoSans-Bold.ttf"),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  //
+  return (
+    <View style={styles.homeScreenWrapper} onLayout={onLayoutRootView}>
+      <MyStatusBar backgroundColor={colors.primary} barStyle="light-content" />
+      <HomepageHeader />
+      <UserApi />
+
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <SearchComponent />
+
+        <>
+          {all_listings.length === 0 && !alllistingloading ? (
+            <View style={styles.emptyWrapper}>
+              <Image
+                style={styles.emptyImage}
+                source={require("../assets/images/empty.png")}
+              />
+              <Text style={styles.emptyText}>No data found</Text>
+            </View>
+          ) : (
+            <>
+              <AroundYou navigation={navigation} />
+              <NewListings />
+              {/* <LagosListings /> */}
+
+              {/* add banners here */}
+              {/* {!alllistingloading && (
+                <View style={styles.banners}>
+                  <Image
+                    style={styles.bannersImage}
+                    source={require("../assets/images/ads.png")}
+                  />
+                </View>
+              )} */}
+
+              {/* Explore more section */}
+              {alllistingloading ? (
+                <ActivityIndicator />
+              ) : (
+                <View style={styles.explore}>
+                  <Text style={styles.exploreText}>Explore more</Text>
+
+                  {all_listings
+                    .filter(
+                      (item) =>
+                        item.category !== "Recent apartment" &&
+                        item.category !== "New apartment"
+                    )
+                    .map((item) =>
+                      alllistingloading ? (
+                        <Loader2 key={item._id} />
+                      ) : (
+                        <SearchCard item={item} key={item._id} />
+                      )
+                    )}
+                </View>
+              )}
+            </>
+          )}
+        </>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default HomeScreen;
+
+const styles = StyleSheet.create({
+  homeScreenWrapper: {
+    backgroundColor: colors.white,
+    flex: 1,
+  },
+  activityloading: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "orange",
+    height: "100%",
+  },
+  banners: {
+    height: 150,
+    marginHorizontal: 15,
+    marginVertical: 30,
+    backgroundColor: colors.light,
+  },
+  bannersImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+  explore: {
+    marginHorizontal: 15,
+    marginBottom: 100,
+    marginTop: 30,
+  },
+  exploreText: {
+    marginBottom: 10,
+    fontSize: 15,
+    color: colors.primary,
+    fontWeight: "500",
+  },
+  emptyWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+  },
+  emptyImage: {
+    height: 150,
+    width: 150,
+  },
+  emptyText: {
+    color: colors.textLight,
+    fontSize: 16,
+  },
+});

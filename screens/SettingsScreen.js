@@ -1,0 +1,198 @@
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Platform,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
+import React from "react";
+import {
+  AntDesign,
+  FontAwesome5,
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import colors from "../assets/colors/colors";
+import MyStatusBar from "../common/MyStatusBar";
+import GoBack from "../common/GoBack";
+
+//
+
+const SettingsScreen = ({ navigation }) => {
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.white }}>
+      <GoBack navigation={navigation} title="Settings" />
+
+      <ScrollView style={styles.settingsWrapper}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("FaqScreen")}
+          activeOpacity={0.7}
+          style={styles.settingsBox}
+        >
+          <View style={styles.settingsLeft}>
+            <AntDesign
+              name="questioncircle"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>FAQS</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("TermsOfUse")}
+          activeOpacity={0.7}
+          style={styles.settingsBox}
+        >
+          <View style={styles.settingsLeft}>
+            <MaterialIcons
+              name="policy"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>Terms Of Use</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("PrivacyPolicy")}
+          activeOpacity={0.7}
+          style={styles.settingsBox}
+        >
+          <View style={styles.settingsLeft}>
+            <MaterialIcons
+              name="privacy-tip"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>Privacy Policy</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
+          <View style={styles.settingsLeft}>
+            <MaterialCommunityIcons
+              name="view-gallery-outline"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>Advertise with us</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
+          <View style={styles.settingsLeft}>
+            <Ionicons
+              name="star-half"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>Rate the app</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => Linking.openURL("mailto:support@hapartment.org")}
+          activeOpacity={0.7}
+          style={styles.settingsBox}
+        >
+          <View style={styles.settingsLeft}>
+            <AntDesign
+              name="message1"
+              size={22}
+              color="black"
+              style={styles.settingsIcon}
+            />
+            <Text style={styles.settingsText}>Leave Feedback</Text>
+          </View>
+
+          <MaterialIcons
+            name="chevron-right"
+            size={24}
+            color="black"
+            style={styles.arrow}
+          />
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+};
+
+export default SettingsScreen;
+
+const styles = StyleSheet.create({
+  settingsWrapper: {
+    paddingHorizontal: 15,
+    marginVertical: 25,
+  },
+  settingsBox: {
+    borderWidth: 0.3,
+    borderColor: colors.textDark,
+    borderRadius: 5,
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: Platform.OS === "ios" ? 70 : 60,
+    marginBottom: 20,
+  },
+  settingsLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  settingsIcon: {
+    marginRight: 10,
+    color: colors.textDark,
+  },
+  settingsText: {
+    color: colors.textDark,
+    // fontFamily: "//NunitoSans-Bold",
+    fontSize: Platform.OS === "ios" ? 15 : 14,
+  },
+  arrow: {
+    color: colors.textDark,
+  },
+});

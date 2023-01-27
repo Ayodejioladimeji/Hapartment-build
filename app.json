@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "Hapartment",
+    "slug": "hapartment",
+    "description": "We help users search for apartment easily and provide them with adequate information to help them make well-informed decisions.",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#449342"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "entitlements": {
+        "com.apple.developer.networking.wifi-info": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#449342"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.LOCATION",
+        "CAMERA", "ACCESS_FINE_LOCATION","ACCESS_COARSE_LOCATION"
+      ],
+      "config" : {
+        "googleMaps":{
+          "apiKey" : "AIzaSyDfZHjt4DLPteGGSoD2kBnO8Kj04_H-BEo"
+        }
+      },
+      "package": "com.layobright.hapartment"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow Hapartment to access your camera"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1a03b837-9f82-4b4d-b980-a052e3d3f447"
+      }
+    }
+   
+  }
+}
+
