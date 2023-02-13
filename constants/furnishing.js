@@ -6,8 +6,8 @@ const furnishing = [
   },
   {
     id: 2,
-    label: "Semi-Furnished",
-    value: "Semi-Furnished",
+    label: "Semi Furnished",
+    value: "Semi Furnished",
   },
   {
     id: 1,

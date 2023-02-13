@@ -46,8 +46,6 @@ const FilterSearch = () => {
     });
   }, [statename]);
 
-  console.log(city);
-
   const handleSubmit = () => {
     if (
       !propertyType ||
@@ -65,12 +63,12 @@ const FilterSearch = () => {
 
     navigation.navigate("FilterSearchScreen");
     const data = {
-      property_type: propertyType,
-      statename,
-      cityname,
+      property_type: propertyType.toLowerCase(),
+      statename: statename.toLowerCase(),
+      cityname: cityname.toLowerCase(),
       bathrooms: bath,
       toilets: toilet,
-      furnishing: furnish,
+      furnishing: furnish.toLowerCase(),
       min_price: minPrice,
       max_price: maxPrice,
     };
