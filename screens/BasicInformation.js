@@ -218,35 +218,6 @@ const BasicInformation = ({ route }) => {
             />
           </View>
 
-          {/* <View style={styles.country}>
-            <Text style={styles.selectHeading}>Select Country</Text>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                isFocus && { borderColor: colors.primary },
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={countries}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Select country"
-              searchPlaceholder="Search..."
-              value={country}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                dispatch({ type: GLOBALTYPES.COUNTRY, payload: item.value });
-                handleState(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View> */}
-
           <View style={styles.states}>
             <Text style={styles.selectHeading}>Select State </Text>
 

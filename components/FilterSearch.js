@@ -10,7 +10,6 @@ import {
   View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import axios from "axios";
 // import { BASE_URL, API_KEY } from "@env";
 import colors from "../assets/colors/colors";
 import propertyData from "../constants/propertyData";
@@ -20,20 +19,14 @@ import furnishing from "../constants/furnishing";
 import { filterListing } from "../redux/actions/listingAction";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-
-const BASE_URL = "https://api.countrystatecity.in/v1";
-
-const API_KEY = "UnM1RmVPMFB0M09FN1RIWGZZM2Vyc2pvMzFrb3l5dDhQa3RzR1ZIbA==";
+import statesData from "../constants/statesdata";
 
 //
 
 const FilterSearch = () => {
-  const [stateData, setStateData] = useState([]);
-  const [cityData, setCityData] = useState([]);
-  const [state, setState] = useState(null);
-  const [city, setCity] = useState(null);
+  const [city, setCity] = useState([]);
+  const [cityname, setCityname] = useState([]);
   const [statename, setStatename] = useState(null);
-  const [cityname, setCityname] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [propertyType, setPropertyType] = useState(null);
   const [furnish, setFurnish] = useState("");
@@ -44,64 +37,16 @@ const FilterSearch = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  // load the states when the page renders
+  // get the city method
   useEffect(() => {
-    handleState("NG");
-  }, []);
+    statesData.filter((item) => {
+      if (item.value === statename) {
+        setCity(item.lgas);
+      }
+    });
+  }, [statename]);
 
-  const handleState = (countryCode) => {
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let stateArray = [];
-        for (var i = 0; i < count; i++) {
-          stateArray.push({
-            value: response.data[i].iso2,
-            label: response.data[i].name,
-          });
-        }
-        setStateData(stateArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const handleCity = (countryCode, stateCode) => {
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let cityArray = [];
-        for (var i = 0; i < count; i++) {
-          cityArray.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-        setCityData(cityArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  console.log(city);
 
   const handleSubmit = () => {
     if (
@@ -232,21 +177,19 @@ const FilterSearch = () => {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={stateData}
+            data={statesData}
             search
             maxHeight={300}
             labelField="label"
             valueField="value"
             placeholder="Select state"
             searchPlaceholder="Search..."
-            value={state}
+            value={statename}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              setState(item.value);
-              handleCity("NG", item.value);
               setIsFocus(false);
-              setStatename(item.label);
+              setStatename(item.value);
             }}
           />
         </View>
@@ -259,7 +202,7 @@ const FilterSearch = () => {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={cityData}
+            data={city}
             search
             maxHeight={300}
             labelField="label"
@@ -270,9 +213,8 @@ const FilterSearch = () => {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              setCity(item.value);
               setIsFocus(false);
-              setCityname(item.label);
+              setCityname(item.value);
             }}
           />
         </View>
