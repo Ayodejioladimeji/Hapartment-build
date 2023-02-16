@@ -36,8 +36,8 @@ export const getDataApis = async (url) => {
 };
 
 // THE PATCH DATA API
-export const patchDataApi = async (url, token) => {
-  const res = await axios.patch(ENDPOINT + url, {
+export const patchDataApi = async (url, data, token) => {
+  const res = await axios.patch(ENDPOINT + url, data, {
     headers: { Authorization: token },
   });
   return res;

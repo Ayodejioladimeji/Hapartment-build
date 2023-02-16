@@ -28,6 +28,7 @@ const Description = ({ route }) => {
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [item, setItem] = useState(null);
   const { category, video, description, price, isEdit } = useSelector(
     (state) => state.listing
   );
@@ -37,6 +38,7 @@ const Description = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
 
       dispatch({ type: GLOBALTYPES.CATEGORY, payload: item.category });
       dispatch({
@@ -62,7 +64,9 @@ const Description = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };

@@ -55,7 +55,6 @@ const ListProperty = ({ navigation }) => {
     handleSubmit(
       address,
       property_type,
-      country,
       state,
       city,
       statename,

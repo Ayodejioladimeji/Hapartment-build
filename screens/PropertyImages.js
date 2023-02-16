@@ -41,6 +41,7 @@ const PropertyImages = ({ route }) => {
   const [loadingFive, setLoadingFive] = useState(false);
   const [loadingSix, setLoadingSix] = useState(false);
   const [loadingSeven, setLoadingSeven] = useState(false);
+  const [item, setItem] = useState(null);
   const dispatch = useDispatch();
 
   const {
@@ -58,6 +59,7 @@ const PropertyImages = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
 
       dispatch({ type: GLOBALTYPES.IMAGE_ONE, payload: item.images[0].url });
       dispatch({
@@ -105,7 +107,9 @@ const PropertyImages = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };

@@ -31,9 +31,10 @@ const IdentityTwo = ({ navigation }) => {
   const openCamera = async () => {
     setLoading(true);
     // Ask the user for the permission to access the camera
+    // const [status, requestPermission] = ImagePicker.useCameraPermissions();
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    // console.log(permission.granted);
+    console.log(permissionResult.granted);
 
     if (permissionResult.granted === false) {
       Alert.alert("You refused to allow Hapartment to access your camera");

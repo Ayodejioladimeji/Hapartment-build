@@ -20,12 +20,11 @@ import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 const UpdateProperty = ({ route, navigation }) => {
   const item = route.params.item;
-  // console.log(item);
+
   const { token } = useSelector((state) => state.auth);
   const {
     address,
     property_type,
-    country,
     state,
     city,
     statename,
@@ -58,10 +57,8 @@ const UpdateProperty = ({ route, navigation }) => {
 
   const submit = () => {
     handleSubmit(
-      updateId,
       address,
       property_type,
-      country,
       state,
       city,
       statename,
@@ -86,7 +83,8 @@ const UpdateProperty = ({ route, navigation }) => {
       dispatch,
       token,
       listing_callback,
-      isEdit
+      isEdit,
+      updateId
     );
   };
 

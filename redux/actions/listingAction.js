@@ -37,7 +37,7 @@ export const createListing =
       // console.log(error.response.data.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { error: error.response.data.msg },
+        payload: { listingError: error.response.data.msg },
       });
 
       setTimeout(() => {
@@ -52,11 +52,8 @@ export const createListing =
 // Update Listing
 export const updateListing =
   (data, token, listing_callback) => async (dispatch) => {
-    console.log(data);
     try {
       const res = await patchDataApi("/update_listing", data, token);
-
-      console.log(res.data);
 
       dispatch({
         type: GLOBALTYPES.ALERT,
@@ -75,10 +72,10 @@ export const updateListing =
         });
       }, 2000);
     } catch (error) {
-      // console.log(error.response.data.msg);
+      console.log(error.response.data.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { error: error.response.data.msg },
+        payload: { listingError: error.response.data.msg },
       });
 
       setTimeout(() => {

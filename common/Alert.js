@@ -8,6 +8,7 @@ import ListingSuccess from "./ListingSucces";
 import LoginErrorModal from "./LoginErrorModal";
 import DeleteModal from "./DeleteModals";
 import UpdateListingSuccess from "./UpdateListingSuccessss";
+import ListingErrorModal from "./ListingErrorModal";
 
 const Alert = () => {
   const {
@@ -22,6 +23,7 @@ const Alert = () => {
     updateListingSuccess,
     loginerror,
     deleteListing,
+    listingError,
   } = useSelector((state) => state.alert);
   const navigation = useNavigation();
 
@@ -85,6 +87,8 @@ const Alert = () => {
       {createListingSuccess && <ListingSuccess />}
 
       {updateListingSuccess && <UpdateListingSuccess />}
+
+      {listingError && <ListingErrorModal />}
 
       {loginerror && <LoginErrorModal />}
 

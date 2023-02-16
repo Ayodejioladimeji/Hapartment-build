@@ -5,10 +5,8 @@ const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/hapartment/upload";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 const handleSubmit = async (
-  updateId,
   address,
   property_type,
-  country,
   state,
   city,
   statename,
@@ -33,7 +31,8 @@ const handleSubmit = async (
   dispatch,
   token,
   listing_callback,
-  isEdit
+  isEdit,
+  updateId
 ) => {
   // validate the input
 
@@ -196,44 +195,44 @@ const handleSubmit = async (
   ];
 
   const newData = {
-    address,
-    property_type,
+    address: address.toLowerCase(),
+    property_type: property_type.toLowerCase(),
     country: "NG",
-    state,
-    city,
-    statename,
-    cityname,
+    state: state.toLowerCase(),
+    city: city.toLowerCase(),
+    statename: statename.toLowerCase(),
+    cityname: cityname.toLowerCase(),
     bedrooms,
     bathrooms,
     toilets,
-    furnishing,
+    furnishing: furnishing.toLowerCase(),
     home_facilities,
     area_facilities,
-    description,
+    description: description.toLowerCase(),
     price,
-    category,
+    category: category.toLowerCase(),
     video,
     images: newImages,
   };
 
   const newDatas = {
     list_id: updateId,
-    address,
-    property_type,
+    address: address.toLowerCase(),
+    property_type: property_type.toLowerCase(),
     country: "NG",
-    state,
-    city,
-    statename,
-    cityname,
+    state: state.toLowerCase(),
+    city: city.toLowerCase(),
+    statename: statename.toLowerCase(),
+    cityname: cityname.toLowerCase(),
     bedrooms,
     bathrooms,
     toilets,
-    furnishing,
+    furnishing: furnishing.toLowerCase(),
     home_facilities,
     area_facilities,
-    description,
+    description: description.toLowerCase(),
     price,
-    category,
+    category: category.toLowerCase(),
     video,
     images: newImages,
   };

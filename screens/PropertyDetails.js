@@ -36,6 +36,8 @@ const PropertyDetails = ({ route }) => {
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [item, setItem] = useState(null);
+
   const {
     bathrooms,
     toilets,
@@ -50,6 +52,7 @@ const PropertyDetails = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
 
       dispatch({ type: GLOBALTYPES.BATHROOMS, payload: item.bathrooms });
       dispatch({
@@ -91,7 +94,9 @@ const PropertyDetails = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };

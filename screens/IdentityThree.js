@@ -110,19 +110,19 @@ const IdentityThree = ({ navigation }) => {
     documentData.append("file", documentFile);
     selfieData.append("file", selfieFile);
 
-    documentData.append("upload_preset", "hapartment");
-    selfieData.append("upload_preset", "hapartment");
+    documentData.append("upload_preset", "hapartment_marketplace");
+    selfieData.append("upload_preset", "hapartment_marketplace");
 
-    documentData.append("cloud_name", "hapartment");
-    selfieData.append("cloud_name", "hapartment");
+    documentData.append("cloud_name", "hapartment_marketplace");
+    selfieData.append("cloud_name", "hapartment_marketplace");
 
     const documentRes = await fetch(
-      "https://api.cloudinary.com/v1_1/hapartment/upload",
+      "https://api.cloudinary.com/v1_1/hapartments/upload",
       { method: "POST", body: documentData }
     );
 
     const selfieRes = await fetch(
-      "https://api.cloudinary.com/v1_1/hapartment/upload",
+      "https://api.cloudinary.com/v1_1/hapartments/upload",
       { method: "POST", body: selfieData }
     );
 
