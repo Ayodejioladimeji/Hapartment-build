@@ -56,4 +56,5 @@ export const GLOBALTYPES = {
   DELETE_ID: "DELETE_ID",
   UPDATE_ID: "UPDATE_ID",
   PUBLIC_ID: "PUBLIC_ID",
+  MODAL: "MODAL",
 };

@@ -21,11 +21,15 @@ import { format } from "timeago.js";
 import { addComma } from "comma-separator";
 import { saveProperties } from "../redux/actions/listingAction";
 import { useDispatch, useSelector } from "react-redux";
+import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import Modals from "./Modals";
+import CautionModal from "./CautionModal";
 
 //
 
 const Cards = ({ item, navigation }) => {
   const { callback } = useSelector((state) => state.property);
+  const { modal } = useSelector((state) => state.notification);
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -49,84 +53,105 @@ const Cards = ({ item, navigation }) => {
     }, 2000);
   };
 
+  // Display a caution modal before going to the details page
+  const caution = () => {
+    if (item.status === "pending") {
+      dispatch({ type: GLOBALTYPES.MODAL, payload: true });
+    } else {
+      navigation.navigate("DetailsScreen", { item });
+    }
+  };
+
   //
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("DetailsScreen", { item })}
-    >
-      <View style={styles.cardWrapper}>
-        <View style={styles.imageWrapper}>
-          <Image
-            source={{ uri: item.images[0].url }}
-            style={styles.cardImage}
-          />
-          <View
-            style={[
-              styles.verify,
-              item.status === "pending" && { backgroundColor: "orange" },
-            ]}
-          >
-            <Text style={styles.verifyText}>
-              {item.status === "pending" ? "Pending" : "Verified"}
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            onPress={saveProperty}
-            activeOpacity={0.5}
-            style={styles.favoriteWrapper}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <MaterialIcons name="favorite" style={styles.favorite} />
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.cardBox}>
-          <View style={styles.cardName}>
-            <Text style={styles.nameText}>
-              {item.property_type.substring(0, 15) + "..."}
-            </Text>
-            <Text style={styles.amountText}>₦{addComma(item.price)}</Text>
-          </View>
-
-          <View style={styles.cardLocation}>
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={18}
-              color={colors.textLight}
-              style={{ marginLeft: -3 }}
+    <>
+      <TouchableWithoutFeedback onPress={caution}>
+        <View style={styles.cardWrapper}>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={{ uri: item.images[0].url }}
+              style={styles.cardImage}
             />
-            <Text style={styles.locationText}>
-              {item.address.substring(0, 27) + "..."}
-            </Text>
+            <View
+              style={[
+                styles.verify,
+                item.status === "pending" && { backgroundColor: "orange" },
+              ]}
+            >
+              <Text style={styles.verifyText}>{item.status}</Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={saveProperty}
+              activeOpacity={0.5}
+              style={styles.favoriteWrapper}
+            >
+              {loading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : (
+                <MaterialIcons name="favorite" style={styles.favorite} />
+              )}
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.cardFooter}>
-            <View style={styles.cardFooterBox}>
-              <Ionicons name="bed-outline" size={15} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>2 Bed</Text>
+          <View style={styles.cardBox}>
+            <View style={styles.cardName}>
+              <Text style={styles.nameText}>
+                {item.property_type.substring(0, 15) + "..."}
+              </Text>
+              <Text style={styles.amountText}>₦{addComma(item.price)}</Text>
             </View>
-            <View style={styles.cardFooterBox}>
-              <FontAwesome5 name="bath" size={12} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>{item.bathrooms} Bath</Text>
-            </View>
-            <View style={styles.cardFooterBox}>
-              <FontAwesome5 name="toilet" size={12} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>{item.toilets} Toilet</Text>
-            </View>
-          </View>
 
-          <View style={styles.cardTimeWrapper}>
-            <Text style={styles.cardTime}>
-              Property updated : {format(item.updatedAt)}
-            </Text>
+            <View style={styles.cardLocation}>
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={18}
+                color={colors.textLight}
+                style={{ marginLeft: -3 }}
+              />
+              <Text style={styles.locationText}>
+                {item.address.substring(0, 27) + "..."}
+              </Text>
+            </View>
+
+            <View style={styles.cardFooter}>
+              <View style={styles.cardFooterBox}>
+                <Ionicons
+                  name="bed-outline"
+                  size={15}
+                  color={colors.textLight}
+                />
+                <Text style={styles.footerBoxText}>2 Bed</Text>
+              </View>
+              <View style={styles.cardFooterBox}>
+                <FontAwesome5 name="bath" size={12} color={colors.textLight} />
+                <Text style={styles.footerBoxText}>{item.bathrooms} Bath</Text>
+              </View>
+              <View style={styles.cardFooterBox}>
+                <FontAwesome5
+                  name="toilet"
+                  size={12}
+                  color={colors.textLight}
+                />
+                <Text style={styles.footerBoxText}>{item.toilets} Toilet</Text>
+              </View>
+            </View>
+
+            <View style={styles.cardTimeWrapper}>
+              <Text style={styles.cardTime}>
+                Property updated : {format(item.updatedAt)}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+
+      {modal && (
+        <Modals>
+          <CautionModal item={item} />
+        </Modals>
+      )}
+    </>
   );
 };
 
@@ -228,7 +253,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     justifyContent: "center",
-    // borderTopRightRadius: 30,
+    borderTopRightRadius: 10,
   },
   verifyText: {
     color: colors.white,

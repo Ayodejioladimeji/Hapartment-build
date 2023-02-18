@@ -75,19 +75,7 @@ const HomeScreen = ({ navigation }) => {
             <>
               <AroundYou navigation={navigation} />
               <NewListings />
-              {/* <LagosListings /> */}
 
-              {/* add banners here */}
-              {/* {!alllistingloading && (
-                <View style={styles.banners}>
-                  <Image
-                    style={styles.bannersImage}
-                    source={require("../assets/images/ads.png")}
-                  />
-                </View>
-              )} */}
-
-              {/* Explore more section */}
               {alllistingloading ? (
                 <ActivityIndicator />
               ) : (
