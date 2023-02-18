@@ -1,19 +1,18 @@
 import {
   View,
   Text,
-  ScrollView,
-  SafeAreaView,
   StyleSheet,
   TextInput,
   Image,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import SearchCard from "../common/SearchCard";
 import colors from "../assets/colors/colors";
 import GoBack from "../common/GoBack";
 import { useSelector } from "react-redux";
-import Loading from "../common/Loading";
+import Loader2 from "../common/Loader2";
 
 //
 
@@ -54,31 +53,32 @@ const SearchScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {alllistingloading ? (
-        <Loading />
-      ) : (
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.searchScroll}>
-            {filteredData.map((item) => {
-              return <SearchCard item={item} key={item._id} />;
-            })}
-          </View>
+      <>
+        <View style={styles.searchScroll}>
+          <FlatList
+            data={filteredData}
+            renderItem={({ item }) => {
+              return alllistingloading ? (
+                <Loader2 />
+              ) : (
+                <SearchCard item={item} navigation={navigation} />
+              );
+            }}
+            keyExtractor={(item) => item._id}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
 
-          {filteredData.length === 0 && (
-            <View style={styles.emptyWrapper}>
-              <Image
-                style={styles.emptyImage}
-                source={require("../assets/images/empty.png")}
-              />
-              <Text style={styles.emptyText}>No data found</Text>
-            </View>
-          )}
-        </ScrollView>
-      )}
+        {filteredData.length === 0 && (
+          <View style={styles.emptyWrapper}>
+            <Image
+              style={styles.emptyImage}
+              source={require("../assets/images/empty.png")}
+            />
+            <Text style={styles.emptyText}>No data found</Text>
+          </View>
+        )}
+      </>
     </View>
   );
 };
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   searchScroll: {
     backgroundColor: colors.white,
     paddingHorizontal: 15,
-    marginBottom: 80,
+    marginBottom: 250,
   },
   searchText: {
     marginLeft: 15,

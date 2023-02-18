@@ -19,55 +19,61 @@ const TermsOfUse = ({ navigation }) => {
         <View style={styles.terms}>
           <Text style={styles.heading}>Terms of use</Text>
           <Text style={styles.text}>
-            Hapartment.org is operated by Hapartment Platform. By using this
-            website and the services contained therein ('Services') you agree to
-            comply with and be bound by the following terms and conditions
-            ('Terms of Use'). If you do not agree to or accept these Terms of
-            Use, you should not use this website. All references within these
-            Terms of Use to 'we/us/our' refer to Hapartment.
+            Hapartment.org is operated by Hapartment Digital Marketplace. By
+            using this website and the services contained therein (Services) you
+            agree to comply with and be bound by the following terms and
+            conditions (Terms of Use). If you do not agree to or accept these
+            Terms of Use, you should not use this website. All references within
+            these Terms of Use to we/us/our refer to Hapartment.
           </Text>
 
           <Text style={styles.heading}>Restrictions On Use</Text>
           <Text style={styles.text}>
-            You agree not to transmit any material designed to interrupt,
+            1. You agree not to transmit any material designed to interrupt,
             damage, destroy or limit the functionality of our website or the
-            Services. You agree not to use any automated software to view the
-            Services without consent and to only access our Services manually.
-            You agree not to use the Services other than for your own personal
-            use or as an agent listing properties for sale and to rent. You
-            agree not to attempt to copy our data or reverse engineer our
-            processes without our consent. You agree not to use our Services in
-            any manner that is illegal, immoral or harmful to us. You agree not
-            to use our Services in breach of any policy or other notice on our
-            website. You agree not to remove or alter any copyright notices that
-            appear on our website. You agree not to publish any material that
-            may encourage a breach of any relevant laws or regulations. You
-            agree not to interfere with any other user's enjoyment of our
-            website or the Services. You agree not to transmit materials
-            protected by copyright without the permission of the owner. You
-            agree not to conduct yourself in an offensive or abusive manner
-            whilst using our website or the Services. You agree not to attempt
-            to bypass restrictions on user accounts.
+            Services. {"\n"}
+            2. You agree not to use any automated software to view the Services
+            without consent and to only access our Services manually.{"\n"}
+            3. You agree not to use the Services other than for your own
+            personal use or as an agent listing properties for sale and to rent.
+            {"\n"}
+            4. You agree not to attempt to copy our data or reverse engineer our
+            processes without our consent. {"\n"}
+            5. You agree not to use our Services in any manner that is illegal,
+            immoral or harmful to us. {"\n"}
+            6. You agree not to use our Services in breach of any policy or
+            other notice on our website. {"\n"}
+            7. You agree not to remove or alter any copyright notices that
+            appear on our website. {"\n"}
+            8. You agree not to publish any material that may encourage a breach
+            of any relevant laws or regulations. {"\n"}
+            9. You agree not to interfere with any other user's enjoyment of our
+            website or the Services. {"\n"}
+            10. You agree not to transmit materials protected by copyright
+            without the permission of the owner. {"\n"}
+            11. You agree not to conduct yourself in an offensive or abusive
+            manner whilst using our website or the Services. {"\n"}
+            12. You agree not to attempt to bypass restrictions on user
+            accounts.
           </Text>
 
           <Text style={styles.heading}>Registration And Security</Text>
           <Text style={styles.text}>
-            {" "}
-            You must be over eighteen years of age to register on our website
-            and must ensure that the details provided by you on registration are
-            true, accurate, current and complete. It is your responsibility to
-            update and inform us of any changes to the details provided on
-            registration. Although certain parts of our website may be used by
-            anyone who visits without requiring registration, some of the
-            Services require you to register in order to enable us to verify
-            your identity. By registering with the service, you agree that we
-            can send you emails about your account, other Hapartment services
-            and occasional third party offers. When registering, you will be
-            asked to create a password and will be responsible for maintaining
-            the confidentiality of your password and restricting access to your
-            computer, as you will be accountable for any activities conducted
-            under your password. If you believe that someone has accessed your
-            account without authorisation, please contact us immediately.
+            When you register on our website, the information which you provide
+            is used to confirm that you are over 18 years of age and are
+            lawfully permitted to access and use our website, services and
+            content. Therefore, only you are partly responsible for any misuse
+            of our website and Services by any person under the age of 18 years.
+            We do not accept liability for unauthorised or unlawful use of the
+            Services by any person under the age of 18 years.
+          </Text>
+          <Text style={styles.text}>
+            When registering, you will be asked to create a password and will be
+            responsible for maintaining the confidentiality of your password and
+            restricting access to your computer, as you will be accountable for
+            any activities conducted under your password. If you believe that
+            someone has accessed your account without authorisation, please
+            contact us immediately.
           </Text>
 
           <Text style={styles.heading}>Materials You Provide</Text>

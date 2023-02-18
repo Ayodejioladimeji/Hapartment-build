@@ -103,6 +103,7 @@ const WhoAreYou = () => {
         </TouchableWithoutFeedback>
 
         <TouchableOpacity
+          activeOpacity={0.7}
           style={styles.continue}
           onPress={() => navigation.navigate("Register", userType)}
         >
