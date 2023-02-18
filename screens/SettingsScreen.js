@@ -10,6 +10,7 @@ import {
 import React from "react";
 import {
   AntDesign,
+  FontAwesome,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
@@ -156,6 +157,54 @@ const SettingsScreen = ({ navigation }) => {
             style={styles.arrow}
           />
         </TouchableOpacity>
+
+        <View style={styles.socialIconBox}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.facebook.com/profile.php?id=100085724386292&mibextid=ZbWKwL"
+              )
+            }
+          >
+            <AntDesign name="facebook-square" size={27} color="#1778f2" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.instagram.com/invites/contact/?i=1pqlgg45pg0nl&utm_content=pldblyb"
+              )
+            }
+          >
+            <AntDesign name="instagram" size={27} color="#405de6" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://twitter.com/Hapartment11?t=cmOAR5aAypWeGzbLvebt-A&s=09"
+              )
+            }
+          >
+            <FontAwesome name="twitter-square" size={27} color="#1da1f2" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL("https://www.linkedin.com/in/hapartment-rentals")
+            }
+          >
+            <AntDesign name="linkedin-square" size={27} color="#0a66c2" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -194,5 +243,13 @@ const styles = StyleSheet.create({
   },
   arrow: {
     color: colors.textDark,
+  },
+  socialIconBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: 200,
+    alignSelf: "center",
+    marginTop: 10,
   },
 });
