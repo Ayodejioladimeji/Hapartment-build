@@ -103,7 +103,7 @@ const Popup = ({ image, text, buttonText, navigation }) => {
           <Text style={styles.text}>{text}</Text>
 
           <TouchableOpacity
-            activeOpacity={0.5}
+            activeOpacity={0.7}
             onPress={next}
             style={styles.modalButton}
           >
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 30,
-    borderRadius: 20,
+    borderRadius: 10,
     elevation: 20,
   },
   header: {

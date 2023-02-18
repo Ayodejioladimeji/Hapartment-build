@@ -65,48 +65,50 @@ const LandlordScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         >
-          {filteredData.map((item) => {
-            let id = item._id;
-            return (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                key={item._id}
-                onPress={() =>
-                  navigation.navigate("LandlordProfileScreen", { id })
-                }
-              >
-                <View style={styles.landlordBox}>
-                  <View style={styles.landlordLeft}>
-                    {item.image !== null ? (
-                      <View style={styles.landlordImage}>
+          {filteredData
+            .filter((item) => item.verification.length !== 0)
+            .map((item) => {
+              let id = item._id;
+              return (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  key={item._id}
+                  onPress={() =>
+                    navigation.navigate("LandlordProfileScreen", { id })
+                  }
+                >
+                  <View style={styles.landlordBox}>
+                    <View style={styles.landlordLeft}>
+                      {item.image !== null ? (
+                        <View style={styles.landlordImage}>
+                          <Image
+                            source={{ uri: item.image }}
+                            style={styles.landlordImage}
+                          />
+                        </View>
+                      ) : (
                         <Image
-                          source={{ uri: item.image }}
+                          source={require("../assets/images/user.jpg")}
                           style={styles.landlordImage}
                         />
+                      )}
+                      <View>
+                        <Text style={styles.landlordText}>{item.fullname}</Text>
+                        <Text style={styles.addressText}>{item.username}</Text>
+                        <Rating />
                       </View>
-                    ) : (
-                      <Image
-                        source={require("../assets/images/user.jpg")}
-                        style={styles.landlordImage}
-                      />
-                    )}
-                    <View>
-                      <Text style={styles.landlordText}>{item.fullname}</Text>
-                      <Text style={styles.addressText}>{item.username}</Text>
-                      <Rating />
                     </View>
-                  </View>
 
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={24}
+                      color="black"
+                      style={styles.arrow}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
 
           {filteredData.length === 0 && (
             <View style={styles.emptyWrapper}>

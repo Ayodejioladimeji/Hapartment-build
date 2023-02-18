@@ -165,7 +165,7 @@ const Login = () => {
                     Forgot password ?
                   </Text>
 
-                  <TouchableWithoutFeedback onPress={handleSubmit}>
+                  <TouchableOpacity activeOpacity={0.7} onPress={handleSubmit}>
                     <View style={styles.profileButton}>
                       {authloading ? (
                         <ActivityIndicator size="small" color={colors.white} />
@@ -173,7 +173,7 @@ const Login = () => {
                         <Text style={styles.profileButtonText}>Login</Text>
                       )}
                     </View>
-                  </TouchableWithoutFeedback>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.helpWrapper}>
