@@ -67,19 +67,13 @@ const SearchCard = ({ item }) => {
     }, 2000);
   };
 
-  // Display a caution modal before going to the details page
-  const caution = () => {
-    if (item.status === "pending") {
-      dispatch({ type: GLOBALTYPES.MODAL, payload: true });
-    } else {
-      navigation.navigate("DetailsScreen", { item });
-    }
-  };
-
   //
   return (
     <>
-      <TouchableOpacity activeOpacity={0.7} onPress={caution}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate("DetailsScreen", { item })}
+      >
         <View style={styles.cardsWrapper}>
           <View style={styles.imagesWrapper}>
             <Image source={{ uri: images[0].url }} style={styles.cardImage} />

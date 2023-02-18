@@ -9,7 +9,6 @@ import EditProfileScreen from "./screens/EditProfileScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import LandlordProfileScreen from "./screens/LandlordProfileScreen";
 import AgentDetailsScreen from "./screens/AgentDetailsScreen";
-import WhoAreYou from "./screens/WhoAreYou";
 import Login from "./screens/Login";
 import ForgotPassword from "./screens/ForgotPassword";
 import OneTimeCode from "./screens/OneTimeCode";
@@ -45,6 +44,7 @@ import FaqScreen from "./screens/FaqScreen";
 import TermsOfUse from "./screens/TermsOfUse";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import UpdateProperty from "./screens/UpdateProperty";
+import MapScreen from "./screens/MapScreen";
 const Stack = createStackNavigator();
 
 //
@@ -178,6 +178,7 @@ function App() {
               <Stack.Screen name="FaqScreen" component={FaqScreen} />
               <Stack.Screen name="TermsOfUse" component={TermsOfUse} />
               <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+              <Stack.Screen name="MapScreen" component={MapScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </DataProvider>

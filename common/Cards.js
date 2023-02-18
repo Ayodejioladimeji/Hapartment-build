@@ -21,7 +21,6 @@ import { format } from "timeago.js";
 import { addComma } from "comma-separator";
 import { saveProperties } from "../redux/actions/listingAction";
 import { useDispatch, useSelector } from "react-redux";
-import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import Modals from "./Modals";
 import CautionModal from "./CautionModal";
 
@@ -53,19 +52,12 @@ const Cards = ({ item, navigation }) => {
     }, 2000);
   };
 
-  // Display a caution modal before going to the details page
-  const caution = () => {
-    if (item.status === "pending") {
-      dispatch({ type: GLOBALTYPES.MODAL, payload: true });
-    } else {
-      navigation.navigate("DetailsScreen", { item });
-    }
-  };
-
   //
   return (
     <>
-      <TouchableWithoutFeedback onPress={caution}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate("DetailsScreen", { item })}
+      >
         <View style={styles.cardWrapper}>
           <View style={styles.imageWrapper}>
             <Image

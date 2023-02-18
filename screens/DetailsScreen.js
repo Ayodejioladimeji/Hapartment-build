@@ -169,6 +169,10 @@ const DetailsScreen = ({ route }) => {
           )}
         </TouchableOpacity>
 
+        <Text style={styles.verification}>
+          Property still pending verification
+        </Text>
+
         {/* <Map /> */}
 
         <Tab params={route.params.item} />
@@ -361,6 +365,14 @@ const styles = StyleSheet.create({
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+  },
+
+  verification: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "red",
+    fontWeight: "600",
   },
 
   map: {
