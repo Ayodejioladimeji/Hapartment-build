@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import colors from "../assets/colors/colors";
 import GoBack from "../common/GoBack";
 import { useSelector } from "react-redux";
 import Loading from "../common/Loading";
+import Loader2 from "../common/Loader2";
 
 //
 
@@ -67,54 +69,55 @@ const FilterSearchScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {filterloading ? (
-        <Loading />
-      ) : (
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.searchScroll}>
-            {filteredData.map((item) => {
-              return <SearchCard item={item} key={item._id} />;
-            })}
+      <>
+        <View style={styles.searchScroll}>
+          <FlatList
+            data={filteredData}
+            renderItem={({ item }) => {
+              return filterloading ? (
+                <Loader2 />
+              ) : (
+                <SearchCard item={item} navigation={navigation} />
+              );
+            }}
+            keyExtractor={(item) => item._id}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+
+        {search_listing.length === 0 && (
+          <View style={styles.emptyWrapper}>
+            <Image
+              style={styles.emptyImage}
+              source={require("../assets/images/empty.png")}
+            />
+            <Text style={styles.emptyText}>
+              No property found for your search
+            </Text>
+
+            <Text style={styles.alert}>
+              We can alert you when there is a property that match your search
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={createNotification}
+              style={styles.create}
+            >
+              <Text style={styles.createText}>Create Notification</Text>
+            </TouchableOpacity>
           </View>
+        )}
 
-          {search_listing.length === 0 && (
-            <View style={styles.emptyWrapper}>
-              <Image
-                style={styles.emptyImage}
-                source={require("../assets/images/empty.png")}
-              />
-              <Text style={styles.emptyText}>
-                No property found for your search
-              </Text>
-
-              <Text style={styles.alert}>
-                We can alert you when there is a property that match your search
-              </Text>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={createNotification}
-                style={styles.create}
-              >
-                <Text style={styles.createText}>Create Notification</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {filteredData.length === 0 && search_listing.length !== 0 && (
-            <View style={styles.emptyWrapper}>
-              <Image
-                style={styles.emptyImage}
-                source={require("../assets/images/empty.png")}
-              />
-              <Text style={styles.emptyText}>No data found</Text>
-            </View>
-          )}
-        </ScrollView>
-      )}
+        {filteredData.length === 0 && search_listing.length !== 0 && (
+          <View style={styles.emptyWrapper}>
+            <Image
+              style={styles.emptyImage}
+              source={require("../assets/images/empty.png")}
+            />
+            <Text style={styles.emptyText}>No data found</Text>
+          </View>
+        )}
+      </>
     </View>
   );
 };
@@ -129,7 +132,7 @@ const styles = StyleSheet.create({
   searchScroll: {
     backgroundColor: colors.white,
     paddingHorizontal: 15,
-    marginBottom: 80,
+    marginBottom: 180,
   },
   searchText: {
     marginLeft: 15,

@@ -55,7 +55,8 @@ const Cards = ({ item, navigation }) => {
   //
   return (
     <>
-      <TouchableWithoutFeedback
+      <TouchableOpacity
+        activeOpacity={0.7}
         onPress={() => navigation.navigate("DetailsScreen", { item })}
       >
         <View style={styles.cardWrapper}>
@@ -136,7 +137,7 @@ const Cards = ({ item, navigation }) => {
             </View>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
 
       {modal && (
         <Modals>

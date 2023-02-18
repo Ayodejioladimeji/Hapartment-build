@@ -34,7 +34,7 @@ const LandlordScreen = ({ navigation }) => {
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <GoBack navigation={navigation} title="Apartment Agents" />
+      <GoBack navigation={navigation} title="Verified Agents" />
 
       {/* The search component */}
       <View style={styles.searchWrapper}>

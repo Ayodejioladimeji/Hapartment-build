@@ -307,7 +307,7 @@ export const searchListing = (cityname) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.LOADING, payload: { filterloading: true } });
 
-    const res = await getDataApis(`/search_listing?cityname=${cityname}`);
+    const res = await getDataApis(`/search_listing/${cityname}`);
 
     dispatch({ type: GLOBALTYPES.SEARCH_LISTING, payload: res.data });
 
