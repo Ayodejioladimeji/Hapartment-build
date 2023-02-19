@@ -10,6 +10,7 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
+  Share,
 } from "react-native";
 import React from "react";
 import GoBack from "../common/GoBack";
@@ -42,7 +43,6 @@ const DetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { token, user } = useSelector((state) => state.auth);
   const { callback } = useSelector((state) => state.property);
-  const { listing_callback } = useSelector((state) => state.listing);
   const { favloading, reportlistingloading, acquiredloading } = useSelector(
     (state) => state.loading
   );
@@ -94,6 +94,27 @@ const DetailsScreen = ({ route }) => {
 
   const handleAcquired = () => {
     dispatch(acquiredListing(_id, token));
+  };
+
+  // onshare method -  for sharing on social media
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          //dismissed
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
 
   //
@@ -193,6 +214,15 @@ const DetailsScreen = ({ route }) => {
           ))}
         </View>
 
+        {/* share */}
+        <TouchableOpacity
+          onPress={onShare}
+          activeOpacity={0.7}
+          style={styles.shareWrapper}
+        >
+          <Text style={styles.share}>Share Property</Text>
+        </TouchableOpacity>
+
         {/* date section */}
         <View style={styles.videoWrapper}>
           <View style={styles.dateWrapper}>
@@ -221,24 +251,6 @@ const DetailsScreen = ({ route }) => {
             </TouchableOpacity>
           </View>
         )}
-
-        {/* share */}
-        {/* <View style={styles.shareWrapper}>
-          <View style={styles.shareHeader}>
-            <AntDesign name="sharealt" size={18} color={colors.textDark} />
-            <Text style={styles.shareText}>Share this property</Text>
-          </View>
-
-          <View style={styles.shareIcons}>
-            <AntDesign name="facebook-square" size={26} color="#3b5998" />
-            <FontAwesome name="twitter-square" size={26} color="#00acee" />
-            <FontAwesome5
-              name="whatsapp-square"
-              size={26}
-              color={colors.primary}
-            />
-          </View>
-        </View> */}
 
         {/* report listing */}
         <TouchableOpacity
@@ -435,6 +447,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginVertical: 40,
     padding: 25,
+    marginBottom: 20,
     backgroundColor: colors.light,
   },
   tipsHeading: {
@@ -480,28 +493,13 @@ const styles = StyleSheet.create({
   shareWrapper: {
     marginTop: 20,
     marginHorizontal: 15,
-    borderWidth: 0.3,
-    borderColor: colors.textLighter,
-    height: 100,
-  },
-  shareHeader: {
-    backgroundColor: colors.light,
-    paddingHorizontal: 15,
-    flexDirection: "row",
+    height: 50,
     alignItems: "center",
-    height: 40,
+    justifyContent: "center",
   },
-  shareText: {
-    marginLeft: 5,
-  },
-  shareIcons: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // alignSelf: "center",
-    height: 60,
-    width: 180,
+  share: {
+    color: colors.primary,
+    fontSize: 16,
   },
   rentWrapper: {
     marginHorizontal: 10,
