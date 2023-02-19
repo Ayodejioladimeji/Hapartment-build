@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -14,10 +14,7 @@ SplashScreen.preventAutoHideAsync();
 
 import colors from "../assets/colors/colors";
 import MyStatusBar from "../common/MyStatusBar";
-import AroundYou from "../components/AroundYou";
 import HomepageHeader from "../components/HomepageHeader";
-import LagosListings from "../components/LagosListings";
-import NewListings from "../components/NewListings";
 import SearchComponent from "../components/SearchComponent";
 import SearchCard from "../common/SearchCard";
 import UserApi from "../api/UserApi";
@@ -32,6 +29,12 @@ const HomeScreen = ({ navigation }) => {
   const { alllistingloading } = useSelector((state) => state.loading);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(10);
+  const [randomData, setRandomData] = useState([]);
+
+  useEffect(() => {
+    const res = all_listings.sort(() => Math.random() - 0.5);
+    setRandomData(res);
+  }, []);
 
   // initialize font family
   const [fontsLoaded] = useFonts({
@@ -78,12 +81,7 @@ const HomeScreen = ({ navigation }) => {
           ) : (
             <>
               <View style={styles.explore}>
-                {all_listings
-                  .filter(
-                    (item) =>
-                      item.category !== "Recent apartment" &&
-                      item.category !== "New apartment"
-                  )
+                {randomData
                   .slice(0, visible)
                   .map((item) =>
                     alllistingloading ? (

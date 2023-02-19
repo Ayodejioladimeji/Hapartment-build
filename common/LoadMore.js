@@ -15,7 +15,15 @@ const LoadMore = ({ loading, setLoading, setVisible }) => {
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Text style={{ color: "green", alignSelf: "center" }}>See More</Text>
+        <Text
+          style={{
+            color: "green",
+            alignSelf: "center",
+            marginVertical: 20,
+          }}
+        >
+          See More
+        </Text>
       )}
     </TouchableOpacity>
   );

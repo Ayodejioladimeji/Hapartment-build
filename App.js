@@ -77,7 +77,7 @@ function App() {
     };
     getItem();
 
-    // AsyncStorage.clear();
+    AsyncStorage.clear();
   }, [showOnboard]);
 
   //
@@ -100,7 +100,6 @@ function App() {
               )}
 
               <Stack.Screen name="RootHome" component={RootHome} />
-              {/* <Stack.Screen name="WhoAreYou" component={WhoAreYou} /> */}
               <Stack.Screen name="Register" component={Register} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="OneTimeCode" component={OneTimeCode} />
@@ -190,5 +189,3 @@ function App() {
 }
 
 export default App;
-
-// "apiKey" : "AIzaSyDXdO_qkMHQ6vLisaRq5vfXgK_n9YT5WBQ"
