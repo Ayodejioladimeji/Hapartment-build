@@ -7,6 +7,7 @@ import {
   Platform,
   Share,
   Alert,
+  Linking,
 } from "react-native";
 import React from "react";
 import GoBack from "../common/GoBack";
@@ -33,6 +34,7 @@ const AgentDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { token } = useSelector((state) => state.auth);
   const { callback } = useSelector((state) => state.property);
+  const { agent_details } = useSelector((state) => state.profile);
   const { favloading, reportlistingloading } = useSelector(
     (state) => state.loading
   );
@@ -52,6 +54,7 @@ const AgentDetailsScreen = ({ route }) => {
     reportedBy,
     updatedAt,
   } = route.params.item;
+  console.log(postedBy);
 
   const id = postedBy._id;
 
@@ -99,6 +102,14 @@ const AgentDetailsScreen = ({ route }) => {
     } catch (error) {
       Alert.alert(error.message);
     }
+  };
+
+  // Chat agent on whatsapp
+  const openWhatsapp = () => {
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=234
+        ${agent_details.agent_details.verification[0].identity_mobile}&text=""`
+    );
   };
 
   //
@@ -155,25 +166,40 @@ const AgentDetailsScreen = ({ route }) => {
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={saveProperty}
-          activeOpacity={0.7}
-          style={styles.save}
-        >
-          {favloading ? (
-            <Text>Saving property...</Text>
-          ) : (
-            <>
-              <MaterialIcons
-                name="favorite-outline"
-                size={16}
-                color={colors.textLight}
-              />
-              <Text style={styles.saveText}>Save</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {/* Save Property section */}
+        <View style={styles.saveSection}>
+          <TouchableOpacity
+            onPress={saveProperty}
+            activeOpacity={0.7}
+            style={styles.save}
+          >
+            {favloading ? (
+              <Text>Saving property...</Text>
+            ) : (
+              <>
+                <MaterialIcons
+                  name="favorite-outline"
+                  size={16}
+                  color={colors.textLight}
+                />
+                <Text style={styles.saveText}>Save</Text>
+              </>
+            )}
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={openWhatsapp}
+            activeOpacity={0.7}
+            style={styles.contactWrapper}
+          >
+            <FontAwesome5 name="whatsapp" size={24} color={colors.white} />
+            <Text style={styles.contactText}>
+              {agent_details.agent_details.verification[0].identity_mobile}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Property verification section */}
         {status === "verified" ? (
           <Text style={styles.verified}>Property verified</Text>
         ) : (
@@ -312,21 +338,42 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
   },
+  saveSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginVertical: 40,
+  },
   save: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10,
-    marginVertical: 20,
+    height: 45,
+    width: 170,
+    borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
-    height: 40,
-    borderRadius: 3,
   },
   saveText: {
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+  },
+  contactWrapper: {
+    height: 45,
+    width: 170,
+    borderRadius: 40,
+    backgroundColor: colors.primary,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  contactText: {
+    color: colors.white,
+    // fontFamily: "//NunitoSans-Bold",
+    marginLeft: 10,
   },
 
   verified: {

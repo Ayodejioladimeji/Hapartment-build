@@ -77,37 +77,40 @@ const HomeScreen = ({ navigation }) => {
             </View>
           ) : (
             <>
-              <View style={styles.explore}>
-                {all_listings
-                  .filter(
-                    (item) =>
-                      item.category !== "Recent apartment" &&
-                      item.category !== "New apartment"
-                  )
-                  .slice(0, visible)
-                  .map((item) =>
-                    alllistingloading ? (
-                      <Loader2 key={item._id} />
-                    ) : (
-                      <SearchCard item={item} key={item._id} />
-                    )
-                  )}
+              {/* <AroundYou navigation={navigation} />
+              <NewListings /> */}
 
-                {visible > all_listings.length ||
-                alllistingloading ||
-                all_listings.length === 0 ? (
-                  ""
-                ) : (
-                  <LoadMore
-                    loading={loading}
-                    setLoading={setLoading}
-                    setVisible={setVisible}
-                  />
-                )}
-              </View>
+              {alllistingloading ? (
+                <ActivityIndicator />
+              ) : (
+                <View style={styles.explore}>
+                  <Text style={styles.exploreText}>Explore more</Text>
+
+                  {all_listings
+                    .filter(
+                      (item) =>
+                        item.category !== "Recent apartment" &&
+                        item.category !== "New apartment"
+                    )
+                    .slice(0, visible)
+                    .map((item) =>
+                      alllistingloading ? (
+                        <Loader2 key={item._id} />
+                      ) : (
+                        <SearchCard item={item} key={item._id} />
+                      )
+                    )}
+                </View>
+              )}
             </>
           )}
         </>
+
+        <LoadMore
+          loading={loading}
+          setLoading={setLoading}
+          setVisible={setVisible}
+        />
       </ScrollView>
     </View>
   );

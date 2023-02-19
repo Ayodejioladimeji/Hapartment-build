@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Platform,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
@@ -63,14 +64,15 @@ const HomepageHeader = () => {
       <View style={styles.headerRight}>
         <Feather name="sun" size={22} color={colors.white} />
 
-        <Ionicons
-          name="md-reload-sharp"
-          size={22}
-          color={colors.white}
+        <TouchableOpacity
+          activeOpacity={0.7}
           onPress={() =>
             dispatch({ type: GLOBALTYPES.REFRESHING, payload: !refreshing })
           }
-        />
+        >
+          <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
+        </TouchableOpacity>
+
         <View style={styles.notify}>
           <MaterialCommunityIcons
             name="bell-outline"

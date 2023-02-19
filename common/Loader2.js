@@ -14,7 +14,8 @@ const Loader2 = () => {
       <Placeholder Left={PlaceholderMedia} Animation={ShineOverlay}>
         <PlaceholderLine width={80} />
         <PlaceholderLine />
-        <PlaceholderLine width={30} />
+        <PlaceholderLine />
+        <PlaceholderLine width={50} />
       </Placeholder>
     </View>
   );

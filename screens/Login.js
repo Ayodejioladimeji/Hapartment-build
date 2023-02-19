@@ -165,14 +165,16 @@ const Login = () => {
                     Forgot password ?
                   </Text>
 
-                  <TouchableOpacity activeOpacity={0.7} onPress={handleSubmit}>
-                    <View style={styles.profileButton}>
-                      {authloading ? (
-                        <ActivityIndicator size="small" color={colors.white} />
-                      ) : (
-                        <Text style={styles.profileButtonText}>Login</Text>
-                      )}
-                    </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={handleSubmit}
+                    style={styles.profileButton}
+                  >
+                    {authloading ? (
+                      <ActivityIndicator size="small" color={colors.white} />
+                    ) : (
+                      <Text style={styles.profileButtonText}>Login</Text>
+                    )}
                   </TouchableOpacity>
                 </View>
 

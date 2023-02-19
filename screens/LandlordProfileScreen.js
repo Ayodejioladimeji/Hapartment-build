@@ -7,8 +7,9 @@ import {
   Platform,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import GoBack from "../common/GoBack";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../assets/colors/colors";
@@ -18,6 +19,8 @@ import { agentDetails } from "../redux/actions/profileAction";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../common/Loading";
 import AgentSearchCard from "../common/AgentSearchCard";
+import LoadMore from "../common/LoadMore";
+import Loader2 from "../common/Loader2";
 
 //
 
@@ -27,6 +30,8 @@ const LandlordProfileScreen = ({ route }) => {
   const dispatch = useDispatch();
   const { agent_details } = useSelector((state) => state.profile);
   const { agentdetailsloading } = useSelector((state) => state.loading);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(5);
 
   //
 
@@ -36,34 +41,28 @@ const LandlordProfileScreen = ({ route }) => {
 
   // Open whatsapp
   const openWhatsapp = () => {
-    // if (
-    //   agent_details.agent_details.verification[0].identity_mobile.length !== 11
-    // ) {
-    //   Alert.alert("Invalid mobile number");
-    //   return;
-    // } else {
     Linking.openURL(
-      "http://api.whatsapp.com/send?phone=234" +
-        agent_details.agent_details.verification[0].identity_mobile
+      `http://api.whatsapp.com/send?phone=234
+        ${agent_details.agent_details.verification[0].identity_mobile}&text=""`
     );
-    // }
   };
 
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack title="Agent Profile" navigation={navigation} />
-      {agentdetailsloading || agentdetailsloading === undefined ? (
-        <Loading />
-      ) : (
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.profileWrapper}>
+
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profileWrapper}>
+          {agentdetailsloading || agent_details.agent_listing === undefined ? (
+            <ActivityIndicator />
+          ) : (
             <View style={styles.profileBox}>
-              {agent_details.agent_details.image === null ? (
+              {agent_details?.agent_details === undefined ? (
                 <Image
                   source={require("../assets/images/user.jpg")}
                   style={styles.profileImage}
@@ -92,9 +91,13 @@ const LandlordProfileScreen = ({ route }) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          )}
+        </View>
 
-          <View style={styles.apartment}>
+        <View style={styles.apartment}>
+          {agentdetailsloading || agent_details.agent_listing === undefined ? (
+            ""
+          ) : (
             <Text style={styles.apartmentText}>
               ({agent_details.agent_listing.length}){" "}
               {agent_details.agent_listing.length === 1
@@ -102,15 +105,34 @@ const LandlordProfileScreen = ({ route }) => {
                 : "Apartments"}{" "}
               posted by {agent_details.agent_details.username}
             </Text>
+          )}
 
-            <View>
-              {agent_details.agent_listing.map((item) => (
-                <AgentSearchCard item={item} key={item._id} />
-              ))}
-            </View>
+          <View>
+            {agent_details.agent_listing !== undefined &&
+              agent_details.agent_listing
+                .slice(0, visible)
+                .map((item) =>
+                  agentdetailsloading ? (
+                    <Loader2 key={item._id} />
+                  ) : (
+                    <AgentSearchCard item={item} key={item._id} />
+                  )
+                )}
           </View>
-        </ScrollView>
-      )}
+
+          {/* {visible > agent_details?.agent_listing.length ||
+          agentdetailsloading ||
+          agent_details?.agent_listing.length === 0 ? (
+            ""
+          ) : (
+            <LoadMore
+              loading={loading}
+              setLoading={setLoading}
+              setVisible={setVisible}
+            />
+          )} */}
+        </View>
+      </ScrollView>
     </View>
   );
 };

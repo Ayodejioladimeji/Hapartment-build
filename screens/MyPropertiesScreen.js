@@ -25,6 +25,8 @@ const MyPropertiesScreen = ({ navigation }) => {
   const { my_listings } = useSelector((state) => state.property);
   const { mylistingloading } = useSelector((state) => state.loading);
 
+  console.log(my_listings);
+
   //
 
   const filteredData = my_listings.filter((item) => {

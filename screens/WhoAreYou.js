@@ -111,17 +111,15 @@ const WhoAreYou = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.registeredWrapper}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Login")}
+        activeOpacity={0.7}
+        style={styles.registeredWrapper}
+      >
         <Text style={styles.registeredText}>
-          Already registered ?{" "}
-          <Text
-            style={styles.colored}
-            onPress={() => navigation.navigate("Login")}
-          >
-            Login
-          </Text>
+          Already registered ? <Text style={styles.colored}>Login</Text>
         </Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
