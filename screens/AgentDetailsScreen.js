@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Share,
   Alert,
 } from "react-native";
 import React from "react";
@@ -46,6 +47,7 @@ const AgentDetailsScreen = ({ route }) => {
     toilets,
     price,
     images,
+    status,
     postedBy,
     reportedBy,
     updatedAt,
@@ -77,6 +79,27 @@ const AgentDetailsScreen = ({ route }) => {
 
   // check if a user has already reported a property
   const check = reportedBy.find((item) => item.user === user._id);
+
+  // onshare method -  for sharing on social media
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          //dismissed
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
 
   //
   return (
@@ -151,6 +174,14 @@ const AgentDetailsScreen = ({ route }) => {
           )}
         </TouchableOpacity>
 
+        {status === "verified" ? (
+          <Text style={styles.verified}>Property verified</Text>
+        ) : (
+          <Text style={styles.pending}>
+            Property still pending verification
+          </Text>
+        )}
+
         <Tab params={route.params.item} />
 
         <View style={styles.tipsWrapper}>
@@ -163,6 +194,15 @@ const AgentDetailsScreen = ({ route }) => {
             </View>
           ))}
         </View>
+
+        {/* share */}
+        <TouchableOpacity
+          onPress={onShare}
+          activeOpacity={0.7}
+          style={styles.shareWrapper}
+        >
+          <Text style={styles.share}>Share Property</Text>
+        </TouchableOpacity>
 
         {/* date section */}
         <View style={styles.videoWrapper}>
@@ -289,6 +329,21 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 
+  verified: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: colors.primary,
+    fontWeight: "600",
+  },
+  pending: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "red",
+    fontWeight: "600",
+  },
+
   map: {
     backgroundColor: colors.primary,
     padding: 12,
@@ -347,6 +402,7 @@ const styles = StyleSheet.create({
   tipsWrapper: {
     paddingHorizontal: 20,
     marginVertical: 40,
+    marginBottom: 20,
     padding: 25,
     backgroundColor: colors.light,
     width: "100%",
@@ -386,28 +442,13 @@ const styles = StyleSheet.create({
   shareWrapper: {
     marginTop: 20,
     marginHorizontal: 15,
-    borderWidth: 0.3,
-    borderColor: colors.textLighter,
-    height: 100,
-  },
-  shareHeader: {
-    backgroundColor: colors.light,
-    paddingHorizontal: 15,
-    flexDirection: "row",
+    height: 50,
     alignItems: "center",
-    height: 40,
+    justifyContent: "center",
   },
-  shareText: {
-    marginLeft: 5,
-  },
-  shareIcons: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // alignSelf: "center",
-    height: 60,
-    width: 180,
+  share: {
+    color: colors.primary,
+    fontSize: 16,
   },
   reportWrapper: {
     padding: 12,

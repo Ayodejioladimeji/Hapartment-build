@@ -2,12 +2,10 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   ScrollView,
   Image,
   TouchableOpacity,
   Platform,
-  FlatList,
   Alert,
   ActivityIndicator,
   Share,
@@ -16,11 +14,7 @@ import React from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
-  AntDesign,
-  FontAwesome,
   FontAwesome5,
-  Fontisto,
-  Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
   Octicons,
@@ -57,6 +51,7 @@ const DetailsScreen = ({ route }) => {
     toilets,
     price,
     images,
+    status,
     postedBy,
     acquired,
     reportedBy,
@@ -190,11 +185,13 @@ const DetailsScreen = ({ route }) => {
           )}
         </TouchableOpacity>
 
-        <Text style={styles.verification}>
-          Property still pending verification
-        </Text>
-
-        {/* <Map /> */}
+        {status === "verified" ? (
+          <Text style={styles.verified}>Property verified</Text>
+        ) : (
+          <Text style={styles.pending}>
+            Property still pending verification
+          </Text>
+        )}
 
         <Tab params={route.params.item} />
 
@@ -379,7 +376,14 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 
-  verification: {
+  verified: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: colors.primary,
+    fontWeight: "600",
+  },
+  pending: {
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",

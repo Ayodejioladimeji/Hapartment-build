@@ -2,40 +2,28 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   ScrollView,
   Image,
   TouchableOpacity,
   Platform,
-  FlatList,
+  Share,
   Alert,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
-  AntDesign,
-  FontAwesome,
   FontAwesome5,
-  Fontisto,
-  Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
   Octicons,
 } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useNavigation } from "@react-navigation/native";
-import VideoComponent from "../components/VideoComponent";
 import { addComma } from "comma-separator";
 import { format } from "timeago.js";
-import { list } from "../constants/list";
 import { useDispatch, useSelector } from "react-redux";
-import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import Tab from "../components/Tab";
-import Map from "../components/Map";
-import Video from "../components/Video";
-import Videos from "../components/Video";
-import { reportListing, saveProperties } from "../redux/actions/listingAction";
 import { safetytips } from "../constants/safetytips";
 
 //
@@ -44,7 +32,6 @@ const SavedDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { token, user } = useSelector((state) => state.auth);
   const { callback, saved_properties } = useSelector((state) => state.property);
-  const { listing_callback } = useSelector((state) => state.listing);
   const { favloading, reportlistingloading } = useSelector(
     (state) => state.loading
   );
@@ -58,6 +45,7 @@ const SavedDetailsScreen = ({ route }) => {
     bedrooms,
     bathrooms,
     toilets,
+    status,
     price,
     images,
     reportedBy,
@@ -100,7 +88,26 @@ const SavedDetailsScreen = ({ route }) => {
     navigation.navigate("ReportListing", { _id });
   };
 
-  // check if a user has already reported a property
+  // onshare method -  for sharing on social media
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          //dismissed
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
 
   //
   return (
@@ -175,7 +182,13 @@ const SavedDetailsScreen = ({ route }) => {
           )}
         </TouchableOpacity>
 
-        {/* <Map /> */}
+        {status === "verified" ? (
+          <Text style={styles.verified}>Property verified</Text>
+        ) : (
+          <Text style={styles.pending}>
+            Property still pending verification
+          </Text>
+        )}
 
         <Tab params={route.params.item} />
 
@@ -194,6 +207,15 @@ const SavedDetailsScreen = ({ route }) => {
             </View>
           ))}
         </View>
+
+        {/* share */}
+        <TouchableOpacity
+          onPress={onShare}
+          activeOpacity={0.7}
+          style={styles.shareWrapper}
+        >
+          <Text style={styles.share}>Share Property</Text>
+        </TouchableOpacity>
 
         {/* date section */}
         <View style={styles.videoWrapper}>
@@ -348,6 +370,20 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     marginLeft: 5,
   },
+  verified: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: colors.primary,
+    fontWeight: "600",
+  },
+  pending: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "red",
+    fontWeight: "600",
+  },
 
   map: {
     backgroundColor: colors.primary,
@@ -407,6 +443,7 @@ const styles = StyleSheet.create({
   tipsWrapper: {
     paddingHorizontal: 20,
     marginVertical: 40,
+    marginBottom: 20,
     padding: 25,
     backgroundColor: colors.light,
     width: "100%",
@@ -453,28 +490,13 @@ const styles = StyleSheet.create({
   shareWrapper: {
     marginTop: 20,
     marginHorizontal: 15,
-    borderWidth: 0.3,
-    borderColor: colors.textLighter,
-    height: 100,
-  },
-  shareHeader: {
-    backgroundColor: colors.light,
-    paddingHorizontal: 15,
-    flexDirection: "row",
+    height: 50,
     alignItems: "center",
-    height: 40,
+    justifyContent: "center",
   },
-  shareText: {
-    marginLeft: 5,
-  },
-  shareIcons: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // alignSelf: "center",
-    height: 60,
-    width: 180,
+  share: {
+    color: colors.primary,
+    fontSize: 16,
   },
   reportWrapper: {
     padding: 12,
