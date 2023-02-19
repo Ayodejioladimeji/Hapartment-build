@@ -25,7 +25,7 @@ import { saveProperties } from "../redux/actions/listingAction";
 
 //
 
-const SavedCard = ({ item }) => {
+const SavedCard = ({ item, savedBy }) => {
   const {
     address,
     images,
@@ -36,6 +36,7 @@ const SavedCard = ({ item }) => {
     updatedAt,
     bathrooms,
   } = item;
+  const data = { savedBy, ...item };
   const navigation = useNavigation();
 
   const { callback } = useSelector((state) => state.property);
@@ -64,7 +65,7 @@ const SavedCard = ({ item }) => {
   //
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("SavedDetailsScreen", { item })}
+      onPress={() => navigation.navigate("SavedDetailsScreen", { data })}
     >
       <View style={styles.cardsWrapper}>
         <View style={styles.imagesWrapper}>

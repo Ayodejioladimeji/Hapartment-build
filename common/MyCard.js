@@ -79,9 +79,7 @@ const MyCard = ({ item }) => {
     });
   };
 
-  // const handleAcquired = () => {
-  //   dispatch(acquiredListing(_id, token));
-  // };
+  console.log(item);
 
   //
   return (

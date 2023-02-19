@@ -79,6 +79,7 @@ const SavedPropertiesScreen = ({ navigation }) => {
                   item={item.saved_favorite}
                   key={item._id}
                   postedBy={saved_properties.postedBy}
+                  savedBy={item.savedBy}
                 />
               );
             })}

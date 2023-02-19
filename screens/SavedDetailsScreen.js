@@ -8,6 +8,7 @@ import {
   Platform,
   Share,
   Alert,
+  Linking,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import GoBack from "../common/GoBack";
@@ -50,20 +51,14 @@ const SavedDetailsScreen = ({ route }) => {
     images,
     reportedBy,
     updatedAt,
-    postedBy,
-  } = route.params.item;
+    savedBy,
+  } = route.params.data;
+  console.log(route.params.data);
 
   useEffect(() => {
     const res = reportedBy.find((item) => item.user === user._id);
     setCheck(res);
   }, []);
-
-  const posted = saved_properties.find(
-    (item) => item.postedBy._id === postedBy
-  );
-
-  const newPosted = posted.postedBy;
-  const id = posted.postedBy._id;
 
   // add favourite method
   const saveProperty = () => {
@@ -107,6 +102,14 @@ const SavedDetailsScreen = ({ route }) => {
     } catch (error) {
       Alert.alert(error.message);
     }
+  };
+
+  // Chat agent on whatsapp
+  const openWhatsapp = () => {
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=234
+        ${savedBy.verification[0].identity_mobile}&text=""`
+    );
   };
 
   //
@@ -163,25 +166,40 @@ const SavedDetailsScreen = ({ route }) => {
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={saveProperty}
-          activeOpacity={0.7}
-          style={styles.save}
-        >
-          {favloading ? (
-            <Text>Saving property...</Text>
-          ) : (
-            <>
-              <MaterialIcons
-                name="favorite-outline"
-                size={16}
-                color={colors.textLight}
-              />
-              <Text style={styles.saveText}>Save</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {/* Save Property section */}
+        <View style={styles.saveSection}>
+          <TouchableOpacity
+            onPress={saveProperty}
+            activeOpacity={0.7}
+            style={styles.save}
+          >
+            {favloading ? (
+              <Text>Saving property...</Text>
+            ) : (
+              <>
+                <MaterialIcons
+                  name="favorite-outline"
+                  size={16}
+                  color={colors.textLight}
+                />
+                <Text style={styles.saveText}>Save</Text>
+              </>
+            )}
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={openWhatsapp}
+            activeOpacity={0.7}
+            style={styles.contactWrapper}
+          >
+            <FontAwesome5 name="whatsapp" size={24} color={colors.white} />
+            <Text style={styles.contactText}>
+              {savedBy.verification[0].identity_mobile}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Property verification section */}
         {status === "verified" ? (
           <Text style={styles.verified}>Property verified</Text>
         ) : (
@@ -190,7 +208,7 @@ const SavedDetailsScreen = ({ route }) => {
           </Text>
         )}
 
-        <Tab params={route.params.item} />
+        <Tab params={route.params.data} />
 
         {/* video section */}
         {/* <View style={styles.videosWrapper}>
@@ -227,22 +245,6 @@ const SavedDetailsScreen = ({ route }) => {
         </View>
 
         {/* share */}
-        {/* <View style={styles.shareWrapper}>
-          <View style={styles.shareHeader}>
-            <AntDesign name="sharealt" size={18} color={colors.textDark} />
-            <Text style={styles.shareText}>Share this property</Text>
-          </View>
-
-          <View style={styles.shareIcons}>
-            <AntDesign name="facebook-square" size={26} color="#3b5998" />
-            <FontAwesome name="twitter-square" size={26} color="#00acee" />
-            <FontAwesome5
-              name="whatsapp-square"
-              size={26}
-              color={colors.primary}
-            />
-          </View>
-        </View> */}
 
         {/* report listing */}
         <TouchableOpacity
@@ -266,19 +268,19 @@ const SavedDetailsScreen = ({ route }) => {
         {/* Agent section */}
         <View style={styles.agentWrapper}>
           <View style={styles.agentBox}>
-            {newPosted.image === null ? (
+            {savedBy.image === null ? (
               <Image
                 source={require("../assets/images/user.jpg")}
                 style={styles.agentImage}
               />
             ) : (
               <Image
-                source={{ uri: newPosted.image }}
+                source={{ uri: savedBy.image }}
                 style={styles.agentImage}
               />
             )}
             <View>
-              <Text style={styles.agentName}>{newPosted.fullname}</Text>
+              <Text style={styles.agentName}>{savedBy.fullname}</Text>
               <Text style={styles.desc}>Agent</Text>
             </View>
           </View>
@@ -286,7 +288,9 @@ const SavedDetailsScreen = ({ route }) => {
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.viewWrapper}
-            onPress={() => navigation.navigate("LandlordProfileScreen", { id })}
+            onPress={() =>
+              navigation.navigate("LandlordProfileScreen", { id: savedBy._id })
+            }
           >
             <Text style={styles.viewText}>View Agent</Text>
           </TouchableOpacity>
@@ -354,21 +358,42 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
   },
+  saveSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginVertical: 40,
+  },
   save: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10,
-    marginVertical: 20,
+    height: 45,
+    width: 170,
+    borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
-    height: 40,
-    borderRadius: 3,
   },
   saveText: {
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+  },
+  contactWrapper: {
+    height: 45,
+    width: 170,
+    borderRadius: 40,
+    backgroundColor: colors.primary,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  contactText: {
+    color: colors.white,
+    // fontFamily: "//NunitoSans-Bold",
+    marginLeft: 10,
   },
   verified: {
     paddingHorizontal: 10,

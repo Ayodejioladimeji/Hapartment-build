@@ -210,6 +210,8 @@ export const getSavedProperties = (token) => async (dispatch) => {
 
     const res = await getDataApi("/get_favorite", token);
 
+    console.log(res.data);
+
     dispatch({ type: GLOBALTYPES.SAVED_PROPERTIES, payload: res.data });
 
     setTimeout(() => {

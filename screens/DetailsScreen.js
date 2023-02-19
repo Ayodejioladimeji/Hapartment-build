@@ -122,6 +122,8 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
+  console.log(_id, postedBy._id);
+
   //
   return (
     <View style={styles.detailsWrapper}>
@@ -183,7 +185,10 @@ const DetailsScreen = ({ route }) => {
             activeOpacity={0.7}
             style={[
               styles.save,
-              postedBy.verification === undefined && { width: "100%" },
+              (postedBy.verification === undefined ||
+                user._id === postedBy._id) && {
+                width: "100%",
+              },
             ]}
           >
             {favloading ? (
@@ -200,7 +205,7 @@ const DetailsScreen = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          {postedBy.verification !== undefined && (
+          {postedBy.verification !== undefined && user._id !== postedBy._id && (
             <TouchableOpacity
               onPress={openWhatsapp}
               activeOpacity={0.7}
