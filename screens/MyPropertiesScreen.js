@@ -69,7 +69,6 @@ const MyPropertiesScreen = ({ navigation }) => {
         ) : (
           <View style={styles.searchScroll}>
             {filteredData.map((data) => {
-              console.log(data);
               return <MyCard item={data} key={data._id} />;
             })}
           </View>

@@ -67,7 +67,6 @@ const CreateNotification = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log(JSON.stringify(response.data));
         var count = Object.keys(response.data).length;
         let stateArray = [];
         for (var i = 0; i < count; i++) {
@@ -94,7 +93,6 @@ const CreateNotification = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log(JSON.stringify(response.data));
         var count = Object.keys(response.data).length;
         let cityArray = [];
         for (var i = 0; i < count; i++) {

@@ -79,8 +79,6 @@ const MyCard = ({ item }) => {
     });
   };
 
-  console.log(item);
-
   //
   return (
     <View>

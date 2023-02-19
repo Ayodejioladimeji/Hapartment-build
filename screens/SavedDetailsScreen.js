@@ -53,7 +53,6 @@ const SavedDetailsScreen = ({ route }) => {
     updatedAt,
     savedBy,
   } = route.params.data;
-  console.log(route.params.data);
 
   useEffect(() => {
     const res = reportedBy.find((item) => item.user === user._id);

@@ -34,8 +34,6 @@ const IdentityTwo = ({ navigation }) => {
     // const [status, requestPermission] = ImagePicker.useCameraPermissions();
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    console.log(permissionResult.granted);
-
     if (permissionResult.granted === false) {
       Alert.alert("You refused to allow Hapartment to access your camera");
       setLoading(false);
@@ -48,8 +46,6 @@ const IdentityTwo = ({ navigation }) => {
       Alert.alert("Take selfie to verify your identity");
       return;
     }
-
-    // console.log(result);
 
     if (!result.canceled) {
       dispatch({

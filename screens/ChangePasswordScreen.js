@@ -48,7 +48,7 @@ const ChangePasswordScreen = () => {
             account_password: values.currentPassword,
             new_password: values.password,
           };
-          // console.log(newData);
+
           dispatch(changePassword(newData, token));
           setSubmitting(false);
         }, 500);

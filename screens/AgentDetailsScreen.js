@@ -54,7 +54,6 @@ const AgentDetailsScreen = ({ route }) => {
     reportedBy,
     updatedAt,
   } = route.params.item;
-  console.log(postedBy);
 
   const id = postedBy._id;
 

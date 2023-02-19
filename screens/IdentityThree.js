@@ -64,8 +64,6 @@ const IdentityThree = ({ navigation }) => {
       return;
     }
 
-    // console.log(result);
-
     if (!result.canceled) {
       dispatch({
         type: GLOBALTYPES.IDENTITY_DOCUMENT,

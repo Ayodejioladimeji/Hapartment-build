@@ -122,8 +122,6 @@ const DetailsScreen = ({ route }) => {
     );
   };
 
-  console.log(_id, postedBy._id);
-
   //
   return (
     <View style={styles.detailsWrapper}>

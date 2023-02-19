@@ -97,7 +97,7 @@ export const agentDetails = (id) => async (dispatch) => {
       });
     }, 3000);
   } catch (error) {
-    console.log(error.response.data.msg);
+    // console.log(error.response.data.msg);
     dispatch({
       type: GLOBALTYPES.ALERT,
       payload: { error: error.response.data.msg },

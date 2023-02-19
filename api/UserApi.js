@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -38,7 +38,8 @@ const UserApi = () => {
           }, 3000);
           //
         } catch (error) {
-          console.log(error);
+          Alert.alert(error.response.data.msg);
+          // console.log(error);
         }
       };
 
