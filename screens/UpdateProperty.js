@@ -91,7 +91,7 @@ const UpdateProperty = ({ route, navigation }) => {
   // user navigation
   const userNavigation = () => {
     dispatch({ type: GLOBALTYPES.IS_EDIT, payload: false });
-
+    dispatch({ type: GLOBALTYPES.RESET_LISTING, payload: {} });
     navigation.goBack();
   };
 

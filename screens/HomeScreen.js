@@ -29,12 +29,8 @@ const HomeScreen = ({ navigation }) => {
   const { alllistingloading } = useSelector((state) => state.loading);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(10);
-  const [randomData, setRandomData] = useState([]);
 
-  useEffect(() => {
-    const res = all_listings.sort(() => Math.random() - 0.5);
-    setRandomData(res);
-  }, []);
+  // const randomData = all_listings.sort(() => Math.random() - 0.5);
 
   // initialize font family
   const [fontsLoaded] = useFonts({
@@ -81,15 +77,19 @@ const HomeScreen = ({ navigation }) => {
           ) : (
             <>
               <View style={styles.explore}>
-                {randomData
-                  .slice(0, visible)
-                  .map((item) =>
-                    alllistingloading ? (
-                      <Loader2 key={item._id} />
-                    ) : (
-                      <SearchCard item={item} key={item._id} />
-                    )
-                  )}
+                {alllistingloading ? (
+                  <>
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                  </>
+                ) : (
+                  all_listings
+                    .slice(0, visible)
+                    .map((item) => <SearchCard item={item} key={item._id} />)
+                )}
 
                 {visible > all_listings.length ||
                 alllistingloading ||

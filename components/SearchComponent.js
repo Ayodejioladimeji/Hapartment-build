@@ -46,7 +46,7 @@ const SearchComponent = () => {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Enter your city name"
+          placeholder="Enter your search & hit enter"
           value={cityname}
           onChangeText={(text) => setCityname(text)}
           onSubmitEditing={handleSubmit}

@@ -71,21 +71,27 @@ const FilterSearchScreen = ({ navigation }) => {
 
       <>
         <View style={styles.searchScroll}>
-          <FlatList
-            data={filteredData}
-            renderItem={({ item }) => {
-              return filterloading ? (
-                <Loader2 />
-              ) : (
-                <SearchCard item={item} navigation={navigation} />
-              );
-            }}
-            keyExtractor={(item) => item._id}
-            showsVerticalScrollIndicator={false}
-          />
+          {filterloading ? (
+            <>
+              <Loader2 />
+              <Loader2 />
+              <Loader2 />
+              <Loader2 />
+              <Loader2 />
+            </>
+          ) : (
+            <FlatList
+              data={filteredData}
+              renderItem={({ item }) => {
+                return <SearchCard item={item} navigation={navigation} />;
+              }}
+              keyExtractor={(item) => item._id}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
         </View>
 
-        {search_listing.length === 0 && (
+        {search_listing.length === 0 && !filterloading && (
           <View style={styles.emptyWrapper}>
             <Image
               style={styles.emptyImage}
@@ -108,15 +114,17 @@ const FilterSearchScreen = ({ navigation }) => {
           </View>
         )}
 
-        {filteredData.length === 0 && search_listing.length !== 0 && (
-          <View style={styles.emptyWrapper}>
-            <Image
-              style={styles.emptyImage}
-              source={require("../assets/images/empty.png")}
-            />
-            <Text style={styles.emptyText}>No data found</Text>
-          </View>
-        )}
+        {filteredData.length === 0 &&
+          search_listing.length !== 0 &&
+          !filterloading && (
+            <View style={styles.emptyWrapper}>
+              <Image
+                style={styles.emptyImage}
+                source={require("../assets/images/empty.png")}
+              />
+              <Text style={styles.emptyText}>No data found</Text>
+            </View>
+          )}
       </>
     </View>
   );

@@ -106,8 +106,7 @@ const SavedDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234
-        ${savedBy.verification[0].identity_mobile}&text=""`
+      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
     );
   };
 
@@ -191,7 +190,7 @@ const SavedDetailsScreen = ({ route }) => {
             activeOpacity={0.7}
             style={styles.contactWrapper}
           >
-            <FontAwesome5 name="whatsapp" size={24} color={colors.white} />
+            <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
             <Text style={styles.contactText}>
               {savedBy.verification[0].identity_mobile}
             </Text>
@@ -378,6 +377,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
   },
   contactWrapper: {
     height: 45,
@@ -393,20 +393,19 @@ const styles = StyleSheet.create({
     color: colors.white,
     // fontFamily: "//NunitoSans-Bold",
     marginLeft: 10,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
   },
   verified: {
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
     color: colors.primary,
-    fontWeight: "600",
   },
   pending: {
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
     color: "red",
-    fontWeight: "600",
   },
 
   map: {

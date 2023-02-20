@@ -84,7 +84,7 @@ const MyCard = ({ item }) => {
     <View>
       <TouchableOpacity
         activeOpacity={0.9}
-        onPress={() => navigation.navigate("DetailsScreen", { item })}
+        onPress={() => navigation.navigate("AgentDetailsScreen", { item })}
         style={styles.cardsWrapper}
       >
         <View style={styles.imagesWrapper}>

@@ -13,11 +13,10 @@ import React, { useState } from "react";
 import GoBack from "../common/GoBack";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../assets/colors/colors";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { agentDetails } from "../redux/actions/profileAction";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../common/Loading";
 import AgentSearchCard from "../common/AgentSearchCard";
 import LoadMore from "../common/LoadMore";
 import Loader2 from "../common/Loader2";
@@ -29,22 +28,23 @@ const LandlordProfileScreen = ({ route }) => {
   const id = route.params.id.toString();
   const dispatch = useDispatch();
   const { agent_details } = useSelector((state) => state.profile);
+  const { all_listings } = useSelector((state) => state.property);
   const { agentdetailsloading } = useSelector((state) => state.loading);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(5);
 
   //
 
+  const agentListing = all_listings.filter((item) => item.postedBy._id === id);
+
   useEffect(() => {
     dispatch(agentDetails(id));
   }, []);
 
-  // Open whatsapp
-  const openWhatsapp = () => {
-    Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234
-        ${agent_details.agent_details.verification[0].identity_mobile}&text=""`
-    );
+  // Call agent directly
+  const callAgent = () => {
+    const url = `tel://${agent_details.agent_details.verification[0].identity_mobile}`;
+    Linking.openURL(url);
   };
 
   //
@@ -81,11 +81,11 @@ const LandlordProfileScreen = ({ route }) => {
               </Text>
 
               <TouchableOpacity
-                onPress={openWhatsapp}
+                onPress={callAgent}
                 activeOpacity={0.7}
                 style={styles.contactWrapper}
               >
-                <FontAwesome5 name="whatsapp" size={24} color={colors.white} />
+                <Feather name="phone-call" size={22} color={colors.white} />
                 <Text style={styles.contactText}>
                   {agent_details.agent_details.verification[0].identity_mobile}
                 </Text>
@@ -108,21 +108,20 @@ const LandlordProfileScreen = ({ route }) => {
           )}
 
           <View>
-            {agent_details.agent_listing !== undefined &&
-              agent_details.agent_listing
-                .slice(0, visible)
-                .map((item) =>
-                  agentdetailsloading ? (
-                    <Loader2 key={item._id} />
-                  ) : (
-                    <AgentSearchCard item={item} key={item._id} />
-                  )
-                )}
+            {agentListing
+              .slice(0, visible)
+              .map((item) =>
+                agentdetailsloading ? (
+                  <Loader2 key={item._id} />
+                ) : (
+                  <AgentSearchCard item={item} key={item._id} />
+                )
+              )}
           </View>
 
-          {/* {visible > agent_details?.agent_listing.length ||
+          {visible > agentListing.length ||
           agentdetailsloading ||
-          agent_details?.agent_listing.length === 0 ? (
+          agentListing.length === 0 ? (
             ""
           ) : (
             <LoadMore
@@ -130,7 +129,7 @@ const LandlordProfileScreen = ({ route }) => {
               setLoading={setLoading}
               setVisible={setVisible}
             />
-          )} */}
+          )}
         </View>
       </ScrollView>
     </View>
