@@ -8,6 +8,7 @@ import {
   Share,
   Alert,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import GoBack from "../common/GoBack";
@@ -174,7 +175,7 @@ const AgentDetailsScreen = ({ route }) => {
             style={styles.save}
           >
             {favloading ? (
-              <Text>Saving...</Text>
+              <ActivityIndicator />
             ) : (
               <>
                 <MaterialIcons

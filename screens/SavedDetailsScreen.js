@@ -9,6 +9,7 @@ import {
   Share,
   Alert,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import GoBack from "../common/GoBack";
@@ -173,7 +174,7 @@ const SavedDetailsScreen = ({ route }) => {
             style={styles.save}
           >
             {favloading ? (
-              <Text>Saving...</Text>
+              <ActivityIndicator />
             ) : (
               <>
                 <MaterialIcons
