@@ -189,7 +189,7 @@ const DetailsScreen = ({ route }) => {
             ]}
           >
             {favloading ? (
-              <Text>Saving property...</Text>
+              <Text>Saving...</Text>
             ) : (
               <>
                 <MaterialIcons

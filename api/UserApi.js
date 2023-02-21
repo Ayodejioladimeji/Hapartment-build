@@ -59,7 +59,7 @@ const UserApi = () => {
     if (token !== "") {
       dispatch(getSavedProperties(token));
     }
-  }, [token, callback]);
+  }, [token, callback, listing_callback]);
 
   return <View></View>;
 };

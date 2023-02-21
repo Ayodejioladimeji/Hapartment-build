@@ -6,6 +6,7 @@ import {
   Platform,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import React from "react";
 import {

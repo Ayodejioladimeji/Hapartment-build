@@ -26,6 +26,7 @@ import { format } from "timeago.js";
 import { useDispatch, useSelector } from "react-redux";
 import Tab from "../components/Tab";
 import { safetytips } from "../constants/safetytips";
+import { saveProperties } from "../redux/actions/listingAction";
 
 //
 
@@ -106,7 +107,7 @@ const SavedDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${savedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
     );
   };
 
@@ -172,7 +173,7 @@ const SavedDetailsScreen = ({ route }) => {
             style={styles.save}
           >
             {favloading ? (
-              <Text>Saving property...</Text>
+              <Text>Saving...</Text>
             ) : (
               <>
                 <MaterialIcons
@@ -367,8 +368,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: 45,
-    width: 170,
+    height: 40,
+    width: 150,
     borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
@@ -380,8 +381,8 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 14 : 13,
   },
   contactWrapper: {
-    height: 45,
-    width: 170,
+    height: 40,
+    width: 150,
     borderRadius: 40,
     backgroundColor: colors.primary,
     alignSelf: "center",

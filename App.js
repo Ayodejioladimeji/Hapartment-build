@@ -78,7 +78,7 @@ function App() {
     };
     getItem();
 
-    AsyncStorage.clear();
+    // AsyncStorage.clear();
   }, [showOnboard]);
 
   //

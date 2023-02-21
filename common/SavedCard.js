@@ -6,26 +6,25 @@ import {
   Platform,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert,
-  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import {
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
 import { addComma } from "comma-separator";
-import { saveProperties } from "../redux/actions/listingAction";
+import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 //
 
-const SavedCard = ({ item, savedBy }) => {
+const SavedCard = ({ item }) => {
+  const { saved_favorite, savedBy } = item;
+
   const {
     address,
     images,
@@ -35,31 +34,33 @@ const SavedCard = ({ item, savedBy }) => {
     status,
     updatedAt,
     bathrooms,
-  } = item;
-  const data = { savedBy, ...item };
+  } = saved_favorite;
+
+  const data = { savedBy, ...saved_favorite };
   const navigation = useNavigation();
-
-  const { callback } = useSelector((state) => state.property);
-  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
-  // add favourite method
-  const saveProperty = () => {
-    if (token === "") {
-      Alert.alert("Kindly login to save properties");
-      return;
-    }
+  // open delete modal
+  const openModal = () => {
+    let arr = [];
 
-    setLoading(true);
+    saved_favorite.images.forEach((item) => {
+      arr.push(item.id);
+    });
 
-    const data = {
-      list_id: item._id,
-    };
-    dispatch(saveProperties(data, token, callback));
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    dispatch({
+      type: GLOBALTYPES.DELETE_ID,
+      payload: item._id,
+    });
+    dispatch({
+      type: GLOBALTYPES.PUBLIC_ID,
+      payload: arr,
+    });
+
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { deleteSaved: true },
+    });
   };
 
   //
@@ -123,6 +124,14 @@ const SavedCard = ({ item, savedBy }) => {
               Updated : {format(updatedAt).substring(0, 25) + " "}
             </Text>
           </View>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.remove}
+            onPress={openModal}
+          >
+            <FontAwesome5 name="times-circle" style={styles.removeIcon} />
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -161,6 +170,7 @@ const styles = StyleSheet.create({
     // padding: 10,
     paddingHorizontal: 5,
     width: "60%",
+    position: "relative",
   },
   cardName: {
     flexDirection: "row",
@@ -254,5 +264,15 @@ const styles = StyleSheet.create({
   favorite: {
     color: colors.white,
     fontSize: 17,
+  },
+  remove: {
+    color: "red",
+    position: "absolute",
+    right: Platform.OS === "ios" ? 0 : 25,
+    top: 0,
+  },
+  removeIcon: {
+    fontSize: Platform.OS === "ios" ? 20 : 20,
+    color: "red",
   },
 });

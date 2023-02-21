@@ -57,6 +57,7 @@ const AgentDetailsScreen = ({ route }) => {
   } = route.params.item;
 
   const id = postedBy._id;
+  console.log(postedBy);
 
   // add favourite method
   const saveProperty = () => {
@@ -173,7 +174,7 @@ const AgentDetailsScreen = ({ route }) => {
             style={styles.save}
           >
             {favloading ? (
-              <Text>Saving property...</Text>
+              <Text>Saving...</Text>
             ) : (
               <>
                 <MaterialIcons
@@ -193,7 +194,7 @@ const AgentDetailsScreen = ({ route }) => {
           >
             <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
             <Text style={styles.contactText}>
-              {agent_details.agent_details.verification[0].identity_mobile}
+              {postedBy?.verification[0].identity_mobile}
             </Text>
           </TouchableOpacity>
         </View>
@@ -330,8 +331,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: 45,
-    width: 170,
+    height: 40,
+    width: 150,
     borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
@@ -343,8 +344,8 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 14 : 13,
   },
   contactWrapper: {
-    height: 45,
-    width: 170,
+    height: 40,
+    width: 150,
     borderRadius: 40,
     backgroundColor: colors.primary,
     alignSelf: "center",

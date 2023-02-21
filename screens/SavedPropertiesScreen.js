@@ -73,15 +73,8 @@ const SavedPropertiesScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.searchScroll}>
-            {filteredData.map((item) => {
-              return (
-                <SavedCard
-                  item={item.saved_favorite}
-                  key={item._id}
-                  postedBy={saved_properties.postedBy}
-                  savedBy={item.savedBy}
-                />
-              );
+            {saved_properties.map((item) => {
+              return <SavedCard item={item} key={item._id} />;
             })}
           </View>
 

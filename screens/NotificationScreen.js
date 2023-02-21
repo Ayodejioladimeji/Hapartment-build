@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   type: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize: 16,
   },
   text: {
     lineHeight: 30,

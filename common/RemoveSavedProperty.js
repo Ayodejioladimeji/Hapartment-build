@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -11,26 +11,25 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import colors from "../assets/colors/colors";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
-import { deleteProperty } from "../redux/actions/listingAction";
+import { deleteFavorite } from "../redux/actions/listingAction";
 
-const DeleteModal = () => {
+const RemoveSavedProperty = () => {
   const dispatch = useDispatch();
-  const { deleteListing } = useSelector((state) => state.alert);
+  const { deleteSaved } = useSelector((state) => state.alert);
   const { token } = useSelector((state) => state.auth);
-  const { deleteId, publicId, listing_callback } = useSelector(
-    (state) => state.listing
-  );
+  const { deleteId, publicId } = useSelector((state) => state.listing);
+  const { callback } = useSelector((state) => state.property);
   const { deleteloading } = useSelector((state) => state.loading);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
 
   //
   React.useEffect(() => {
     toggleModal();
-  }, [deleteListing]);
+  }, [deleteSaved]);
 
   // modal method
   const toggleModal = () => {
-    if (deleteListing) {
+    if (deleteSaved) {
       Animated.spring(scaleValue, {
         toValue: 1,
         duration: 300,
@@ -43,13 +42,13 @@ const DeleteModal = () => {
     dispatch({ type: GLOBALTYPES.PUBLIC_ID, payload: [] });
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { deleteListing: false },
+      payload: { deleteSaved: false },
     });
   };
 
   //   navigate method
   const remove = () => {
-    dispatch(deleteProperty(deleteId, publicId, token, listing_callback));
+    dispatch(deleteFavorite(deleteId, publicId, token, callback));
   };
 
   //
@@ -95,7 +94,7 @@ const DeleteModal = () => {
   );
 };
 
-export default DeleteModal;
+export default RemoveSavedProperty;
 
 const styles = StyleSheet.create({
   modalBackGround: {

@@ -9,6 +9,9 @@ import LoginErrorModal from "./LoginErrorModal";
 import DeleteModal from "./DeleteModals";
 import UpdateListingSuccess from "./UpdateListingSuccessss";
 import ListingErrorModal from "./ListingErrorModal";
+import RemoveSavedProperty from "./RemoveSavedProperty";
+
+//
 
 const Alert = () => {
   const {
@@ -24,8 +27,11 @@ const Alert = () => {
     loginerror,
     deleteListing,
     listingError,
+    deleteSaved,
   } = useSelector((state) => state.alert);
   const navigation = useNavigation();
+
+  console.log(deleteSaved);
 
   //
   return (
@@ -95,6 +101,8 @@ const Alert = () => {
       {verifyagent && <IdentityVerificationModal />}
 
       {deleteListing && <DeleteModal />}
+
+      {deleteSaved && <RemoveSavedProperty />}
     </View>
   );
 };

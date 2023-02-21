@@ -369,6 +369,50 @@ export const deleteProperty =
     }
   };
 
+// delete Favorite
+export const deleteFavorite =
+  (id, publicId, token, callback) => async (dispatch) => {
+    try {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: { deleteloading: true } });
+
+      const res = await deleteDataApi(`/delete_favorite/${id}`, token);
+
+      console.log(res.data);
+
+      Alert.alert(res.data.msg);
+
+      dispatch({
+        type: GLOBALTYPES.CALLBACK,
+        payload: !callback,
+      });
+
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { deleteFavorite: false },
+      });
+
+      dispatch({ type: GLOBALTYPES.PUBLIC_ID, payload: [] });
+      setTimeout(() => {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: { deleteloading: false },
+        });
+      }, 1000);
+
+      // delete images
+      await postDataApis("/delete_images", publicId, token);
+    } catch (error) {
+      Alert.alert(error.response.data.msg);
+
+      setTimeout(() => {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: { deleteloading: false },
+        });
+      }, 1000);
+    }
+  };
+
 // acquired listing
 export const acquiredListing =
   (id, token, listing_callback) => async (dispatch) => {

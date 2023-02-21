@@ -163,14 +163,6 @@ const MyCard = ({ item }) => {
           <EvilIcons name="trash" size={20} color="red" />
           <Text style={styles.delete}>delete</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          onPress={handleAcquired}
-          activeOpacity={0.7}
-          style={styles.actionDelete}
-        >
-          <Text style={styles.delete}>Property rented</Text>
-        </TouchableOpacity> */}
       </View>
     </View>
   );
