@@ -81,11 +81,17 @@ const SearchCard = ({ item }) => {
             <View
               style={[
                 styles.verify,
-                status === "pending" && { backgroundColor: "orange" },
+                status === "pending"
+                  ? { backgroundColor: "orange" }
+                  : { backgroundColor: "red" },
               ]}
             >
               <Text style={styles.verifyText}>
-                {status === "pending" ? "Pending" : "Verified"}
+                {status === "pending"
+                  ? "Pending"
+                  : status === "declined"
+                  ? "Declined"
+                  : "Verified"}
               </Text>
             </View>
 

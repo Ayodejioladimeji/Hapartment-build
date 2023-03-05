@@ -377,8 +377,6 @@ export const deleteFavorite =
 
       const res = await deleteDataApi(`/delete_favorite/${id}`, token);
 
-      console.log(res.data);
-
       Alert.alert(res.data.msg);
 
       dispatch({

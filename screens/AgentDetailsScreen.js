@@ -58,7 +58,6 @@ const AgentDetailsScreen = ({ route }) => {
   } = route.params.item;
 
   const id = postedBy._id;
-  console.log(postedBy);
 
   // add favourite method
   const saveProperty = () => {

@@ -219,6 +219,8 @@ const DetailsScreen = ({ route }) => {
         {/* Property verification section */}
         {status === "verified" ? (
           <Text style={styles.verified}>Property verified</Text>
+        ) : status === "declined" ? (
+          <Text style={styles.pending}>Property declined</Text>
         ) : (
           <Text style={styles.pending}>
             Property still pending verification

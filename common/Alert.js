@@ -31,8 +31,6 @@ const Alert = () => {
   } = useSelector((state) => state.alert);
   const navigation = useNavigation();
 
-  console.log(deleteSaved);
-
   //
   return (
     <View>
