@@ -14,6 +14,7 @@ import React from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
+  AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -82,13 +83,13 @@ const AgentDetailsScreen = ({ route }) => {
   };
 
   // check if a user has already reported a property
-  const check = reportedBy.find((item) => item.user === user._id);
+  const check = reportedBy.find((item) => item?.user === user?._id);
 
   // onshare method -  for sharing on social media
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -108,7 +109,7 @@ const AgentDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -122,7 +123,7 @@ const AgentDetailsScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <Carousel images={images} />
+        <Carousel images={images} status={status} />
 
         <View style={styles.detailsName}>
           <Text style={styles.name}>{property_type}</Text>
@@ -199,15 +200,7 @@ const AgentDetailsScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Property verification section */}
-        {status === "verified" ? (
-          <Text style={styles.verified}>Property verified</Text>
-        ) : (
-          <Text style={styles.pending}>
-            Property still pending verification
-          </Text>
-        )}
-
+        {/* Tab section */}
         <Tab params={route.params.item} />
 
         <View style={styles.tipsWrapper}>
@@ -364,13 +357,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
+    backgroundColor: "rgba(0, 128, 0, 0.088);",
+    paddingVertical: 10,
+    marginHorizontal: 15,
     color: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  verifiedText: {
+    color: colors.primary,
+    marginLeft: 10,
   },
   pending: {
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
     color: "red",
+    backgroundColor: "rgba(255, 0, 0, 0.141)",
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  pendingText: {
+    color: "red",
+    marginLeft: 10,
   },
 
   map: {

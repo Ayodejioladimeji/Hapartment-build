@@ -13,19 +13,18 @@ import { GLOBALTYPES } from "./globalTypes";
 
 // Create Listing
 export const createListing =
-  (data, token, listing_callback) => async (dispatch) => {
+  (data, token, listing_callback, navigation) => async (dispatch) => {
     try {
       const res = await postDataApis("/create_listing", data, token);
 
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: { createListingSuccess: res.data.msg },
-      });
+      Alert.alert(res.data.msg);
 
       dispatch({
         type: GLOBALTYPES.LISTING_CALLBACK,
         payload: !listing_callback,
       });
+
+      // navigation.navigate("RootHome");
 
       setTimeout(() => {
         dispatch({
@@ -34,7 +33,7 @@ export const createListing =
         });
       }, 2000);
     } catch (error) {
-      // console.log(error.response.data.msg);
+      console.log(error.response);
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: { listingError: error.response.data.msg },
@@ -57,13 +56,15 @@ export const updateListing =
 
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { updateListingSuccess: res.data.msg },
+        payload: { success: res.data.msg },
       });
 
       dispatch({
         type: GLOBALTYPES.LISTING_CALLBACK,
         payload: !listing_callback,
       });
+
+      navigation.navigate("RootHome");
 
       setTimeout(() => {
         dispatch({

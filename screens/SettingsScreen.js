@@ -52,9 +52,7 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL("https://hapartment-client.vercel.app/terms")
-          }
+          onPress={() => Linking.openURL("https://hapartment.org/terms")}
           activeOpacity={0.7}
           style={styles.settingsBox}
         >
@@ -78,9 +76,7 @@ const SettingsScreen = ({ navigation }) => {
 
         <TouchableOpacity
           onPress={() =>
-            Linking.openURL(
-              "https://hapartment-client.vercel.app/privacypolicy"
-            )
+            Linking.openURL("https://hapartment.org/privacypolicy")
           }
           activeOpacity={0.7}
           style={styles.settingsBox}
@@ -104,9 +100,7 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL("https://hapartment-client.vercel.app/advertise")
-          }
+          onPress={() => Linking.openURL("https://hapartment.org/advertise")}
           activeOpacity={0.7}
           style={styles.settingsBox}
         >

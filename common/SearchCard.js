@@ -83,7 +83,9 @@ const SearchCard = ({ item }) => {
                 styles.verify,
                 status === "pending"
                   ? { backgroundColor: "orange" }
-                  : { backgroundColor: "red" },
+                  : status === "declined"
+                  ? { backgroundColor: "red" }
+                  : { backgroundColor: "green" },
               ]}
             >
               <Text style={styles.verifyText}>
@@ -110,8 +112,7 @@ const SearchCard = ({ item }) => {
 
           <View style={styles.cardBox}>
             <Text style={styles.nameText}>
-              {property_type}
-              {/* {name.substring(0, 25) + "..."} */}
+              {property_type.substring(0, 21) + "..."}
             </Text>
 
             <Text style={styles.amountText}>₦{addComma(price)}</Text>

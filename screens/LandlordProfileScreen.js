@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AgentSearchCard from "../common/AgentSearchCard";
 import LoadMore from "../common/LoadMore";
 import Loader2 from "../common/Loader2";
+import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
 
 //
 
@@ -59,7 +60,7 @@ const LandlordProfileScreen = ({ route }) => {
       >
         <View style={styles.profileWrapper}>
           {agentdetailsloading || agent_details.agent_listing === undefined ? (
-            <ActivityIndicator />
+            <ProfileSkeletal />
           ) : (
             <View style={styles.profileBox}>
               {agent_details?.agent_details === undefined ? (
@@ -108,15 +109,19 @@ const LandlordProfileScreen = ({ route }) => {
           )}
 
           <View>
-            {agentListing
-              .slice(0, visible)
-              .map((item) =>
-                agentdetailsloading ? (
-                  <Loader2 key={item._id} />
-                ) : (
+            {agentdetailsloading ? (
+              <>
+                <Loader2 />
+                <Loader2 />
+                <Loader2 />
+              </>
+            ) : (
+              <>
+                {agentListing.slice(0, visible).map((item) => (
                   <AgentSearchCard item={item} key={item._id} />
-                )
-              )}
+                ))}
+              </>
+            )}
           </View>
 
           {visible > agentListing.length ||

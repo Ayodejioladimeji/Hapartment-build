@@ -3,6 +3,7 @@ import { createListing, updateListing } from "../redux/actions/listingAction";
 // import { CLOUDINARY_URL } from "@env";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/hapartment/upload";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import { useNavigation } from "@react-navigation/native";
 
 const handleSubmit = async (
   address,
@@ -35,6 +36,9 @@ const handleSubmit = async (
   updateId
 ) => {
   // validate the input
+  // const navigation = useNavigation();
+
+  // console.log(navigation);
 
   if (
     address === "" ||

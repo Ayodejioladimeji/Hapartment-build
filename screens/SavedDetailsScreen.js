@@ -88,7 +88,7 @@ const SavedDetailsScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -108,7 +108,7 @@ const SavedDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${savedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${savedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -122,7 +122,7 @@ const SavedDetailsScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <Carousel images={images} />
+        <Carousel images={images} status={status} />
 
         <View style={styles.detailsName}>
           <Text style={styles.name}>{property_type}</Text>

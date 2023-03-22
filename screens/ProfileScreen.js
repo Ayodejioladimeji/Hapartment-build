@@ -21,11 +21,13 @@ import colors from "../assets/colors/colors";
 import GoBack from "../common/GoBack";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import VerifyErrorModal from "../common/VerifyErrorModal";
+import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
 
 //
 
 const ProfileScreen = ({ navigation }) => {
   const { user } = useSelector((state) => state.auth);
+  const { userloading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const [verify, setVerify] = useState(false);
 
@@ -64,29 +66,33 @@ const ProfileScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.profileWrapper}>
-          <View style={styles.profileBox}>
-            {!user.image ? (
-              <View style={styles.profileImage}>
-                <Image
-                  source={require("../assets/images/user.jpg")}
-                  style={styles.Image}
-                />
-              </View>
-            ) : (
-              <View style={styles.profileImage}>
-                <Image source={{ uri: user.image }} style={styles.Image} />
-              </View>
-            )}
-            <Text style={styles.nameText}>{user.fullname}</Text>
-            <Text style={styles.usernameText}>@{user.username}</Text>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.profileButton}
-              onPress={() => navigation.navigate("EditProfileScreen")}
-            >
-              <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
-          </View>
+          {userloading ? (
+            <ProfileSkeletal />
+          ) : (
+            <View style={styles.profileBox}>
+              {!user.image ? (
+                <View style={styles.profileImage}>
+                  <Image
+                    source={require("../assets/images/user.jpg")}
+                    style={styles.Image}
+                  />
+                </View>
+              ) : (
+                <View style={styles.profileImage}>
+                  <Image source={{ uri: user.image }} style={styles.Image} />
+                </View>
+              )}
+              <Text style={styles.nameText}>{user.fullname}</Text>
+              <Text style={styles.usernameText}>@{user.username}</Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.profileButton}
+                onPress={() => navigation.navigate("EditProfileScreen")}
+              >
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         <View style={styles.profileDetailsWrapper}>

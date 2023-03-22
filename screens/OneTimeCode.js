@@ -112,6 +112,7 @@ const OneTimeCode = () => {
           />
 
           <TouchableOpacity
+            activeOpacity={0.7}
             onPress={handleSubmit}
             disabled={!isPinReady}
             style={{

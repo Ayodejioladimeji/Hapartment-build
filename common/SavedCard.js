@@ -75,18 +75,26 @@ const SavedCard = ({ item }) => {
           <View
             style={[
               styles.verify,
-              status === "pending" && { backgroundColor: "orange" },
+              status === "pending"
+                ? { backgroundColor: "orange" }
+                : status === "declined"
+                ? { backgroundColor: "red" }
+                : { backgroundColor: "green" },
             ]}
           >
             <Text style={styles.verifyText}>
-              {status === "pending" ? "Pending" : "Verified"}
+              {status === "pending"
+                ? "Pending"
+                : status === "declined"
+                ? "Declined"
+                : "Verified"}
             </Text>
           </View>
         </View>
 
         <View style={styles.cardBox}>
           <Text style={styles.nameText}>
-            {property_type}
+            {property_type.substring(0, 21) + "..."}
             {/* {name.substring(0, 25) + "..."} */}
           </Text>
 

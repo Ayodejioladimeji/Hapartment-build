@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
@@ -111,7 +112,9 @@ const ListProperty = ({ navigation }) => {
               <Text style={styles.subheading}>
                 Follow the instructions{" "}
                 <Text
-                  onPress={() => navigation.navigate("HowTo")}
+                  onPress={() =>
+                    Linking.openURL("https://hapartment.org/howto")
+                  }
                   style={{ color: colors.primary, fontWeight: "bold" }}
                 >
                   here

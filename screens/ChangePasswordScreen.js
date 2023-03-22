@@ -49,7 +49,7 @@ const ChangePasswordScreen = () => {
             new_password: values.password,
           };
 
-          dispatch(changePassword(newData, token));
+          dispatch(changePassword(newData, token, navigation));
           setSubmitting(false);
         }, 500);
       }}
@@ -198,6 +198,7 @@ const ChangePasswordScreen = () => {
                   </View>
 
                   <TouchableOpacity
+                    activeOpacity={0.7}
                     onPress={handleSubmit}
                     style={styles.profileButton}
                   >

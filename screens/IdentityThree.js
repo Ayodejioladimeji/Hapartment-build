@@ -135,7 +135,7 @@ const IdentityThree = ({ navigation }) => {
       document_type,
     };
 
-    dispatch(identity(newData, token));
+    dispatch(identity(newData, token, navigation));
   };
 
   //

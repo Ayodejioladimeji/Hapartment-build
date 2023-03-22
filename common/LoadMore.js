@@ -19,7 +19,8 @@ const LoadMore = ({ loading, setLoading, setVisible }) => {
           style={{
             color: "green",
             alignSelf: "center",
-            marginVertical: 20,
+            marginVertical: 10,
+            textDecorationLine: "underline",
           }}
         >
           See More

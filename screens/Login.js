@@ -21,7 +21,7 @@ import { login } from "../redux/actions/authAction";
 import Navigate from "../common/Navigate";
 import GoBack from "../common/GoBack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { A } from "@expo/html-elements";
+import Notification from "../common/Notification";
 
 // VALIDATION REGEX
 const passwordUpper = /(?=.*[A-Z])/;
@@ -37,6 +37,8 @@ const Login = () => {
   const { authloading, error } = useSelector((state) => state.alert);
   const [typePassword, setTypePassword] = useState(false);
 
+  // The section of the login page.
+
   //
   return (
     <Formik
@@ -50,7 +52,7 @@ const Login = () => {
             email: values.email.toLowerCase(),
             password: values.password,
           };
-          dispatch(login(newData));
+          dispatch(login(newData, navigation));
           setSubmitting(false);
         }, 500);
       }}
@@ -196,6 +198,8 @@ const Login = () => {
                 </View>
               </View>
             </ScrollView>
+
+            <Notification />
           </View>
         );
       }}

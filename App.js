@@ -46,6 +46,7 @@ import PrivacyPolicy from "./screens/PrivacyPolicy";
 import UpdateProperty from "./screens/UpdateProperty";
 import MapScreen from "./screens/MapScreen";
 import { LogBox } from "react-native";
+import Notification from "./common/Notification";
 const Stack = createStackNavigator();
 
 //
@@ -104,6 +105,7 @@ function App() {
         <DataProvider>
           <NavigationContainer>
             <Alert />
+            <Notification />
             <FetchApi />
 
             <Stack.Navigator

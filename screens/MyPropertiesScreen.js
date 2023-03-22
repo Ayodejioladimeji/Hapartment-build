@@ -49,7 +49,7 @@ const MyPropertiesScreen = ({ navigation }) => {
             color="black"
           />
           <TextInput
-            placeholder="Search for landlord or agent"
+            placeholder="Search for property"
             style={styles.searchInput}
             placeholderTextColor={colors.textLight}
             placeholderStyle={{ color: colors.textDark, fontSize: 12 }}

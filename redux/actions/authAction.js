@@ -1,10 +1,11 @@
 import { postDataApi, postDataApis } from "../../utils/fetchData";
 import { GLOBALTYPES } from "./globalTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 //
 
-export const register = (data) => async (dispatch) => {
+export const register = (data, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
@@ -16,6 +17,12 @@ export const register = (data) => async (dispatch) => {
     });
 
     dispatch({ type: GLOBALTYPES.ALERT, payload: { success: res.data.msg } });
+
+    setTimeout(() => {
+      navigation.navigate("OneTimeCode");
+    }, 3000);
+
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -29,7 +36,7 @@ export const register = (data) => async (dispatch) => {
 };
 
 // Authenticate the user code
-export const authenticate = (data) => async (dispatch) => {
+export const authenticate = (data, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
@@ -37,9 +44,9 @@ export const authenticate = (data) => async (dispatch) => {
 
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { authenticateUser: res.data.msg },
+      payload: { success: res.data.msg },
     });
-
+    navigation.navigate("Login");
     dispatch({ type: GLOBALTYPES.ACTIVATION_TOKEN, payload: "" });
   } catch (error) {
     dispatch({
@@ -65,10 +72,10 @@ export const resendCode = (data) => async (dispatch) => {
       payload: res.data.activation_token,
     });
 
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { success: res.data.msg },
-    });
+    // dispatch({
+    //   type: GLOBALTYPES.ALERT,
+    //   payload: { success: res.data.msg },
+    // });
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { resendloading: false } });
@@ -86,7 +93,7 @@ export const resendCode = (data) => async (dispatch) => {
 };
 
 // Login the user
-export const login = (data) => async (dispatch) => {
+export const login = (data, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
@@ -101,10 +108,7 @@ export const login = (data) => async (dispatch) => {
       payload: res.data.access_token,
     });
 
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { authenticate: res.data.msg },
-    });
+    navigation.navigate("RootHome");
   } catch (error) {
     // console.log(error.response);
     dispatch({
@@ -119,7 +123,7 @@ export const login = (data) => async (dispatch) => {
 };
 
 // forgot password
-export const forgotPassword = (data) => async (dispatch) => {
+export const forgotPassword = (data, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
@@ -132,8 +136,9 @@ export const forgotPassword = (data) => async (dispatch) => {
 
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { forgotpasswordsuccess: res.data.msg },
+      payload: { success: res.data.msg },
     });
+    navigation.navigate("ResetPassword");
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -147,7 +152,7 @@ export const forgotPassword = (data) => async (dispatch) => {
 };
 
 // reset password
-export const resetPassword = (data) => async (dispatch) => {
+export const resetPassword = (data, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
@@ -155,8 +160,10 @@ export const resetPassword = (data) => async (dispatch) => {
 
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { resetpasswordsuccess: res.data.msg },
+      payload: { success: res.data.msg },
     });
+
+    navigation.navigate("Login");
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -170,16 +177,13 @@ export const resetPassword = (data) => async (dispatch) => {
 };
 
 // change password
-export const changePassword = (data, token) => async (dispatch) => {
+export const changePassword = (data, token, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
-    const res = await postDataApis("/changepassword", data, token);
+    await postDataApis("/changepassword", data, token);
 
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { changepasswordsuccess: res.data.msg },
-    });
+    navigation.navigate("RootHome");
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,

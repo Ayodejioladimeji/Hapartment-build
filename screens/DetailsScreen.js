@@ -15,6 +15,7 @@ import React from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
+  AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -96,7 +97,7 @@ const DetailsScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment-client.vercel.app/listings/${_id}`,
+        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -117,7 +118,7 @@ const DetailsScreen = ({ route }) => {
 
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment-client.vercel.app/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -131,7 +132,7 @@ const DetailsScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <Carousel images={images} acquired={acquired} />
+        <Carousel images={images} status={status} />
 
         <View style={styles.detailsName}>
           <Text style={styles.name}>{property_type}</Text>
@@ -210,22 +211,11 @@ const DetailsScreen = ({ route }) => {
             >
               <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
               <Text style={styles.contactText}>
-                {postedBy?.verification[0].identity_mobile}
+                {postedBy?.verification[0]?.identity_mobile}
               </Text>
             </TouchableOpacity>
           )}
         </View>
-
-        {/* Property verification section */}
-        {status === "verified" ? (
-          <Text style={styles.verified}>Property verified</Text>
-        ) : status === "declined" ? (
-          <Text style={styles.pending}>Property declined</Text>
-        ) : (
-          <Text style={styles.pending}>
-            Property still pending verification
-          </Text>
-        )}
 
         <Tab params={route.params.item} />
 
@@ -437,13 +427,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
+    backgroundColor: "rgba(0, 128, 0, 0.088);",
+    paddingVertical: 10,
+    marginHorizontal: 15,
     color: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  verifiedText: {
+    color: colors.primary,
+    marginLeft: 10,
   },
   pending: {
     paddingHorizontal: 10,
     marginBottom: 20,
     textAlign: "center",
     color: "red",
+    backgroundColor: "rgba(255, 0, 0, 0.141)",
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  pendingText: {
+    color: "red",
+    marginLeft: 10,
   },
 
   map: {

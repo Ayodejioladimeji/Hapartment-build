@@ -21,6 +21,7 @@ import UserApi from "../api/UserApi";
 import { useSelector } from "react-redux";
 import Loader2 from "../common/Loader2";
 import LoadMore from "../common/LoadMore";
+import NewListings from "../components/NewListings";
 
 //
 
@@ -65,7 +66,10 @@ const HomeScreen = ({ navigation }) => {
       >
         <SearchComponent />
 
+        <NewListings />
+
         <>
+          <Text style={styles.exploreText}>Explore</Text>
           {all_listings.length === 0 && !alllistingloading ? (
             <View style={styles.emptyWrapper}>
               <Image
@@ -139,10 +143,10 @@ const styles = StyleSheet.create({
   explore: {
     marginHorizontal: 15,
     marginBottom: 100,
-    marginTop: 30,
+    marginTop: 10,
   },
   exploreText: {
-    marginBottom: 10,
+    marginHorizontal: 15,
     fontSize: 15,
     color: colors.primary,
     fontWeight: "500",

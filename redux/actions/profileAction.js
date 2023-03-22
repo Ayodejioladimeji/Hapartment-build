@@ -34,14 +34,17 @@ export const profile = (data, token, profile_callback) => async (dispatch) => {
 };
 
 // verify Agent identity
-export const identity = (data, token) => async (dispatch) => {
+export const identity = (data, token, navigation) => async (dispatch) => {
   try {
     const res = await patchDataApi("/verifyagent", data, token);
 
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { verifyagent: res.data.msg },
+      payload: { success: res.data.msg },
     });
+
+    Alert.alert(res.data.msg);
+    navigation.navigate("RootHome");
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,

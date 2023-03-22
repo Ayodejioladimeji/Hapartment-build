@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import React from "react";
 import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
@@ -29,7 +30,7 @@ const CreateListingStatusBar = ({ navigation, title }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("HowTo")}
+            onPress={() => Linking.openURL("https://hapartment.org/howto")}
             activeOpacity={0.7}
           >
             <FontAwesome5

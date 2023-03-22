@@ -22,9 +22,7 @@ import { forgotPassword } from "../redux/actions/authAction";
 const ForgotPassword = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { forgotpasswordsuccess, authloading, error } = useSelector(
-    (state) => state.alert
-  );
+  const { authloading, error } = useSelector((state) => state.alert);
 
   return (
     <Formik
@@ -37,7 +35,7 @@ const ForgotPassword = () => {
             email: values.email.toLowerCase(),
           };
 
-          dispatch(forgotPassword(newData));
+          dispatch(forgotPassword(newData, navigation));
           setSubmitting(false);
         }, 500);
       }}
