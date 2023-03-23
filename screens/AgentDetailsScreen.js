@@ -34,7 +34,7 @@ import { safetytips } from "../constants/safetytips";
 
 const AgentDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
   const { callback } = useSelector((state) => state.property);
   const { agent_details } = useSelector((state) => state.profile);
   const { favloading, reportlistingloading } = useSelector(
@@ -53,12 +53,9 @@ const AgentDetailsScreen = ({ route }) => {
     images,
     status,
     postedBy,
-    savedBy,
     reportedBy,
     updatedAt,
   } = route.params.item;
-
-  const id = postedBy._id;
 
   // add favourite method
   const saveProperty = () => {
@@ -89,7 +86,7 @@ const AgentDetailsScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
+        message: `https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -109,7 +106,7 @@ const AgentDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=Hi, i'm interested in your property on Hapartment ${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -168,6 +165,7 @@ const AgentDetailsScreen = ({ route }) => {
         </View>
 
         {/* Save Property section */}
+
         <View style={styles.saveSection}>
           <TouchableOpacity
             onPress={saveProperty}
@@ -298,6 +296,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 15,
     height: 50,
+    marginBottom: 40,
   },
   cardFooterBox: {
     alignItems: "center",
@@ -318,7 +317,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginHorizontal: 10,
-    marginVertical: 40,
+    marginBottom: 40,
   },
   save: {
     flexDirection: "row",

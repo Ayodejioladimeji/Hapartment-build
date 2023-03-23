@@ -101,7 +101,7 @@ const LandlordProfileScreen = ({ route }) => {
           ) : (
             <Text style={styles.apartmentText}>
               ({agent_details.agent_listing.length}){" "}
-              {agent_details.agent_listing.length === 1
+              {agent_details.agent_listing.length <= 1
                 ? "Apartment"
                 : "Apartments"}{" "}
               posted by {agent_details.agent_details.username}

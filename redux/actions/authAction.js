@@ -109,6 +109,7 @@ export const login = (data, navigation) => async (dispatch) => {
     });
 
     navigation.navigate("RootHome");
+    dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
   } catch (error) {
     // console.log(error.response);
     dispatch({

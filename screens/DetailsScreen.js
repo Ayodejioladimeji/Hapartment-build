@@ -97,7 +97,7 @@ const DetailsScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
+        message: `https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -118,7 +118,7 @@ const DetailsScreen = ({ route }) => {
 
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=Hi, i'm interested in your property on Hapartment ${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -177,17 +177,12 @@ const DetailsScreen = ({ route }) => {
         </View>
 
         {/* Save Property section */}
+
         <View style={styles.saveSection}>
           <TouchableOpacity
             onPress={saveProperty}
             activeOpacity={0.7}
-            style={[
-              styles.save,
-              (postedBy.verification === undefined ||
-                user._id === postedBy._id) && {
-                width: "100%",
-              },
-            ]}
+            style={styles.save}
           >
             {favloading ? (
               <ActivityIndicator />
@@ -203,18 +198,16 @@ const DetailsScreen = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          {postedBy.verification !== undefined && user._id !== postedBy._id && (
-            <TouchableOpacity
-              onPress={openWhatsapp}
-              activeOpacity={0.7}
-              style={styles.contactWrapper}
-            >
-              <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
-              <Text style={styles.contactText}>
-                {postedBy?.verification[0]?.identity_mobile}
-              </Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            onPress={openWhatsapp}
+            activeOpacity={0.7}
+            style={styles.contactWrapper}
+          >
+            <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
+            <Text style={styles.contactText}>
+              {postedBy?.verification[0].identity_mobile}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <Tab params={route.params.item} />

@@ -83,19 +83,19 @@ function App() {
   }, [showOnboard]);
 
   //
-  LogBox.ignoreLogs([
-    "VirtualizedLists should never be nested",
-    "Warning: Failed prop type: Invalid prop `touchableComponent`",
-    "Require cycle:",
-    "Calling `getNode()`",
-    "Animated: `useNativeDriver` was not specified.",
-    "Warning: componentWillReceiveProps has been renamed",
-    "Warning: componentWillMount has been renamed",
-    "Non-serializable values were found in the navigation state",
-    "Sending `onAnimatedValueUpdate` with no listeners registered.",
-    "You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like `PureComponent`, `shouldComponentUpdate`, etc.",
-    // 'Looks like you',
-  ]);
+  // LogBox.ignoreLogs([
+  //   "VirtualizedLists should never be nested",
+  //   "Warning: Failed prop type: Invalid prop `touchableComponent`",
+  //   "Require cycle:",
+  //   "Calling `getNode()`",
+  //   "Animated: `useNativeDriver` was not specified.",
+  //   "Warning: componentWillReceiveProps has been renamed",
+  //   "Warning: componentWillMount has been renamed",
+  //   "Non-serializable values were found in the navigation state",
+  //   "Sending `onAnimatedValueUpdate` with no listeners registered.",
+  //   "You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like `PureComponent`, `shouldComponentUpdate`, etc.",
+  //   // 'Looks like you',
+  // ]);
 
   //
 

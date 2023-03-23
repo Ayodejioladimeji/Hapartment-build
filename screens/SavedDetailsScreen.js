@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Tab from "../components/Tab";
 import { safetytips } from "../constants/safetytips";
 import { saveProperties } from "../redux/actions/listingAction";
+import { getDataApis } from "../utils/fetchData";
 
 //
 
@@ -40,6 +41,7 @@ const SavedDetailsScreen = ({ route }) => {
   );
   const dispatch = useDispatch();
   const [check, setCheck] = useState(null);
+  const [postedBy, setPostedBy] = useState(null);
 
   const {
     _id,
@@ -53,8 +55,25 @@ const SavedDetailsScreen = ({ route }) => {
     images,
     reportedBy,
     updatedAt,
-    savedBy,
   } = route.params.data;
+
+  console.log(_id);
+
+  useEffect(() => {
+    if (_id) {
+      console.log("id has been found");
+      const details = async () => {
+        try {
+          const res = await getDataApis(`/list_details/${_id}`);
+          console.log(res.data);
+          setPostedBy(res.data.postedBy);
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      };
+      details();
+    }
+  }, [_id]);
 
   useEffect(() => {
     const res = reportedBy.find((item) => item.user === user._id);
@@ -88,7 +107,7 @@ const SavedDetailsScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `${property_type} at ${address} | Price : ${price} || https://hapartment.org/listings/${_id}`,
+        message: `https://hapartment.org/listings/${_id}`,
       });
 
       if (result.action === Share.sharedAction) {
@@ -108,7 +127,7 @@ const SavedDetailsScreen = ({ route }) => {
   // Chat agent on whatsapp
   const openWhatsapp = () => {
     Linking.openURL(
-      `http://api.whatsapp.com/send?phone=234${savedBy.verification[0].identity_mobile}&text=${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
+      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=Hi, i'm interested in your property on Hapartment ${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
     );
   };
 
@@ -167,6 +186,7 @@ const SavedDetailsScreen = ({ route }) => {
         </View>
 
         {/* Save Property section */}
+
         <View style={styles.saveSection}>
           <TouchableOpacity
             onPress={saveProperty}
@@ -194,19 +214,10 @@ const SavedDetailsScreen = ({ route }) => {
           >
             <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
             <Text style={styles.contactText}>
-              {savedBy.verification[0].identity_mobile}
+              {postedBy?.verification[0]?.identity_mobile}
             </Text>
           </TouchableOpacity>
         </View>
-
-        {/* Property verification section */}
-        {status === "verified" ? (
-          <Text style={styles.verified}>Property verified</Text>
-        ) : (
-          <Text style={styles.pending}>
-            Property still pending verification
-          </Text>
-        )}
 
         <Tab params={route.params.data} />
 
@@ -268,19 +279,19 @@ const SavedDetailsScreen = ({ route }) => {
         {/* Agent section */}
         <View style={styles.agentWrapper}>
           <View style={styles.agentBox}>
-            {savedBy.image === null ? (
+            {postedBy?.image === null ? (
               <Image
                 source={require("../assets/images/user.jpg")}
                 style={styles.agentImage}
               />
             ) : (
               <Image
-                source={{ uri: savedBy.image }}
+                source={{ uri: postedBy?.image }}
                 style={styles.agentImage}
               />
             )}
             <View>
-              <Text style={styles.agentName}>{savedBy.fullname}</Text>
+              <Text style={styles.agentName}>{postedBy?.fullname}</Text>
               <Text style={styles.desc}>Agent</Text>
             </View>
           </View>
@@ -289,7 +300,9 @@ const SavedDetailsScreen = ({ route }) => {
             activeOpacity={0.7}
             style={styles.viewWrapper}
             onPress={() =>
-              navigation.navigate("LandlordProfileScreen", { id: savedBy._id })
+              navigation.navigate("LandlordProfileScreen", {
+                id: postedBy?._id,
+              })
             }
           >
             <Text style={styles.viewText}>View Agent</Text>

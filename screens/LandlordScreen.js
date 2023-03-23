@@ -94,8 +94,8 @@ const LandlordScreen = ({ navigation }) => {
                       )}
                       <View>
                         <Text style={styles.landlordText}>{item.fullname}</Text>
-                        <Text style={styles.addressText}>{item.username}</Text>
-                        <Rating />
+                        <Text style={styles.addressText}>@{item.username}</Text>
+                        <Text style={styles.addressText}>{item.email}</Text>
                       </View>
                     </View>
 
@@ -149,11 +149,11 @@ const styles = StyleSheet.create({
   },
   landlordImage: {
     marginRight: 10,
-    height: 80,
-    width: 80,
+    height: 70,
+    width: 70,
     borderWidth: 0.7,
     borderColor: colors.primary,
-    borderRadius: 50,
+    borderRadius: 5,
     backgroundColor: colors.light,
   },
   landlordText: {
