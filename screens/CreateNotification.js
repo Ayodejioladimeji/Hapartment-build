@@ -66,7 +66,6 @@ const FilterSearch = () => {
       return;
     }
 
-    navigation.navigate("FilterSearchScreen");
     const data = {
       property_type: propertyType.toLowerCase(),
       statename: statename.toLowerCase(),

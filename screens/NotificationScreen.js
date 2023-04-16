@@ -31,6 +31,9 @@ const NotificationScreen = ({ navigation }) => {
     dispatch(getNotifications(token));
   }, [callback]);
 
+  // console.log(my_notification?.length);
+  // console.log(getnotificationloading);
+
   //
 
   return (
@@ -104,7 +107,7 @@ const NotificationScreen = ({ navigation }) => {
                     <Text style={styles.text}>
                       ₦{min_price} - ₦{max_price}
                     </Text>
-                    <Text style={styles.text}>Created {format(createdAt)}</Text>
+                    <Text style={styles.time}>Created {format(createdAt)}</Text>
 
                     <FontAwesome
                       onPress={() =>
@@ -164,11 +167,21 @@ const styles = StyleSheet.create({
   type: {
     fontWeight: "500",
     fontSize: 16,
+    textTransform: "uppercase",
+    color: colors.primary,
   },
   text: {
     lineHeight: 30,
     color: colors.textDark,
     fontSize: 15,
+    textTransform: "capitalize",
+  },
+  time: {
+    lineHeight: 30,
+    color: colors.textLight,
+    fontSize: 15,
+    alignSelf: "center",
+    marginTop: 20,
   },
 
   times: {

@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "../assets/colors/colors";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
-const Popup = ({ image, text, buttonText, navigation }) => {
+const Popup = ({ image, text, navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {

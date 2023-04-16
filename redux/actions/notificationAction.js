@@ -1,10 +1,5 @@
 import { Alert } from "react-native";
-import {
-  deleteDataApi,
-  getDataApi,
-  postDataApi,
-  postDataApis,
-} from "../../utils/fetchData";
+import { deleteDataApi, getDataApi, postDataApis } from "../../utils/fetchData";
 import { GLOBALTYPES } from "./globalTypes";
 
 // CREATE NOTIFICATON
@@ -21,6 +16,10 @@ export const createNotification =
       Alert.alert(res.data.msg);
 
       dispatch({ type: GLOBALTYPES.CALLBACK, payload: !callback });
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: { getnotificationloading: true },
+      });
       navigation.navigate("NotificationScreen");
       setTimeout(() => {
         dispatch({
@@ -43,10 +42,10 @@ export const createNotification =
 // GET NOTIFICATIONS CREATED
 export const getNotifications = (token) => async (dispatch) => {
   try {
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: { getnotificationloading: true },
-    });
+    // dispatch({
+    //   type: GLOBALTYPES.LOADING,
+    //   payload: { getnotificationloading: true },
+    // });
 
     const res = await getDataApi("/my_notifications", token);
 
