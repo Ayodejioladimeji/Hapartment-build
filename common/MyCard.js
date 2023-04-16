@@ -211,10 +211,11 @@ const styles = StyleSheet.create({
   },
 
   nameText: {
-    fontWeight: "600",
-    fontSize: Platform.OS === "ios" ? 13 : 12,
+    fontWeight: "700",
+    fontSize: Platform.OS === "ios" ? 15 : 13,
     // fontFamily: "//NunitoSans-Bold",
     marginBottom: 10,
+    textTransform: "capitalize",
   },
 
   amountText: {

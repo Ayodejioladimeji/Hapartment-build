@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 40,
     backgroundColor: colors.white,
   },
   codeWrapper: {

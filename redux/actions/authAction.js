@@ -20,9 +20,8 @@ export const register = (data, navigation) => async (dispatch) => {
 
     setTimeout(() => {
       navigation.navigate("OneTimeCode");
-    }, 3000);
-
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
+    }, 3500);
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -72,10 +71,10 @@ export const resendCode = (data) => async (dispatch) => {
       payload: res.data.activation_token,
     });
 
-    // dispatch({
-    //   type: GLOBALTYPES.ALERT,
-    //   payload: { success: res.data.msg },
-    // });
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { success: res.data.msg },
+    });
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { resendloading: false } });
@@ -108,8 +107,15 @@ export const login = (data, navigation) => async (dispatch) => {
       payload: res.data.access_token,
     });
 
-    navigation.navigate("RootHome");
-    dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { success: res.data.msg },
+    });
+
+    setTimeout(() => {
+      navigation.navigate("RootHome");
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
+    }, 3000);
   } catch (error) {
     // console.log(error.response);
     dispatch({
@@ -139,6 +145,7 @@ export const forgotPassword = (data, navigation) => async (dispatch) => {
       type: GLOBALTYPES.ALERT,
       payload: { success: res.data.msg },
     });
+
     navigation.navigate("ResetPassword");
   } catch (error) {
     dispatch({
@@ -182,9 +189,17 @@ export const changePassword = (data, token, navigation) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
 
-    await postDataApis("/changepassword", data, token);
+    const res = await postDataApis("/changepassword", data, token);
 
-    navigation.navigate("RootHome");
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { success: res.data.msg },
+    });
+
+    setTimeout(() => {
+      navigation.navigate("RootHome");
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: true } });
+    }, 2000);
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -193,6 +208,6 @@ export const changePassword = (data, token, navigation) => async (dispatch) => {
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
-    }, 3000);
+    }, 2000);
   }
 };

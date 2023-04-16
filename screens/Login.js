@@ -18,10 +18,8 @@ import EmailValidator from "email-validator";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/authAction";
-import Navigate from "../common/Navigate";
 import GoBack from "../common/GoBack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import Notification from "../common/Notification";
 
 // VALIDATION REGEX
 const passwordUpper = /(?=.*[A-Z])/;
@@ -103,7 +101,11 @@ const Login = () => {
               <View style={styles.registerContainer}>
                 <Text style={styles.heading}>Login to continue</Text>
 
-                {error && <Text style={styles.error}>{error}</Text>}
+                {error && (
+                  <View style={styles.error}>
+                    <Text style={styles.errorText}>{error}</Text>
+                  </View>
+                )}
 
                 <View stye={styles.formContainer}>
                   <View style={styles.editProfileBox}>
@@ -198,8 +200,6 @@ const Login = () => {
                 </View>
               </View>
             </ScrollView>
-
-            <Notification />
           </View>
         );
       }}
@@ -292,15 +292,22 @@ const styles = StyleSheet.create({
   },
 
   error: {
-    color: colors.white,
+    color: "red",
     marginBottom: 20,
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    alignSelf: "center",
-    padding: 10,
-    backgroundColor: "orangered",
-    fontWeight: "bold",
+    backgroundColor: colors.white,
     width: "90%",
     textAlign: "center",
+    borderWidth: 0.2,
+    borderColor: "red",
+    borderLeftWidth: 5,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  errorText: {
+    color: "red",
   },
   helpWrapper: {
     marginTop: 40,

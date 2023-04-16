@@ -15,6 +15,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import MyStatusBar from "../common/MyStatusBar";
 import handleSubmit from "../utils/createListing";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import UpdateListings from "../utils/updateListing";
 
 //
 
@@ -56,7 +57,7 @@ const UpdateProperty = ({ route, navigation }) => {
   //
 
   const submit = () => {
-    handleSubmit(
+    UpdateListings(
       address,
       property_type,
       state,
@@ -84,7 +85,8 @@ const UpdateProperty = ({ route, navigation }) => {
       token,
       listing_callback,
       isEdit,
-      updateId
+      updateId,
+      navigation
     );
   };
 

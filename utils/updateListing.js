@@ -4,7 +4,7 @@ import { createListing, updateListing } from "../redux/actions/listingAction";
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/hapartment/upload";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
-const CreateListings = async (
+const UpdateListings = async (
   address,
   property_type,
   state,
@@ -31,6 +31,8 @@ const CreateListings = async (
   dispatch,
   token,
   listing_callback,
+  isEdit,
+  updateId,
   navigation
 ) => {
   // validate the input
@@ -214,7 +216,37 @@ const CreateListings = async (
     images: newImages,
   };
 
-  dispatch(createListing(newData, token, listing_callback, navigation));
+  const newDatas = {
+    list_id: updateId,
+    address: address.toLowerCase(),
+    property_type: property_type.toLowerCase(),
+    country: "NG",
+    state: state.toLowerCase(),
+    city: city.toLowerCase(),
+    statename: statename.toLowerCase(),
+    cityname: cityname.toLowerCase(),
+    bedrooms,
+    bathrooms,
+    toilets,
+    furnishing: furnishing.toLowerCase(),
+    home_facilities,
+    area_facilities,
+    description: description.toLowerCase(),
+    price,
+    category: category.toLowerCase(),
+    video,
+    images: newImages,
+  };
+
+  console.log(isEdit);
+
+  {
+    !isEdit
+      ? dispatch(createListing(newData, token, listing_callback, navigation))
+      : dispatch(updateListing(newDatas, token, listing_callback, navigation));
+  }
+
+  // return;
 };
 
-export default CreateListings;
+export default UpdateListings;

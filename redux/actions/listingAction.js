@@ -17,23 +17,25 @@ export const createListing =
     try {
       const res = await postDataApis("/create_listing", data, token);
 
-      Alert.alert(res.data.msg);
-
       dispatch({
         type: GLOBALTYPES.LISTING_CALLBACK,
         payload: !listing_callback,
       });
 
-      // navigation.navigate("RootHome");
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
 
       setTimeout(() => {
+        navigation.navigate("RootHome");
         dispatch({
           type: GLOBALTYPES.LOADING,
           payload: { createlistingloading: false },
         });
-      }, 2000);
+      }, 3000);
     } catch (error) {
-      console.log(error.response);
+      console.log("this is the error", error.response.data.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
         payload: { listingError: error.response.data.msg },
@@ -50,7 +52,7 @@ export const createListing =
 
 // Update Listing
 export const updateListing =
-  (data, token, listing_callback) => async (dispatch) => {
+  (data, token, listing_callback, navigation) => async (dispatch) => {
     try {
       const res = await patchDataApi("/update_listing", data, token);
 
@@ -64,9 +66,13 @@ export const updateListing =
         payload: !listing_callback,
       });
 
-      navigation.navigate("RootHome");
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
 
       setTimeout(() => {
+        navigation.navigate("RootHome");
         dispatch({
           type: GLOBALTYPES.LOADING,
           payload: { createlistingloading: false },

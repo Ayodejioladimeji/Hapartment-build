@@ -14,7 +14,7 @@ import colors from "../assets/colors/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import MyStatusBar from "../common/MyStatusBar";
-import handleSubmit from "../utils/createListing";
+import CreateListings from "../utils/createListing";
 
 //
 
@@ -46,6 +46,7 @@ const ListProperty = ({ navigation }) => {
     imageSix,
     imageSeven,
   } = useSelector((state) => state.listing);
+
   const dispatch = useDispatch();
   const { createlistingloading } = useSelector((state) => state.loading);
   const { listing_callback, isEdit } = useSelector((state) => state.listing);
@@ -53,7 +54,7 @@ const ListProperty = ({ navigation }) => {
   //
 
   const submit = () => {
-    handleSubmit(
+    CreateListings(
       address,
       property_type,
       state,
@@ -79,7 +80,8 @@ const ListProperty = ({ navigation }) => {
       imageSeven,
       dispatch,
       token,
-      listing_callback
+      listing_callback,
+      navigation
     );
   };
 

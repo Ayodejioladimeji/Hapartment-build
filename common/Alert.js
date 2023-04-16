@@ -36,9 +36,8 @@ const Alert = () => {
     <View>
       {success && (
         <Popup
-          image={require("../assets/images/gmail.png")}
+          image={require("../assets/images/success.png")}
           text={success}
-          buttonText="Continue"
           navigation={navigation}
         />
       )}
@@ -47,7 +46,6 @@ const Alert = () => {
         <Popup
           image={require("../assets/images/gmail.png")}
           text={forgotpasswordsuccess}
-          buttonText="Continue"
           navigation={navigation}
         />
       )}
@@ -56,7 +54,6 @@ const Alert = () => {
         <Popup
           image={require("../assets/images/success.png")}
           text={resetpasswordsuccess}
-          buttonText="Login"
           navigation={navigation}
         />
       )}

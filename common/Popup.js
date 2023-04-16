@@ -31,6 +31,10 @@ const Popup = ({ image, text, buttonText, navigation }) => {
   //
   React.useEffect(() => {
     toggleModal();
+
+    setTimeout(() => {
+      dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
+    }, 3000);
   }, [
     authenticate,
     success,
@@ -101,18 +105,6 @@ const Popup = ({ image, text, buttonText, navigation }) => {
           </View>
 
           <Text style={styles.text}>{text}</Text>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={next}
-            style={styles.modalButton}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <Text style={styles.modalButtonText}>{buttonText}</Text>
-            )}
-          </TouchableOpacity>
         </Animated.View>
       </View>
     </Modal>

@@ -97,7 +97,11 @@ const ChangePasswordScreen = () => {
               <View style={styles.registerContainer}>
                 <Text style={styles.heading}>Change your password</Text>
 
-                {error && <Text style={styles.error}>{error}</Text>}
+                {error && (
+                  <View style={styles.error}>
+                    <Text style={styles.errorText}>{error}</Text>
+                  </View>
+                )}
 
                 <View stye={styles.formContainer}>
                   <View style={styles.editProfileBox}>
@@ -311,14 +315,21 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 13 : 12,
   },
   error: {
-    color: colors.white,
+    color: "red",
     marginBottom: 20,
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    alignSelf: "center",
-    padding: 10,
-    backgroundColor: "orangered",
-    fontWeight: "bold",
+    backgroundColor: colors.white,
     width: "90%",
     textAlign: "center",
+    borderWidth: 0.2,
+    borderColor: "red",
+    borderLeftWidth: 5,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  errorText: {
+    color: "red",
   },
 });

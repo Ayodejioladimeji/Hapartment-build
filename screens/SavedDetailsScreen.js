@@ -176,12 +176,16 @@ const SavedDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="bath" size={16} color={colors.textLight} />
-            <Text style={styles.footerBoxText}>{bathrooms} Bathroom</Text>
+            <Text style={styles.footerBoxText}>
+              {bathrooms} {bathrooms === 1 ? "Bathroom" : "Bathrooms"}
+            </Text>
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="toilet" size={16} color={colors.textLight} />
 
-            <Text style={styles.footerBoxText}>{toilets} Toilet</Text>
+            <Text style={styles.footerBoxText}>
+              {toilets} {toilets === "1" ? "Toilet" : "Toilets"}
+            </Text>
           </View>
         </View>
 
