@@ -135,6 +135,8 @@ const IdentityThree = ({ navigation }) => {
       document_type,
     };
 
+    console.log(newData);
+
     dispatch(identity(newData, token, navigation));
   };
 

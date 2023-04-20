@@ -45,7 +45,8 @@ import TermsOfUse from "./screens/TermsOfUse";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import UpdateProperty from "./screens/UpdateProperty";
 import MapScreen from "./screens/MapScreen";
-import { LogBox } from "react-native";
+import { LogBox, View } from "react-native";
+import PushNotification from "./components/pushNotification";
 const Stack = createStackNavigator();
 
 //
@@ -93,6 +94,7 @@ function App() {
     "Non-serializable values were found in the navigation state",
     "Sending `onAnimatedValueUpdate` with no listeners registered.",
     "You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like `PureComponent`, `shouldComponentUpdate`, etc.",
+    'VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 3808, "dt": 5368, "prevDt": 9490}',
   ]);
 
   //

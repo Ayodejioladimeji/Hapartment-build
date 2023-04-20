@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     fontFamily: "NunitoSans-Bold",
     color: colors.primary,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
   amount: {
     fontSize: 16,

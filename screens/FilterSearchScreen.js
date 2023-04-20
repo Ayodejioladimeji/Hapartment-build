@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: colors.textDark,
     height: Platform.OS === "ios" ? 50 : 45,
+    overflow: "hidden",
   },
   searchIcon: {
     marginRight: 10,
@@ -175,6 +176,8 @@ const styles = StyleSheet.create({
   searchInput: {
     fontSize: 14,
     color: colors.textDark,
+    width: "100%",
+    padding: 10,
   },
   emptyWrapper: {
     alignItems: "center",

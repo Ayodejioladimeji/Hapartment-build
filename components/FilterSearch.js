@@ -64,12 +64,12 @@ const FilterSearch = () => {
 
     navigation.navigate("FilterSearchScreen");
     const data = {
-      property_type: propertyType.toLowerCase(),
-      statename: statename.toLowerCase(),
-      cityname: cityname.toLowerCase(),
+      property_type: propertyType,
+      statename: statename,
+      cityname: cityname,
       bathrooms: bath,
       toilets: toilet,
-      furnishing: furnish.toLowerCase(),
+      furnishing: furnish,
       min_price: minPrice,
       max_price: maxPrice,
     };
@@ -89,7 +89,7 @@ const FilterSearch = () => {
           Filter through your preferred preference
         </Text>
 
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
           <View style={styles.country}>
             <Text style={styles.selectHeading}>Select Property Type</Text>
             <Dropdown
@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     paddingHorizontal: 30,
     fontWeight: "600",
+    lineHeight: 25,
   },
 
   selectHeading: {

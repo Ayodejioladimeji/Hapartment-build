@@ -443,8 +443,8 @@ export const acquiredListing =
         });
       }, 1000);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
-      console.log(error.response);
+      Alert.alert(error?.response?.data?.msg);
+      console.log(error?.response);
 
       setTimeout(() => {
         dispatch({

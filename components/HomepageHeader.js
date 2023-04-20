@@ -73,7 +73,7 @@ const HomepageHeader = () => {
           <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
         </TouchableOpacity>
 
-        <View style={styles.notify}>
+        {/* <View style={styles.notify}>
           <MaterialCommunityIcons
             name="bell-outline"
             size={22}
@@ -81,7 +81,7 @@ const HomepageHeader = () => {
           />
 
           <View style={styles.dots}></View>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
     backgroudColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
-    width: 130,
-    justifyContent: "space-around",
+    width: 70,
+    justifyContent: "space-between",
   },
 
   headerLocation: {

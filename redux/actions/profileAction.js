@@ -20,7 +20,7 @@ export const profile = (data, token, profile_callback) => async (dispatch) => {
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
-    }, 8000);
+    }, 1000);
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
@@ -43,17 +43,16 @@ export const identity = (data, token, navigation) => async (dispatch) => {
       payload: { success: res.data.msg },
     });
 
-    Alert.alert(res.data.msg);
     navigation.navigate("RootHome");
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
-    }, 3000);
+    }, 2000);
   }
 };
 

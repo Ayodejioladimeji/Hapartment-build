@@ -104,9 +104,9 @@ const ProfileScreen = ({ navigation }) => {
           </>
         ) : (
           <View style={styles.profileDetailsWrapper}>
-            {user.userType === "agent" && (
+            {user?.userType === "agent" && (
               <>
-                {user.verification.length === 0 && (
+                {user?.verification?.length === 0 && (
                   <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.profileDetails}
@@ -135,55 +135,59 @@ const ProfileScreen = ({ navigation }) => {
                   </TouchableOpacity>
                 )}
 
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.profileDetails}
-                  onPress={listProperty}
-                >
-                  <View style={styles.profileLeft}>
-                    <View style={styles.detailsBox}>
+                {user?.verification[0]?.isVerified === "true" && (
+                  <>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.profileDetails}
+                      onPress={listProperty}
+                    >
+                      <View style={styles.profileLeft}>
+                        <View style={styles.detailsBox}>
+                          <MaterialIcons
+                            name="notifications-off"
+                            size={20}
+                            color="black"
+                            style={styles.profileIcon}
+                          />
+                        </View>
+                        <Text style={styles.detailsText}>List Property</Text>
+                      </View>
+
                       <MaterialIcons
-                        name="notifications-off"
-                        size={20}
+                        name="chevron-right"
+                        size={24}
                         color="black"
-                        style={styles.profileIcon}
+                        style={styles.arrow}
                       />
-                    </View>
-                    <Text style={styles.detailsText}>List Property</Text>
-                  </View>
+                    </TouchableOpacity>
 
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.profileDetails}
+                      onPress={() => navigation.navigate("MyPropertiesScreen")}
+                    >
+                      <View style={styles.profileLeft}>
+                        <View style={styles.detailsBox}>
+                          <MaterialIcons
+                            name="house-siding"
+                            size={22}
+                            color="black"
+                            style={styles.profileIcon}
+                          />
+                        </View>
+                        <Text style={styles.detailsText}>My Properties</Text>
+                      </View>
 
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.profileDetails}
-                  onPress={() => navigation.navigate("MyPropertiesScreen")}
-                >
-                  <View style={styles.profileLeft}>
-                    <View style={styles.detailsBox}>
                       <MaterialIcons
-                        name="house-siding"
-                        size={22}
+                        name="chevron-right"
+                        size={24}
                         color="black"
-                        style={styles.profileIcon}
+                        style={styles.arrow}
                       />
-                    </View>
-                    <Text style={styles.detailsText}>My Properties</Text>
-                  </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                  </>
+                )}
               </>
             )}
 
