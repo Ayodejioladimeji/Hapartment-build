@@ -70,13 +70,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Fullname & Mobile</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -94,13 +87,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Take a selfie</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -118,13 +104,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Add valid document</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
               </View>
 

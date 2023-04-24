@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
+    textTransform: "capitalize",
   },
   saveSection: {
     flexDirection: "row",

@@ -27,6 +27,7 @@ const IdentityThree = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const { identityloading } = useSelector((state) => state.alert);
   const { token } = useSelector((state) => state.auth);
+  const { profile_callback } = useSelector((state) => state.profile);
 
   const {
     identity_name,
@@ -135,9 +136,9 @@ const IdentityThree = ({ navigation }) => {
       document_type,
     };
 
-    console.log(newData);
+    // console.log(newData);
 
-    dispatch(identity(newData, token, navigation));
+    dispatch(identity(newData, token, navigation, profile_callback));
   };
 
   //

@@ -340,6 +340,7 @@ const styles = StyleSheet.create({
     fontFamily: "NunitoSans-Bold",
     color: colors.primary,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
   amount: {
     fontSize: 16,
@@ -379,6 +380,7 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
+    textTransform: "capitalize",
   },
   saveSection: {
     flexDirection: "row",
