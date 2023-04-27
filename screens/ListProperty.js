@@ -9,12 +9,12 @@ import {
   ActivityIndicator,
   Linking,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import colors from "../assets/colors/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import MyStatusBar from "../common/MyStatusBar";
-import CreateListings from "../utils/createListing";
+import { createListing } from "../redux/actions/listingAction";
 
 //
 
@@ -53,36 +53,78 @@ const ListProperty = ({ navigation }) => {
 
   //
 
-  const submit = () => {
-    CreateListings(
-      address,
-      property_type,
-      state,
-      city,
-      statename,
-      cityname,
+  // Handle submit
+  const handleSubmit = () => {
+    if (
+      address === "" ||
+      property_type === "" ||
+      state === "" ||
+      city === "" ||
+      bathrooms === "" ||
+      toilets === "" ||
+      furnishing === "" ||
+      home_facilities.length === 0 ||
+      area_facilities.length === 0 ||
+      description === "" ||
+      price === "" ||
+      category === ""
+    ) {
+      Alert.alert("Please fill all required input");
+      return;
+    }
+
+    if (
+      !imageOne ||
+      !imageTwo ||
+      !imageThree ||
+      !imageFour ||
+      !imageFive ||
+      !imageSix ||
+      !imageSeven
+    ) {
+      Alert.alert("Please select all seven (7) images");
+      return;
+    }
+
+    const newImages = [
+      { id: imageOne.public_id, url: imageOne.url },
+      { id: imageTwo.public_id, url: imageTwo.url },
+
+      { id: imageThree.public_id, url: imageThree.url },
+
+      { id: imageFour.public_id, url: imageFour.url },
+
+      { id: imageFive.public_id, url: imageFive.url },
+
+      { id: imageSix.public_id, url: imageSix.url },
+
+      { id: imageSeven.public_id, url: imageSeven.url },
+    ];
+
+    const newData = {
+      address: address.toLowerCase(),
+      property_type: property_type.toLowerCase(),
+      country: "NG",
+      state: state.toLowerCase(),
+      city: city.toLowerCase(),
+      statename: statename.toLowerCase(),
+      cityname: cityname.toLowerCase(),
+      bedrooms,
       bathrooms,
       toilets,
-      furnishing,
+      furnishing: furnishing.toLowerCase(),
       home_facilities,
       area_facilities,
-      description,
+      description: description.toLowerCase(),
       price,
-      category,
-      bedrooms,
+      category: category.toLowerCase(),
       video,
-      imageOne,
-      imageTwo,
-      imageThree,
-      imageFour,
-      imageFive,
-      imageSix,
-      imageSeven,
-      dispatch,
-      token,
-      listing_callback,
-      navigation
-    );
+      images: newImages,
+    };
+
+    // console.log(newData);
+
+    dispatch(createListing(newData, token, listing_callback, navigation));
   };
 
   // user navigation
@@ -355,7 +397,7 @@ const ListProperty = ({ navigation }) => {
                   ? true
                   : false
               }
-              onPress={submit}
+              onPress={handleSubmit}
             >
               {createlistingloading ? (
                 <ActivityIndicator size="small" color={colors.white} />

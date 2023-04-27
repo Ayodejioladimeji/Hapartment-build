@@ -5,7 +5,6 @@ import {
   patchDataApi,
   postDataApis,
   deleteDataApi,
-  patchApi,
 } from "../../utils/fetchData";
 import { GLOBALTYPES } from "./globalTypes";
 
@@ -14,6 +13,11 @@ import { GLOBALTYPES } from "./globalTypes";
 // Create Listing
 export const createListing =
   (data, token, listing_callback, navigation) => async (dispatch) => {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { createlistingloading: true },
+    });
+
     try {
       const res = await postDataApis("/create_listing", data, token);
 
@@ -53,6 +57,11 @@ export const createListing =
 // Update Listing
 export const updateListing =
   (data, token, listing_callback, navigation) => async (dispatch) => {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { createlistingloading: true },
+    });
+
     try {
       const res = await patchDataApi("/update_listing", data, token);
 

@@ -12,6 +12,15 @@ export const postDataApi = async (url, data) => {
   return res;
 };
 
+export const postData = async (url, token) => {
+  const res = await axios.post(ENDPOINT + url, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return res;
+};
+
 export const postDataApis = async (url, data, token) => {
   const res = await axios.post(ENDPOINT + url, data, {
     headers: {

@@ -41,6 +41,7 @@ const SearchCard = ({ item }) => {
     status,
     updatedAt,
     bathrooms,
+    bedrooms,
   } = item;
   const navigation = useNavigation();
 
@@ -136,7 +137,16 @@ const SearchCard = ({ item }) => {
                   size={14}
                   color={colors.textLight}
                 />
-                <Text style={styles.footerBoxText}>2 Bed</Text>
+                <Text style={styles.footerBoxText}>
+                  {bedrooms === "singleroom"
+                    ? "1"
+                    : bedrooms === "room&parlour"
+                    ? "1"
+                    : bedrooms === "selfcontain"
+                    ? "1"
+                    : bedrooms}{" "}
+                  Bed
+                </Text>
               </View>
               <View style={styles.cardFooterBox}>
                 <FontAwesome5 name="bath" size={11} color={colors.textLight} />
