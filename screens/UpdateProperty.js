@@ -126,7 +126,7 @@ const UpdateProperty = ({ route, navigation }) => {
 
     console.log(newData);
 
-    // dispatch(updateListing(newData, token, listing_callback, navigation));
+    dispatch(updateListing(newData, token, listing_callback, navigation));
   };
 
   // user navigation
