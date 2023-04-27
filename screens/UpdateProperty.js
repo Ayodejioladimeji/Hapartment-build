@@ -124,8 +124,6 @@ const UpdateProperty = ({ route, navigation }) => {
       images: newImages,
     };
 
-    console.log(newData);
-
     dispatch(updateListing(newData, token, listing_callback, navigation));
   };
 

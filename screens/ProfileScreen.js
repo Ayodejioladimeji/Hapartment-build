@@ -23,6 +23,7 @@ import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import VerifyErrorModal from "../common/VerifyErrorModal";
 import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
 import ListSkeletal from "../common/skeletal_loader/listSkeletal";
+import ProfileGoback from "../common/ProfileGoback";
 
 //
 
@@ -59,7 +60,7 @@ const ProfileScreen = ({ navigation }) => {
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <GoBack navigation={navigation} title="User Profile" />
+      <ProfileGoback navigation={navigation} title="User Profile" />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
