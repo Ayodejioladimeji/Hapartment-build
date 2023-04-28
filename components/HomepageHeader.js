@@ -62,15 +62,21 @@ const HomepageHeader = () => {
       )}
 
       <View style={styles.headerRight}>
-        <Feather name="sun" size={22} color={colors.white} />
+        <TouchableOpacity>
+          <View style={styles.sun}>
+            <Feather name="sun" size={22} color={colors.white} />
+          </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
-          activeOpacity={0.7}
+          // activeOpacity={0.7}
           onPress={() =>
             dispatch({ type: GLOBALTYPES.REFRESHING, payload: !refreshing })
           }
         >
-          <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
+          <View style={styles.refresh}>
+            <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
+          </View>
         </TouchableOpacity>
 
         {/* <View style={styles.notify}>
@@ -156,5 +162,17 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 50,
     right: 0,
+  },
+  sun: {
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  refresh: {
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

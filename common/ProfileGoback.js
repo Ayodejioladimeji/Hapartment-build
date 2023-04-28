@@ -34,7 +34,7 @@ const ProfileGoback = ({ navigation, title }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          activeOpacity={0.7}
+          // activeOpacity={0.7}
           onPress={() =>
             dispatch({
               type: GLOBALTYPES.PROFILE_CALLBACK,

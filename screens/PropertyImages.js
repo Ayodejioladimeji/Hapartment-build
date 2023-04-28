@@ -147,17 +147,17 @@ const PropertyImages = ({ route }) => {
           <Text style={styles.heading}>Add Property Images</Text>
           <Text style={styles.subheading}>Select seven (7) images</Text>
 
-          <TouchableOpacity
-            onPress={() => chooseImageOne(dispatch, setLoadingOne)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingOne ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageOne === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                    onPress={() => chooseImageOne(dispatch, setLoadingOne)}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
@@ -166,7 +166,7 @@ const PropertyImages = ({ route }) => {
                     <Text style={{ color: colors.textLight }}>
                       Add front View of the apartment
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -200,24 +200,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageTwo(dispatch, setLoadingTwo)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingTwo ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageTwo === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageTwo(dispatch, setLoadingTwo)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -243,24 +243,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageThree(dispatch, setLoadingThree)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingThree ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageThree === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageThree(dispatch, setLoadingThree)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -286,24 +286,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageFour(dispatch, setLoadingFour)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingFour ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageFour === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageFour(dispatch, setLoadingFour)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -329,24 +329,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageFive(dispatch, setLoadingFive)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingFive ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageFive === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageFive(dispatch, setLoadingFive)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -372,24 +372,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageSix(dispatch, setLoadingSix)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingSix ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageSix === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageSix(dispatch, setLoadingSix)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
@@ -415,24 +415,24 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageSeven(dispatch, setLoadingSeven)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingSeven ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageSeven === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageSeven(dispatch, setLoadingSeven)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
                     <Image
