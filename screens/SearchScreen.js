@@ -13,6 +13,7 @@ import colors from "../assets/colors/colors";
 import GoBack from "../common/GoBack";
 import { useSelector } from "react-redux";
 import Loader2 from "../common/Loader2";
+import SearchGoback from "../common/searchGoback";
 
 //
 
@@ -31,7 +32,7 @@ const SearchScreen = ({ navigation }) => {
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <GoBack navigation={navigation} title="Search for apartments" />
+      <SearchGoback navigation={navigation} title="Search for apartments" />
 
       {/* The search component */}
       <View style={styles.searchWrapper}>
