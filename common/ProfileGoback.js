@@ -42,12 +42,9 @@ const ProfileGoback = ({ navigation, title }) => {
             })
           }
         >
-          <Ionicons
-            name="md-reload-sharp"
-            size={22}
-            color={colors.white}
-            style={{ marginRight: 10 }}
-          />
+          <View style={styles.refresh}>
+            <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -78,5 +75,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: colors.white,
     // fontFamily: "//NunitoSans-Black",
+  },
+  refresh: {
+    borderColor: colors.white,
+    borderWidth: 0.3,
+    height: 45,
+    width: 45,
+    borderRadius: 100,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

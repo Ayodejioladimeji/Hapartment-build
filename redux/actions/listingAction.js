@@ -80,6 +80,9 @@ export const updateListing =
         payload: { success: res.data.msg },
       });
 
+      dispatch({ type: GLOBALTYPES.IS_EDIT, payload: false });
+      dispatch({ type: GLOBALTYPES.RESET_LISTING, payload: {} });
+
       setTimeout(() => {
         navigation.navigate("RootHome");
         dispatch({

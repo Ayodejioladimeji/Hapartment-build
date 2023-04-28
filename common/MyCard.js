@@ -53,7 +53,6 @@ const MyCard = ({ item }) => {
       payload: _id,
     });
     navigation.navigate("UpdateProperty", { item });
-    console.log(item);
   };
 
   // open delete modal

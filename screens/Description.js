@@ -34,8 +34,6 @@ const Description = ({ route }) => {
   );
   const dispatch = useDispatch();
 
-  console.log(category);
-
   // set data for update
   useEffect(() => {
     if (isEdit) {

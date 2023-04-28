@@ -104,7 +104,7 @@ const PropertyImages = ({ route }) => {
     try {
       setRemoveLoading(true);
       const res = await postDataApis("/destroy", newData, token);
-      console.log(res.data.msg);
+      // console.log(res.data.msg);
       setRemoveLoading(false);
     } catch (error) {
       console.log(error);
