@@ -98,6 +98,12 @@ export const login = (data, navigation) => async (dispatch) => {
 
     const res = await postDataApi("/login", data);
 
+    if (res.data.userData.isSuspended) {
+      navigation.navigate("Suspended");
+      dispatch({ type: GLOBALTYPES.ALERT, payload: { authloading: false } });
+      return;
+    }
+
     //  Save the data to the storage
     await AsyncStorage.setItem("access_token", res.data.access_token);
 

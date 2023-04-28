@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.homeScreenWrapper} onLayout={onLayoutRootView}>
       <MyStatusBar backgroundColor={colors.primary} barStyle="light-content" />
       <HomepageHeader />
-      <UserApi />
+      <UserApi navigation={navigation} />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

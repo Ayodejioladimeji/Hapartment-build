@@ -5,8 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { getDataApi } from "../utils/fetchData";
 import { getSavedProperties, myListings } from "../redux/actions/listingAction";
+import { useNavigation } from "@react-navigation/native";
 
-const UserApi = () => {
+const UserApi = ({ navigation }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { profile_callback } = useSelector((state) => state.profile);
@@ -22,6 +23,11 @@ const UserApi = () => {
           dispatch({ type: GLOBALTYPES.USER_LOADING, payload: true });
 
           const res = await getDataApi("/user", token);
+
+          if (res.data.isSuspended) {
+            navigation.navigate("Suspended");
+            return;
+          }
 
           dispatch({
             type: GLOBALTYPES.USER,

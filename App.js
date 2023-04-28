@@ -47,6 +47,7 @@ import UpdateProperty from "./screens/UpdateProperty";
 import MapScreen from "./screens/MapScreen";
 import { LogBox, View } from "react-native";
 import PushNotification from "./components/pushNotification";
+import Suspended from "./screens/Suspended";
 const Stack = createStackNavigator();
 
 //
@@ -195,6 +196,7 @@ function App() {
               <Stack.Screen name="TermsOfUse" component={TermsOfUse} />
               <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
               <Stack.Screen name="MapScreen" component={MapScreen} />
+              <Stack.Screen name="Suspended" component={Suspended} />
             </Stack.Navigator>
           </NavigationContainer>
         </DataProvider>
