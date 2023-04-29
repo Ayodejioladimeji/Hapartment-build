@@ -32,8 +32,15 @@ const SavedPropertiesScreen = ({ navigation }) => {
     }
   }, [dispatch, token]);
 
-  const filteredData = saved_properties.filter((item) => {
-    return Object.values(item.saved_favorite)
+  let arr = [];
+  saved_properties.filter((item) => {
+    let savedby = item.savedBy;
+    const result = { savedby, ...item.saved_favorite };
+    arr.push(result);
+  });
+
+  const filteredData = arr.filter((item) => {
+    return Object.values(item)
       .join(" ")
       .toLowerCase()
       .match(data.toLowerCase());
@@ -73,7 +80,7 @@ const SavedPropertiesScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.searchScroll}>
-            {saved_properties.map((item) => {
+            {filteredData.map((item) => {
               return <SavedCard item={item} key={item._id} />;
             })}
           </View>

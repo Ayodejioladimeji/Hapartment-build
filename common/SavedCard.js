@@ -22,9 +22,7 @@ import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 //
 
-const SavedCard = ({ item }) => {
-  const { saved_favorite, savedBy } = item;
-
+const SavedCard = (props) => {
   const {
     address,
     images,
@@ -35,9 +33,9 @@ const SavedCard = ({ item }) => {
     updatedAt,
     bathrooms,
     bedrooms,
-  } = saved_favorite;
+  } = props.item;
+  const data = props.item;
 
-  const data = { savedBy, ...saved_favorite };
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
