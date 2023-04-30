@@ -145,12 +145,10 @@ export const allListings = () => async (dispatch) => {
 
     dispatch({ type: GLOBALTYPES.ALL_LISTINGS, payload: res.data });
 
-    setTimeout(() => {
-      dispatch({
-        type: GLOBALTYPES.LOADING,
-        payload: { alllistingloading: false },
-      });
-    }, 3000);
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { alllistingloading: false },
+    });
   } catch (error) {
     // console.log(error);
     dispatch({

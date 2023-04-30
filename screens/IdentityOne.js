@@ -8,6 +8,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Keyboard,
+  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
@@ -31,64 +32,68 @@ const IdentityOne = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack navigation={navigation} />
 
-      {/* <KeyboardAvoidingView
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-      > */}
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.containerWrapper}>
-          <View style={styles.identityWrapper}>
-            <Image
-              source={require("../assets/brandlogo.png")}
-              style={styles.brandImage}
-            />
+        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.containerWrapper}>
+            <View style={styles.identityWrapper}>
+              <Image
+                source={require("../assets/brandlogo.png")}
+                style={styles.brandImage}
+              />
 
-            <Text style={styles.name}>
-              Provide your fullname, which must be the same as the name on your
-              Identity card
-            </Text>
+              <Text style={styles.name}>
+                Provide your fullname, which must be the same as the name on
+                your Identity card
+              </Text>
 
-            <Text>Full Name</Text>
-            <TextInput
-              style={[
-                styles.formInput,
-                isFocus && { borderColor: colors.primary, borderWidth: 1 },
-              ]}
-              value={identity_name}
-              autoComplete={Platform.OS === "web" ? "none" : "off"}
-              onChangeText={(text) =>
-                dispatch({ type: GLOBALTYPES.IDENTITY_NAME, payload: text })
-              }
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-            />
+              <Text>Full Name</Text>
+              <TextInput
+                style={[
+                  styles.formInput,
+                  isFocus && { borderColor: colors.primary, borderWidth: 1 },
+                ]}
+                value={identity_name}
+                autoComplete={Platform.OS === "web" ? "none" : "off"}
+                onChangeText={(text) =>
+                  dispatch({ type: GLOBALTYPES.IDENTITY_NAME, payload: text })
+                }
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+              />
 
-            <Text>Mobile No</Text>
-            <TextInput
-              style={[
-                styles.formInput,
-                mobileFocus && { borderColor: colors.primary, borderWidth: 1 },
-              ]}
-              value={identity_mobile}
-              autoComplete={Platform.OS === "web" ? "none" : "off"}
-              onChangeText={(text) =>
-                dispatch({ type: GLOBALTYPES.IDENTITY_MOBILE, payload: text })
-              }
-              keyboardType="numeric"
-              onFocus={() => setMobileFocus(true)}
-              onBlur={() => setMobileFocus(false)}
-            />
+              <Text>Mobile No</Text>
+              <TextInput
+                style={[
+                  styles.formInput,
+                  mobileFocus && {
+                    borderColor: colors.primary,
+                    borderWidth: 1,
+                  },
+                ]}
+                value={identity_mobile}
+                autoComplete={Platform.OS === "web" ? "none" : "off"}
+                onChangeText={(text) =>
+                  dispatch({ type: GLOBALTYPES.IDENTITY_MOBILE, payload: text })
+                }
+                keyboardType="numeric"
+                onFocus={() => setMobileFocus(true)}
+                onBlur={() => setMobileFocus(false)}
+              />
 
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("IdentityTwo")}
-            >
-              <View style={styles.identityButton}>
-                <Text style={styles.identityButtonText}>Next</Text>
-              </View>
-            </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate("IdentityTwo")}
+              >
+                <View style={styles.identityButton}>
+                  <Text style={styles.identityButtonText}>Next</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-      {/* </KeyboardAvoidingView> */}
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 };

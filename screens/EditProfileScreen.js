@@ -10,6 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import colors from "../assets/colors/colors";
 import * as ImagePicker from "expo-image-picker";
@@ -172,7 +173,10 @@ const EditProfileScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <KeyboardAvoidingView behavior="padding">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+        >
           <View style={styles.editProfileBox}>
             <Text style={styles.inputText}>FullName</Text>
             <TextInput

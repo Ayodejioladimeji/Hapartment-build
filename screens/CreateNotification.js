@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -94,7 +95,10 @@ const FilterSearch = () => {
             Fill the form below to create Notification
           </Text>
 
-          <KeyboardAvoidingView behavior="padding">
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+          >
             <View style={styles.country}>
               <Text style={styles.selectHeading}>Select Property Type</Text>
               <Dropdown

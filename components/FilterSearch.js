@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Dimensions,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -89,7 +91,10 @@ const FilterSearch = () => {
           Filter through your preferred preference
         </Text>
 
-        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+        >
           <View style={styles.country}>
             <Text style={styles.selectHeading}>Select Property Type</Text>
             <Dropdown

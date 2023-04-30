@@ -20,6 +20,7 @@ import { Formik } from "formik";
 import { register } from "../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
 
 // VALIDATION REGEX
 const passwordUpper = /(?=.*[A-Z])/;
@@ -125,7 +126,10 @@ const Register = ({ route }) => {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
             >
-              <KeyboardAvoidingView behavior="padding">
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+              >
                 <View style={styles.registerContainer}>
                   <Text style={styles.heading}>Create an account</Text>
 
