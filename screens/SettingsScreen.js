@@ -120,7 +120,7 @@ const SettingsScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
+        {/* <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
           <View style={styles.settingsLeft}>
             <Ionicons
               name="star-half"
@@ -137,7 +137,7 @@ const SettingsScreen = ({ navigation }) => {
             color="black"
             style={styles.arrow}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@hapartment.org")}
