@@ -75,9 +75,7 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL("https://hapartment.org/privacypolicy")
-          }
+          onPress={() => Linking.openURL("https://hapartment.org/privacy")}
           activeOpacity={0.7}
           style={styles.settingsBox}
         >

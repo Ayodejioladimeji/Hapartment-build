@@ -21,6 +21,7 @@ import AgentSearchCard from "../common/AgentSearchCard";
 import LoadMore from "../common/LoadMore";
 import Loader2 from "../common/Loader2";
 import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
+import profileImg from "../assets/images/user.jpg";
 
 //
 
@@ -63,17 +64,15 @@ const LandlordProfileScreen = ({ route }) => {
             <ProfileSkeletal />
           ) : (
             <View style={styles.profileBox}>
-              {agent_details?.agent_details === undefined ? (
-                <Image
-                  source={require("../assets/images/user.jpg")}
-                  style={styles.profileImage}
-                />
-              ) : (
-                <Image
-                  source={{ uri: agent_details.agent_details.image }}
-                  style={styles.profileImage}
-                />
-              )}
+              <Image
+                source={
+                  agent_details.agent_details.image
+                    ? { uri: agent_details.agent_details.image }
+                    : profileImg
+                }
+                style={styles.profileImage}
+              />
+
               <Text style={styles.nameText}>
                 {agent_details.agent_details.fullname}
               </Text>
