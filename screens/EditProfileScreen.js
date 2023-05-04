@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Dimensions,
+  Linking,
 } from "react-native";
 import colors from "../assets/colors/colors";
 import * as ImagePicker from "expo-image-picker";
@@ -136,10 +137,13 @@ const EditProfileScreen = ({ navigation }) => {
                       style={styles.activity}
                     />
                   ) : (
-                    <Image
-                      source={require("../assets/images/user.jpg")}
-                      style={styles.Image}
-                    />
+                    <View style={styles.ImageBox}>
+                      <Text>Click here</Text>
+                    </View>
+                    // <Image
+                    //   source={require("../assets/images/user.jpg")}
+                    //   style={styles.Image}
+                    // />
                   )}
                 </View>
               ) : image ? (
@@ -189,7 +193,7 @@ const EditProfileScreen = ({ navigation }) => {
               selectTextOnFocus={false}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
-              // editable={!isFocus && true}
+              editable={!isFocus && true}
             />
           </View>
 
@@ -215,7 +219,7 @@ const EditProfileScreen = ({ navigation }) => {
               // selectTextOnFocus={false}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
-              // editable={isFocus && true}
+              editable={false}
             />
           </View>
 
@@ -232,6 +236,17 @@ const EditProfileScreen = ({ navigation }) => {
               <Text style={styles.profileButtonText}>Edit Profile</Text>
             )}
           </TouchableOpacity>
+
+          <Text style={styles.note}>
+            Send a mail to{" "}
+            <Text
+              style={{ color: colors.primary }}
+              onPress={() => Linking.openURL("mailto:support@hapartment.org")}
+            >
+              support@hapartment.org
+            </Text>{" "}
+            to edit your email and username
+          </Text>
         </KeyboardAvoidingView>
       </ScrollView>
     </View>
@@ -269,6 +284,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 
+  ImageBox: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 100,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   nameText: {
     // fontFamily: "//NunitoSans-Black",
     fontSize: 17,
@@ -291,6 +314,7 @@ const styles = StyleSheet.create({
   inputText: {
     marginBottom: 5,
     fontSize: 13,
+
     // fontFamily: "//NunitoSans-Bold",
   },
 
@@ -326,5 +350,13 @@ const styles = StyleSheet.create({
     width: "90%",
     textAlign: "center",
     marginTop: 30,
+  },
+
+  note: {
+    marginHorizontal: 20,
+    marginTop: 20,
+    textAlign: "center",
+    color: colors.textLight,
+    lineHeight: 25,
   },
 });
