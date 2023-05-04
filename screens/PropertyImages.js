@@ -58,8 +58,6 @@ const PropertyImages = ({ route }) => {
     isEdit,
   } = useSelector((state) => state.listing);
 
-  console.log(imageOne);
-
   // set data for update
   useEffect(() => {
     if (isEdit) {

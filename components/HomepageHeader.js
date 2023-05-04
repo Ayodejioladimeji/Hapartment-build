@@ -8,17 +8,25 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import { useNavigation } from "@react-navigation/native";
 
 //
 
 const HomepageHeader = () => {
+  const navigation = useNavigation();
   const { user, token } = useSelector((state) => state.auth);
   const { userloading } = useSelector((state) => state.alert);
   const { refreshing } = useSelector((state) => state.notification);
+
   const dispatch = useDispatch();
 
   //
@@ -62,9 +70,9 @@ const HomepageHeader = () => {
       )}
 
       <View style={styles.headerRight}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("FilterScreen")}>
           <View style={styles.sun}>
-            <Feather name="sun" size={22} color={colors.white} />
+            <FontAwesome name="sliders" size={23} color={colors.white} />
           </View>
         </TouchableOpacity>
 
