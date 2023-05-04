@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
@@ -32,11 +33,12 @@ const IdentityOne = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack navigation={navigation} />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+        >
+          {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
           <View style={styles.containerWrapper}>
             <View style={styles.identityWrapper}>
               <Image
@@ -76,7 +78,10 @@ const IdentityOne = ({ navigation }) => {
                 value={identity_mobile}
                 autoComplete={Platform.OS === "web" ? "none" : "off"}
                 onChangeText={(text) =>
-                  dispatch({ type: GLOBALTYPES.IDENTITY_MOBILE, payload: text })
+                  dispatch({
+                    type: GLOBALTYPES.IDENTITY_MOBILE,
+                    payload: text,
+                  })
                 }
                 keyboardType="numeric"
                 onFocus={() => setMobileFocus(true)}
@@ -92,8 +97,8 @@ const IdentityOne = ({ navigation }) => {
               </TouchableWithoutFeedback>
             </View>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </View>
   );
 };

@@ -31,9 +31,6 @@ const NotificationScreen = ({ navigation }) => {
     dispatch(getNotifications(token));
   }, [callback]);
 
-  // console.log(my_notification?.length);
-  // console.log(getnotificationloading);
-
   //
 
   return (

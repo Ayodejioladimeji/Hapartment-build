@@ -46,7 +46,9 @@ const Identity = ({ navigation }) => {
               />
 
               <View style={styles.textView}>
-                <Text style={styles.heading}>Verify your identity</Text>
+                <Text style={styles.heading}>
+                  Steps to verify your identity
+                </Text>
                 <Text style={styles.subheading}>
                   Please match your face with a supported document in order to
                   get verified
