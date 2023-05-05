@@ -39,10 +39,9 @@ const MyCard = ({ item }) => {
     status,
     updatedAt,
     bathrooms,
+    bedrooms,
   } = item;
   const navigation = useNavigation();
-  const { token } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
 
   // update listing method
@@ -79,16 +78,12 @@ const MyCard = ({ item }) => {
     });
   };
 
-  // const handleAcquired = () => {
-  //   dispatch(acquiredListing(_id, token));
-  // };
-
   //
   return (
     <View>
       <TouchableOpacity
         activeOpacity={0.9}
-        onPress={() => navigation.navigate("DetailsScreen", { item })}
+        onPress={() => navigation.navigate("AgentDetailsScreen", { item })}
         style={styles.cardsWrapper}
       >
         <View style={styles.imagesWrapper}>
@@ -129,7 +124,16 @@ const MyCard = ({ item }) => {
           <View style={styles.cardFooter}>
             <View style={styles.cardFooterBox}>
               <Ionicons name="bed-outline" size={14} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>2 Bed</Text>
+              <Text style={styles.footerBoxText}>
+                {bedrooms === "singleroom"
+                  ? "1"
+                  : bedrooms === "room&parlour"
+                  ? "1"
+                  : bedrooms === "selfcontain"
+                  ? "1"
+                  : bedrooms}{" "}
+                Bed
+              </Text>
             </View>
             <View style={styles.cardFooterBox}>
               <FontAwesome5 name="bath" size={11} color={colors.textLight} />
@@ -167,14 +171,6 @@ const MyCard = ({ item }) => {
           <EvilIcons name="trash" size={20} color="red" />
           <Text style={styles.delete}>delete</Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          onPress={handleAcquired}
-          activeOpacity={0.7}
-          style={styles.actionDelete}
-        >
-          <Text style={styles.delete}>Property rented</Text>
-        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -223,10 +219,11 @@ const styles = StyleSheet.create({
   },
 
   nameText: {
-    fontWeight: "600",
-    fontSize: Platform.OS === "ios" ? 13 : 12,
+    fontWeight: "700",
+    fontSize: Platform.OS === "ios" ? 15 : 13,
     // fontFamily: "//NunitoSans-Bold",
     marginBottom: 10,
+    textTransform: "capitalize",
   },
 
   amountText: {

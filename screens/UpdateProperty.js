@@ -13,19 +13,18 @@ import colors from "../assets/colors/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import MyStatusBar from "../common/MyStatusBar";
-import handleSubmit from "../utils/createListing";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import { updateListing } from "../redux/actions/listingAction";
 
 //
 
 const UpdateProperty = ({ route, navigation }) => {
   const item = route.params.item;
-  // console.log(item);
+
   const { token } = useSelector((state) => state.auth);
   const {
     address,
     property_type,
-    country,
     state,
     city,
     statename,
@@ -56,44 +55,82 @@ const UpdateProperty = ({ route, navigation }) => {
 
   //
 
-  const submit = () => {
-    handleSubmit(
-      updateId,
-      address,
-      property_type,
-      country,
-      state,
-      city,
-      statename,
-      cityname,
+  const handleSubmit = () => {
+    if (
+      address === "" ||
+      property_type === "" ||
+      state === "" ||
+      city === "" ||
+      bathrooms === "" ||
+      toilets === "" ||
+      furnishing === "" ||
+      home_facilities.length === 0 ||
+      area_facilities.length === 0 ||
+      description === "" ||
+      price === "" ||
+      category === ""
+    ) {
+      Alert.alert("Please fill all required input");
+      return;
+    }
+
+    if (
+      !imageOne ||
+      !imageTwo ||
+      !imageThree ||
+      !imageFour ||
+      !imageFive ||
+      !imageSix ||
+      !imageSeven
+    ) {
+      Alert.alert("Please select all seven (7) images");
+      return;
+    }
+
+    const newImages = [
+      { id: imageOne.public_id, url: imageOne.url },
+      { id: imageTwo.public_id, url: imageTwo.url },
+
+      { id: imageThree.public_id, url: imageThree.url },
+
+      { id: imageFour.public_id, url: imageFour.url },
+
+      { id: imageFive.public_id, url: imageFive.url },
+
+      { id: imageSix.public_id, url: imageSix.url },
+
+      { id: imageSeven.public_id, url: imageSeven.url },
+    ];
+
+    const newData = {
+      list_id: updateId,
+      address: address.toLowerCase(),
+      property_type: property_type.toLowerCase(),
+      country: "NG",
+      state: state.toLowerCase(),
+      city: city.toLowerCase(),
+      statename: statename.toLowerCase(),
+      cityname: cityname.toLowerCase(),
+      bedrooms,
       bathrooms,
       toilets,
-      furnishing,
+      furnishing: furnishing.toLowerCase(),
       home_facilities,
       area_facilities,
-      description,
+      description: description.toLowerCase(),
       price,
-      category,
-      bedrooms,
+      category: category.toLowerCase(),
       video,
-      imageOne,
-      imageTwo,
-      imageThree,
-      imageFour,
-      imageFive,
-      imageSix,
-      imageSeven,
-      dispatch,
-      token,
-      listing_callback,
-      isEdit
-    );
+      images: newImages,
+    };
+
+    dispatch(updateListing(newData, token, listing_callback, navigation));
   };
 
   // user navigation
   const userNavigation = () => {
     dispatch({ type: GLOBALTYPES.IS_EDIT, payload: false });
-
+    dispatch({ type: GLOBALTYPES.RESET_LISTING, payload: {} });
     navigation.goBack();
   };
 
@@ -112,9 +149,7 @@ const UpdateProperty = ({ route, navigation }) => {
             />
 
             <View style={styles.textView}>
-              <Text style={styles.heading}>
-                {isEdit ? "Update" : "List"} Your Property
-              </Text>
+              <Text style={styles.heading}>Update Your Property</Text>
               {!isEdit && (
                 <Text style={styles.subheading}>
                   Follow the instructions{" "}
@@ -361,7 +396,7 @@ const UpdateProperty = ({ route, navigation }) => {
                   ? true
                   : false
               }
-              onPress={submit}
+              onPress={handleSubmit}
             >
               {createlistingloading ? (
                 <ActivityIndicator size="small" color={colors.white} />

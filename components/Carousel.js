@@ -34,7 +34,7 @@ const Slide = ({ item }) => {
   );
 };
 
-const Carousel = ({ images, acquired }) => {
+const Carousel = ({ images, status }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
   const ref = React.useRef();
   const { full_image } = useSelector((state) => state.property);
@@ -87,6 +87,15 @@ const Carousel = ({ images, acquired }) => {
 
       <Footer />
 
+      {status === "verified" && (
+        <View style={styles.verifiedContainer}>
+          <Image
+            source={require("../assets/images/verified.png")}
+            style={{ height: 50, width: 50 }}
+          />
+        </View>
+      )}
+
       {full_image !== null && <FullscreenModal full_image={full_image} />}
     </View>
   );
@@ -124,5 +133,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     color: colors.white,
     fontWeight: "700",
+  },
+
+  verifiedContainer: {
+    position: "absolute",
+    left: 10,
+    top: 10,
   },
 });

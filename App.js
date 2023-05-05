@@ -9,7 +9,6 @@ import EditProfileScreen from "./screens/EditProfileScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import LandlordProfileScreen from "./screens/LandlordProfileScreen";
 import AgentDetailsScreen from "./screens/AgentDetailsScreen";
-import WhoAreYou from "./screens/WhoAreYou";
 import Login from "./screens/Login";
 import ForgotPassword from "./screens/ForgotPassword";
 import OneTimeCode from "./screens/OneTimeCode";
@@ -45,6 +44,10 @@ import FaqScreen from "./screens/FaqScreen";
 import TermsOfUse from "./screens/TermsOfUse";
 import PrivacyPolicy from "./screens/PrivacyPolicy";
 import UpdateProperty from "./screens/UpdateProperty";
+import MapScreen from "./screens/MapScreen";
+import { LogBox, View } from "react-native";
+import PushNotification from "./components/pushNotification";
+import Suspended from "./screens/Suspended";
 const Stack = createStackNavigator();
 
 //
@@ -81,6 +84,21 @@ function App() {
   }, [showOnboard]);
 
   //
+  LogBox.ignoreLogs([
+    "VirtualizedLists should never be nested",
+    "Warning: Failed prop type: Invalid prop `touchableComponent`",
+    "Require cycle:",
+    "Calling `getNode()`",
+    "Animated: `useNativeDriver` was not specified.",
+    "Warning: componentWillReceiveProps has been renamed",
+    "Warning: componentWillMount has been renamed",
+    "Non-serializable values were found in the navigation state",
+    "Sending `onAnimatedValueUpdate` with no listeners registered.",
+    "You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like `PureComponent`, `shouldComponentUpdate`, etc.",
+    'VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shouldComponentUpdate, etc. {"contentLength": 3808, "dt": 5368, "prevDt": 9490}',
+  ]);
+
+  //
 
   return connectStatus ? (
     <>
@@ -100,7 +118,6 @@ function App() {
               )}
 
               <Stack.Screen name="RootHome" component={RootHome} />
-              {/* <Stack.Screen name="WhoAreYou" component={WhoAreYou} /> */}
               <Stack.Screen name="Register" component={Register} />
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="OneTimeCode" component={OneTimeCode} />
@@ -178,6 +195,8 @@ function App() {
               <Stack.Screen name="FaqScreen" component={FaqScreen} />
               <Stack.Screen name="TermsOfUse" component={TermsOfUse} />
               <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+              <Stack.Screen name="MapScreen" component={MapScreen} />
+              <Stack.Screen name="Suspended" component={Suspended} />
             </Stack.Navigator>
           </NavigationContainer>
         </DataProvider>
@@ -189,5 +208,3 @@ function App() {
 }
 
 export default App;
-
-// "apiKey" : "AIzaSyDXdO_qkMHQ6vLisaRq5vfXgK_n9YT5WBQ"

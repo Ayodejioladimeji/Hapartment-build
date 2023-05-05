@@ -18,10 +18,8 @@ import EmailValidator from "email-validator";
 import { Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/actions/authAction";
-import Navigate from "../common/Navigate";
 import GoBack from "../common/GoBack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { A } from "@expo/html-elements";
 
 // VALIDATION REGEX
 const passwordUpper = /(?=.*[A-Z])/;
@@ -37,6 +35,8 @@ const Login = () => {
   const { authloading, error } = useSelector((state) => state.alert);
   const [typePassword, setTypePassword] = useState(false);
 
+  // The section of the login page.
+
   //
   return (
     <Formik
@@ -50,7 +50,7 @@ const Login = () => {
             email: values.email.toLowerCase(),
             password: values.password,
           };
-          dispatch(login(newData));
+          dispatch(login(newData, navigation));
           setSubmitting(false);
         }, 500);
       }}
@@ -101,7 +101,11 @@ const Login = () => {
               <View style={styles.registerContainer}>
                 <Text style={styles.heading}>Login to continue</Text>
 
-                {error && <Text style={styles.error}>{error}</Text>}
+                {error && (
+                  <View style={styles.error}>
+                    <Text style={styles.errorText}>{error}</Text>
+                  </View>
+                )}
 
                 <View stye={styles.formContainer}>
                   <View style={styles.editProfileBox}>
@@ -165,15 +169,17 @@ const Login = () => {
                     Forgot password ?
                   </Text>
 
-                  <TouchableWithoutFeedback onPress={handleSubmit}>
-                    <View style={styles.profileButton}>
-                      {authloading ? (
-                        <ActivityIndicator size="small" color={colors.white} />
-                      ) : (
-                        <Text style={styles.profileButtonText}>Login</Text>
-                      )}
-                    </View>
-                  </TouchableWithoutFeedback>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={handleSubmit}
+                    style={styles.profileButton}
+                  >
+                    {authloading ? (
+                      <ActivityIndicator size="small" color={colors.white} />
+                    ) : (
+                      <Text style={styles.profileButtonText}>Login</Text>
+                    )}
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.helpWrapper}>
@@ -286,15 +292,22 @@ const styles = StyleSheet.create({
   },
 
   error: {
-    color: colors.white,
+    color: "red",
     marginBottom: 20,
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    alignSelf: "center",
-    padding: 10,
-    backgroundColor: "orangered",
-    fontWeight: "bold",
+    backgroundColor: colors.white,
     width: "90%",
     textAlign: "center",
+    borderWidth: 0.2,
+    borderColor: "red",
+    borderLeftWidth: 5,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  errorText: {
+    color: "red",
   },
   helpWrapper: {
     marginTop: 40,

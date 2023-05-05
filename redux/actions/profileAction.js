@@ -20,11 +20,11 @@ export const profile = (data, token, profile_callback) => async (dispatch) => {
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
-    }, 8000);
+    }, 1000);
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -34,25 +34,33 @@ export const profile = (data, token, profile_callback) => async (dispatch) => {
 };
 
 // verify Agent identity
-export const identity = (data, token) => async (dispatch) => {
-  try {
-    const res = await patchDataApi("/verifyagent", data, token);
+export const identity =
+  (data, token, navigation, profile_callback) => async (dispatch) => {
+    try {
+      const res = await patchDataApi("/verifyagent", data, token);
 
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { verifyagent: res.data.msg },
-    });
-  } catch (error) {
-    dispatch({
-      type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
-    });
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
 
-    setTimeout(() => {
-      dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
-    }, 3000);
-  }
-};
+      dispatch({
+        type: GLOBALTYPES.PROFILE_CALLBACK,
+        payload: !profile_callback,
+      });
+
+      navigation.navigate("RootHome");
+    } catch (error) {
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { error: error?.response?.data?.msg },
+      });
+
+      setTimeout(() => {
+        dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
+      }, 2000);
+    }
+  };
 
 // Get all agent
 export const allAgent = () => async (dispatch) => {
@@ -69,7 +77,7 @@ export const allAgent = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -97,10 +105,10 @@ export const agentDetails = (id) => async (dispatch) => {
       });
     }, 3000);
   } catch (error) {
-    console.log(error.response.data.msg);
+    // console.log(error?.response?.data?.msg);
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {

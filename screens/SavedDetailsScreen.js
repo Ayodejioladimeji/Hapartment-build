@@ -2,41 +2,33 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   ScrollView,
   Image,
   TouchableOpacity,
   Platform,
-  FlatList,
+  Share,
   Alert,
+  Linking,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
-  AntDesign,
-  FontAwesome,
   FontAwesome5,
-  Fontisto,
-  Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
   Octicons,
 } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useNavigation } from "@react-navigation/native";
-import VideoComponent from "../components/VideoComponent";
 import { addComma } from "comma-separator";
 import { format } from "timeago.js";
-import { list } from "../constants/list";
 import { useDispatch, useSelector } from "react-redux";
-import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import Tab from "../components/Tab";
-import Map from "../components/Map";
-import Video from "../components/Video";
-import Videos from "../components/Video";
-import { reportListing, saveProperties } from "../redux/actions/listingAction";
 import { safetytips } from "../constants/safetytips";
+import { saveProperties } from "../redux/actions/listingAction";
+import { getDataApis } from "../utils/fetchData";
 
 //
 
@@ -44,12 +36,12 @@ const SavedDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { token, user } = useSelector((state) => state.auth);
   const { callback, saved_properties } = useSelector((state) => state.property);
-  const { listing_callback } = useSelector((state) => state.listing);
   const { favloading, reportlistingloading } = useSelector(
     (state) => state.loading
   );
   const dispatch = useDispatch();
   const [check, setCheck] = useState(null);
+  const [postedBy, setPostedBy] = useState(null);
 
   const {
     _id,
@@ -58,24 +50,35 @@ const SavedDetailsScreen = ({ route }) => {
     bedrooms,
     bathrooms,
     toilets,
+    status,
     price,
     images,
     reportedBy,
     updatedAt,
-    postedBy,
-  } = route.params.item;
+  } = route.params.data;
+
+  console.log(_id);
+
+  useEffect(() => {
+    if (_id) {
+      console.log("id has been found");
+      const details = async () => {
+        try {
+          const res = await getDataApis(`/list_details/${_id}`);
+          console.log(res.data);
+          setPostedBy(res.data.postedBy);
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      };
+      details();
+    }
+  }, [_id]);
 
   useEffect(() => {
     const res = reportedBy.find((item) => item.user === user._id);
     setCheck(res);
   }, []);
-
-  const posted = saved_properties.find(
-    (item) => item.postedBy._id === postedBy
-  );
-
-  const newPosted = posted.postedBy;
-  const id = posted.postedBy._id;
 
   // add favourite method
   const saveProperty = () => {
@@ -100,7 +103,33 @@ const SavedDetailsScreen = ({ route }) => {
     navigation.navigate("ReportListing", { _id });
   };
 
-  // check if a user has already reported a property
+  // onshare method -  for sharing on social media
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `https://hapartment.org/listings/${_id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          //dismissed
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  // Chat agent on whatsapp
+  const openWhatsapp = () => {
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=234${postedBy.verification[0].identity_mobile}&text=Hi, i'm interested in your property on Hapartment ${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
+    );
+  };
 
   //
   return (
@@ -112,7 +141,7 @@ const SavedDetailsScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <Carousel images={images} />
+        <Carousel images={images} status={status} />
 
         <View style={styles.detailsName}>
           <Text style={styles.name}>{property_type}</Text>
@@ -147,37 +176,54 @@ const SavedDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="bath" size={16} color={colors.textLight} />
-            <Text style={styles.footerBoxText}>{bathrooms} Bathroom</Text>
+            <Text style={styles.footerBoxText}>
+              {bathrooms} {bathrooms === 1 ? "Bathroom" : "Bathrooms"}
+            </Text>
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="toilet" size={16} color={colors.textLight} />
 
-            <Text style={styles.footerBoxText}>{toilets} Toilet</Text>
+            <Text style={styles.footerBoxText}>
+              {toilets} {toilets === "1" ? "Toilet" : "Toilets"}
+            </Text>
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={saveProperty}
-          activeOpacity={0.7}
-          style={styles.save}
-        >
-          {favloading ? (
-            <Text>Saving property...</Text>
-          ) : (
-            <>
-              <MaterialIcons
-                name="favorite-outline"
-                size={16}
-                color={colors.textLight}
-              />
-              <Text style={styles.saveText}>Save</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {/* Save Property section */}
 
-        {/* <Map /> */}
+        <View style={styles.saveSection}>
+          <TouchableOpacity
+            onPress={saveProperty}
+            activeOpacity={0.7}
+            style={styles.save}
+          >
+            {favloading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <MaterialIcons
+                  name="favorite-outline"
+                  size={16}
+                  color={colors.textLight}
+                />
+                <Text style={styles.saveText}>Save</Text>
+              </>
+            )}
+          </TouchableOpacity>
 
-        <Tab params={route.params.item} />
+          <TouchableOpacity
+            onPress={openWhatsapp}
+            activeOpacity={0.7}
+            style={styles.contactWrapper}
+          >
+            <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
+            <Text style={styles.contactText}>
+              {postedBy?.verification[0]?.identity_mobile}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Tab params={route.params.data} />
 
         {/* video section */}
         {/* <View style={styles.videosWrapper}>
@@ -195,6 +241,15 @@ const SavedDetailsScreen = ({ route }) => {
           ))}
         </View>
 
+        {/* share */}
+        <TouchableOpacity
+          onPress={onShare}
+          activeOpacity={0.7}
+          style={styles.shareWrapper}
+        >
+          <Text style={styles.share}>Share Property</Text>
+        </TouchableOpacity>
+
         {/* date section */}
         <View style={styles.videoWrapper}>
           <View style={styles.dateWrapper}>
@@ -205,22 +260,6 @@ const SavedDetailsScreen = ({ route }) => {
         </View>
 
         {/* share */}
-        {/* <View style={styles.shareWrapper}>
-          <View style={styles.shareHeader}>
-            <AntDesign name="sharealt" size={18} color={colors.textDark} />
-            <Text style={styles.shareText}>Share this property</Text>
-          </View>
-
-          <View style={styles.shareIcons}>
-            <AntDesign name="facebook-square" size={26} color="#3b5998" />
-            <FontAwesome name="twitter-square" size={26} color="#00acee" />
-            <FontAwesome5
-              name="whatsapp-square"
-              size={26}
-              color={colors.primary}
-            />
-          </View>
-        </View> */}
 
         {/* report listing */}
         <TouchableOpacity
@@ -244,19 +283,19 @@ const SavedDetailsScreen = ({ route }) => {
         {/* Agent section */}
         <View style={styles.agentWrapper}>
           <View style={styles.agentBox}>
-            {newPosted.image === null ? (
+            {postedBy?.image === null ? (
               <Image
                 source={require("../assets/images/user.jpg")}
                 style={styles.agentImage}
               />
             ) : (
               <Image
-                source={{ uri: newPosted.image }}
+                source={{ uri: postedBy?.image }}
                 style={styles.agentImage}
               />
             )}
             <View>
-              <Text style={styles.agentName}>{newPosted.fullname}</Text>
+              <Text style={styles.agentName}>{postedBy?.fullname}</Text>
               <Text style={styles.desc}>Agent</Text>
             </View>
           </View>
@@ -264,7 +303,11 @@ const SavedDetailsScreen = ({ route }) => {
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.viewWrapper}
-            onPress={() => navigation.navigate("LandlordProfileScreen", { id })}
+            onPress={() =>
+              navigation.navigate("LandlordProfileScreen", {
+                id: postedBy?._id,
+              })
+            }
           >
             <Text style={styles.viewText}>View Agent</Text>
           </TouchableOpacity>
@@ -332,21 +375,56 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
   },
+  saveSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginVertical: 40,
+  },
   save: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10,
-    marginVertical: 20,
+    height: 40,
+    width: 150,
+    borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
-    height: 40,
-    borderRadius: 3,
   },
   saveText: {
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
+  },
+  contactWrapper: {
+    height: 40,
+    width: 150,
+    borderRadius: 40,
+    backgroundColor: colors.primary,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  contactText: {
+    color: colors.white,
+    // fontFamily: "//NunitoSans-Bold",
+    marginLeft: 10,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
+  },
+  verified: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: colors.primary,
+  },
+  pending: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "red",
   },
 
   map: {
@@ -407,6 +485,7 @@ const styles = StyleSheet.create({
   tipsWrapper: {
     paddingHorizontal: 20,
     marginVertical: 40,
+    marginBottom: 20,
     padding: 25,
     backgroundColor: colors.light,
     width: "100%",
@@ -453,28 +532,13 @@ const styles = StyleSheet.create({
   shareWrapper: {
     marginTop: 20,
     marginHorizontal: 15,
-    borderWidth: 0.3,
-    borderColor: colors.textLighter,
-    height: 100,
-  },
-  shareHeader: {
-    backgroundColor: colors.light,
-    paddingHorizontal: 15,
-    flexDirection: "row",
+    height: 50,
     alignItems: "center",
-    height: 40,
+    justifyContent: "center",
   },
-  shareText: {
-    marginLeft: 5,
-  },
-  shareIcons: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // alignSelf: "center",
-    height: 60,
-    width: 180,
+  share: {
+    color: colors.primary,
+    fontSize: 16,
   },
   reportWrapper: {
     padding: 12,

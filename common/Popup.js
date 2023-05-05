@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "../assets/colors/colors";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
-const Popup = ({ image, text, buttonText, navigation }) => {
+const Popup = ({ image, text, navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -31,6 +31,10 @@ const Popup = ({ image, text, buttonText, navigation }) => {
   //
   React.useEffect(() => {
     toggleModal();
+
+    setTimeout(() => {
+      dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
+    }, 3000);
   }, [
     authenticate,
     success,
@@ -101,18 +105,6 @@ const Popup = ({ image, text, buttonText, navigation }) => {
           </View>
 
           <Text style={styles.text}>{text}</Text>
-
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={next}
-            style={styles.modalButton}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <Text style={styles.modalButtonText}>{buttonText}</Text>
-            )}
-          </TouchableOpacity>
         </Animated.View>
       </View>
     </Modal>
@@ -133,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 30,
-    borderRadius: 20,
+    borderRadius: 10,
     elevation: 20,
   },
   header: {

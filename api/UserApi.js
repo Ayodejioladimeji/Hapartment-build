@@ -1,12 +1,13 @@
-import { View } from "react-native";
+import { Alert, View } from "react-native";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import { getDataApi } from "../utils/fetchData";
 import { getSavedProperties, myListings } from "../redux/actions/listingAction";
+import { useNavigation } from "@react-navigation/native";
 
-const UserApi = () => {
+const UserApi = ({ navigation }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { profile_callback } = useSelector((state) => state.profile);
@@ -23,6 +24,11 @@ const UserApi = () => {
 
           const res = await getDataApi("/user", token);
 
+          if (res.data.isSuspended) {
+            navigation.navigate("Suspended");
+            return;
+          }
+
           dispatch({
             type: GLOBALTYPES.USER,
             payload: res.data,
@@ -38,7 +44,8 @@ const UserApi = () => {
           }, 3000);
           //
         } catch (error) {
-          console.log(error);
+          Alert.alert(error?.response?.data?.msg);
+          // console.log(error);
         }
       };
 
@@ -58,7 +65,7 @@ const UserApi = () => {
     if (token !== "") {
       dispatch(getSavedProperties(token));
     }
-  }, [token, callback]);
+  }, [token, callback, listing_callback]);
 
   return <View></View>;
 };

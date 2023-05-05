@@ -8,6 +8,10 @@ import ListingSuccess from "./ListingSucces";
 import LoginErrorModal from "./LoginErrorModal";
 import DeleteModal from "./DeleteModals";
 import UpdateListingSuccess from "./UpdateListingSuccessss";
+import ListingErrorModal from "./ListingErrorModal";
+import RemoveSavedProperty from "./RemoveSavedProperty";
+
+//
 
 const Alert = () => {
   const {
@@ -22,6 +26,8 @@ const Alert = () => {
     updateListingSuccess,
     loginerror,
     deleteListing,
+    listingError,
+    deleteSaved,
   } = useSelector((state) => state.alert);
   const navigation = useNavigation();
 
@@ -30,9 +36,8 @@ const Alert = () => {
     <View>
       {success && (
         <Popup
-          image={require("../assets/images/gmail.png")}
+          image={require("../assets/images/success.png")}
           text={success}
-          buttonText="Continue"
           navigation={navigation}
         />
       )}
@@ -41,7 +46,6 @@ const Alert = () => {
         <Popup
           image={require("../assets/images/gmail.png")}
           text={forgotpasswordsuccess}
-          buttonText="Continue"
           navigation={navigation}
         />
       )}
@@ -50,7 +54,6 @@ const Alert = () => {
         <Popup
           image={require("../assets/images/success.png")}
           text={resetpasswordsuccess}
-          buttonText="Login"
           navigation={navigation}
         />
       )}
@@ -86,11 +89,15 @@ const Alert = () => {
 
       {updateListingSuccess && <UpdateListingSuccess />}
 
+      {listingError && <ListingErrorModal />}
+
       {loginerror && <LoginErrorModal />}
 
       {verifyagent && <IdentityVerificationModal />}
 
       {deleteListing && <DeleteModal />}
+
+      {deleteSaved && <RemoveSavedProperty />}
     </View>
   );
 };

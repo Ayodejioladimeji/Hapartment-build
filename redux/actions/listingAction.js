@@ -5,7 +5,6 @@ import {
   patchDataApi,
   postDataApis,
   deleteDataApi,
-  patchApi,
 } from "../../utils/fetchData";
 import { GLOBALTYPES } from "./globalTypes";
 
@@ -13,31 +12,37 @@ import { GLOBALTYPES } from "./globalTypes";
 
 // Create Listing
 export const createListing =
-  (data, token, listing_callback) => async (dispatch) => {
+  (data, token, listing_callback, navigation) => async (dispatch) => {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { createlistingloading: true },
+    });
+
     try {
       const res = await postDataApis("/create_listing", data, token);
-
-      dispatch({
-        type: GLOBALTYPES.ALERT,
-        payload: { createListingSuccess: res.data.msg },
-      });
 
       dispatch({
         type: GLOBALTYPES.LISTING_CALLBACK,
         payload: !listing_callback,
       });
 
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
+
       setTimeout(() => {
+        navigation.navigate("RootHome");
         dispatch({
           type: GLOBALTYPES.LOADING,
           payload: { createlistingloading: false },
         });
-      }, 2000);
+      }, 3000);
     } catch (error) {
-      // console.log(error.response.data.msg);
+      console.log("this is the error", error?.response?.data?.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { error: error.response.data.msg },
+        payload: { listingError: error?.response?.data?.msg },
       });
 
       setTimeout(() => {
@@ -51,16 +56,18 @@ export const createListing =
 
 // Update Listing
 export const updateListing =
-  (data, token, listing_callback) => async (dispatch) => {
-    console.log(data);
+  (data, token, listing_callback, navigation) => async (dispatch) => {
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { createlistingloading: true },
+    });
+
     try {
       const res = await patchDataApi("/update_listing", data, token);
 
-      console.log(res.data);
-
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { updateListingSuccess: res.data.msg },
+        payload: { success: res.data.msg },
       });
 
       dispatch({
@@ -68,17 +75,26 @@ export const updateListing =
         payload: !listing_callback,
       });
 
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { success: res.data.msg },
+      });
+
+      dispatch({ type: GLOBALTYPES.IS_EDIT, payload: false });
+      dispatch({ type: GLOBALTYPES.RESET_LISTING, payload: {} });
+
       setTimeout(() => {
+        navigation.navigate("RootHome");
         dispatch({
           type: GLOBALTYPES.LOADING,
           payload: { createlistingloading: false },
         });
       }, 2000);
     } catch (error) {
-      // console.log(error.response.data.msg);
+      console.log(error?.response?.data?.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { error: error.response.data.msg },
+        payload: { listingError: error?.response?.data?.msg },
       });
 
       setTimeout(() => {
@@ -108,7 +124,7 @@ export const myListings = (token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -129,17 +145,15 @@ export const allListings = () => async (dispatch) => {
 
     dispatch({ type: GLOBALTYPES.ALL_LISTINGS, payload: res.data });
 
-    setTimeout(() => {
-      dispatch({
-        type: GLOBALTYPES.LOADING,
-        payload: { alllistingloading: false },
-      });
-    }, 3000);
+    dispatch({
+      type: GLOBALTYPES.LOADING,
+      payload: { alllistingloading: false },
+    });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -169,7 +183,7 @@ export const listDetails = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -195,7 +209,7 @@ export const saveProperties = (data, token, callback) => async (dispatch) => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: { favloading: false } });
     }, 1000);
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: { favloading: false } });
@@ -219,8 +233,8 @@ export const getSavedProperties = (token) => async (dispatch) => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: {} });
     }, 3000);
   } catch (error) {
-    console.log(error.response.data.msg);
-    Alert.alert(error.response.data.msg);
+    // console.log(error?.response?.data?.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
@@ -256,7 +270,7 @@ export const reportListing =
         });
       }, 1000);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
       setMessage("");
       setTimeout(() => {
         dispatch({
@@ -294,7 +308,7 @@ export const filterListing = (data) => async (dispatch) => {
       payload: { filterloading: false },
     });
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({
@@ -310,7 +324,7 @@ export const searchListing = (cityname) => async (dispatch) => {
   try {
     dispatch({ type: GLOBALTYPES.LOADING, payload: { filterloading: true } });
 
-    const res = await getDataApis(`/search_listing?cityname=${cityname}`);
+    const res = await getDataApis(`/search_listing/${cityname}`);
 
     dispatch({ type: GLOBALTYPES.SEARCH_LISTING, payload: res.data });
 
@@ -319,7 +333,7 @@ export const searchListing = (cityname) => async (dispatch) => {
       payload: { filterloading: false },
     });
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({
@@ -338,7 +352,6 @@ export const deleteProperty =
 
       const res = await deleteDataApi(`/delete_listing/${id}`, token);
 
-      console.log(res.data);
       Alert.alert(res.data.msg);
 
       dispatch({
@@ -362,7 +375,49 @@ export const deleteProperty =
       // delete images
       await postDataApis("/delete_images", publicId, token);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
+
+      setTimeout(() => {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: { deleteloading: false },
+        });
+      }, 1000);
+    }
+  };
+
+// delete Favorite
+export const deleteFavorite =
+  (id, publicId, token, callback) => async (dispatch) => {
+    try {
+      dispatch({ type: GLOBALTYPES.LOADING, payload: { deleteloading: true } });
+
+      const res = await deleteDataApi(`/delete_favorite/${id}`, token);
+
+      Alert.alert(res.data.msg);
+
+      dispatch({
+        type: GLOBALTYPES.CALLBACK,
+        payload: !callback,
+      });
+
+      dispatch({
+        type: GLOBALTYPES.ALERT,
+        payload: { deleteFavorite: false },
+      });
+
+      dispatch({ type: GLOBALTYPES.PUBLIC_ID, payload: [] });
+      setTimeout(() => {
+        dispatch({
+          type: GLOBALTYPES.LOADING,
+          payload: { deleteloading: false },
+        });
+      }, 1000);
+
+      // delete images
+      await postDataApis("/delete_images", publicId, token);
+    } catch (error) {
+      Alert.alert(error?.response?.data?.msg);
 
       setTimeout(() => {
         dispatch({
@@ -398,8 +453,8 @@ export const acquiredListing =
         });
       }, 1000);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
-      console.log(error.response);
+      Alert.alert(error?.response?.data?.msg);
+      console.log(error?.response);
 
       setTimeout(() => {
         dispatch({

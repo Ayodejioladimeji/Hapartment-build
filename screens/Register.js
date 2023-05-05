@@ -9,6 +9,7 @@ import {
   Platform,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
@@ -19,6 +20,7 @@ import { Formik } from "formik";
 import { register } from "../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
 
 // VALIDATION REGEX
 const passwordUpper = /(?=.*[A-Z])/;
@@ -124,160 +126,169 @@ const Register = ({ route }) => {
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}
             >
-              <View style={styles.registerContainer}>
-                <Text style={styles.heading}>Create an account</Text>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+              >
+                <View style={styles.registerContainer}>
+                  <Text style={styles.heading}>Create an account</Text>
 
-                {error && <Text style={styles.error}>{error}</Text>}
+                  {error && (
+                    <View style={styles.error}>
+                      <Text style={styles.errorText}>{error}</Text>
+                    </View>
+                  )}
 
-                <View stye={styles.formContainer}>
-                  <View style={styles.editProfileBox}>
-                    <Text style={styles.inputText}>Fullname</Text>
-                    <TextInput
-                      style={styles.formInput}
-                      placeholder="Provide your fullname"
-                      onChangeText={handleChange("fullname")}
-                      onBlur={handleBlur("fullname")}
-                      value={values.fullname}
-                      name="fullname"
-                    />
-                    {errors.fullname && touched.fullname && (
-                      <Text style={styles.errors}>{errors.fullname}</Text>
-                    )}
-                  </View>
+                  <View stye={styles.formContainer}>
+                    <View style={styles.editProfileBox}>
+                      <Text style={styles.inputText}>Fullname</Text>
+                      <TextInput
+                        style={styles.formInput}
+                        placeholder="Provide your fullname"
+                        onChangeText={handleChange("fullname")}
+                        onBlur={handleBlur("fullname")}
+                        value={values.fullname}
+                        name="fullname"
+                      />
+                      {errors.fullname && touched.fullname && (
+                        <Text style={styles.errors}>{errors.fullname}</Text>
+                      )}
+                    </View>
 
-                  <View style={styles.editProfileBox}>
-                    <Text style={styles.inputText}>Email</Text>
-                    <TextInput
-                      style={styles.formInput}
-                      placeholder="Provide your email"
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      value={values.email}
-                      name="email"
-                    />
-                    {errors.email && touched.email && (
-                      <Text style={styles.errors}>{errors.email}</Text>
-                    )}
-                  </View>
+                    <View style={styles.editProfileBox}>
+                      <Text style={styles.inputText}>Email</Text>
+                      <TextInput
+                        style={styles.formInput}
+                        placeholder="Provide your email"
+                        onChangeText={handleChange("email")}
+                        onBlur={handleBlur("email")}
+                        value={values.email}
+                        name="email"
+                      />
+                      {errors.email && touched.email && (
+                        <Text style={styles.errors}>{errors.email}</Text>
+                      )}
+                    </View>
 
-                  <View style={styles.editProfileBox}>
-                    <Text style={styles.inputText}>Username</Text>
-                    <TextInput
-                      style={styles.formInput}
-                      placeholder="Provide your username"
-                      onChangeText={handleChange("username")}
-                      onBlur={handleBlur("username")}
-                      value={values.username}
-                      name="username"
-                    />
-                    {errors.username && touched.username && (
-                      <Text style={styles.errors}>{errors.username}</Text>
-                    )}
-                  </View>
+                    <View style={styles.editProfileBox}>
+                      <Text style={styles.inputText}>Username</Text>
+                      <TextInput
+                        style={styles.formInput}
+                        placeholder="Provide your username"
+                        onChangeText={handleChange("username")}
+                        onBlur={handleBlur("username")}
+                        value={values.username}
+                        name="username"
+                      />
+                      {errors.username && touched.username && (
+                        <Text style={styles.errors}>{errors.username}</Text>
+                      )}
+                    </View>
 
-                  <View style={styles.editProfileBox}>
-                    <Text style={styles.inputText}>Password</Text>
-                    <TextInput
-                      secureTextEntry={typePassword ? false : true}
-                      style={styles.formInput}
-                      placeholder="**********"
-                      onChangeText={handleChange("password")}
-                      onBlur={handleBlur("password")}
-                      value={values.password}
-                      name="password"
-                    />
-                    {errors.password && touched.password ? (
-                      <Text style={styles.errors}>{errors.password}</Text>
-                    ) : (
-                      <Text style={styles.note}>
-                        Password must be 8 characters long, one Uppercase, one
-                        Number, one character
+                    <View style={styles.editProfileBox}>
+                      <Text style={styles.inputText}>Password</Text>
+                      <TextInput
+                        secureTextEntry={typePassword ? false : true}
+                        style={styles.formInput}
+                        placeholder="**********"
+                        onChangeText={handleChange("password")}
+                        onBlur={handleBlur("password")}
+                        value={values.password}
+                        name="password"
+                      />
+                      {errors.password && touched.password ? (
+                        <Text style={styles.errors}>{errors.password}</Text>
+                      ) : (
+                        <Text style={styles.note}>
+                          Password must be 8 characters long, one Uppercase, one
+                          Number, one character
+                        </Text>
+                      )}
+
+                      {/* password toggle */}
+                      <TouchableWithoutFeedback
+                        onPress={() => setTypePassword(!typePassword)}
+                      >
+                        <View style={styles.eye}>
+                          {typePassword ? (
+                            <Ionicons
+                              name="eye-off-outline"
+                              size={22}
+                              color={colors.textLight}
+                            />
+                          ) : (
+                            <Ionicons
+                              name="eye-outline"
+                              size={22}
+                              color={colors.textLight}
+                            />
+                          )}
+                        </View>
+                      </TouchableWithoutFeedback>
+                    </View>
+
+                    <View style={styles.editProfileBox}>
+                      <Text style={styles.inputText}>Confirm password</Text>
+                      <TextInput
+                        secureTextEntry={typePass ? false : true}
+                        style={styles.formInput}
+                        placeholder="***********"
+                        onChangeText={handleChange("password2")}
+                        onBlur={handleBlur("password2")}
+                        value={values.password2}
+                        name="password2"
+                      />
+                      {errors.password2 && touched.password2 && (
+                        <Text style={styles.errors}>{errors.password2}</Text>
+                      )}
+
+                      {/* password toggle */}
+                      <TouchableWithoutFeedback
+                        onPress={() => setTypePass(!typePass)}
+                      >
+                        <View style={styles.eye}>
+                          {typePass ? (
+                            <Ionicons
+                              name="eye-off-outline"
+                              size={22}
+                              color={colors.textLight}
+                            />
+                          ) : (
+                            <Ionicons
+                              name="eye-outline"
+                              size={22}
+                              color={colors.textLight}
+                            />
+                          )}
+                        </View>
+                      </TouchableWithoutFeedback>
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                      style={styles.profileButton}
+                    >
+                      {authloading ? (
+                        <ActivityIndicator size="small" color={colors.white} />
+                      ) : (
+                        <Text style={styles.profileButtonText}>
+                          Create Account
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+
+                    <Text style={styles.member}>
+                      Already a member?{" "}
+                      <Text
+                        style={styles.login}
+                        onPress={() => navigation.navigate("Login")}
+                      >
+                        Login
                       </Text>
-                    )}
-
-                    {/* password toggle */}
-                    <TouchableWithoutFeedback
-                      onPress={() => setTypePassword(!typePassword)}
-                    >
-                      <View style={styles.eye}>
-                        {typePassword ? (
-                          <Ionicons
-                            name="eye-off-outline"
-                            size={22}
-                            color={colors.textLight}
-                          />
-                        ) : (
-                          <Ionicons
-                            name="eye-outline"
-                            size={22}
-                            color={colors.textLight}
-                          />
-                        )}
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
-
-                  <View style={styles.editProfileBox}>
-                    <Text style={styles.inputText}>Confirm password</Text>
-                    <TextInput
-                      secureTextEntry={typePass ? false : true}
-                      style={styles.formInput}
-                      placeholder="***********"
-                      onChangeText={handleChange("password2")}
-                      onBlur={handleBlur("password2")}
-                      value={values.password2}
-                      name="password2"
-                    />
-                    {errors.password2 && touched.password2 && (
-                      <Text style={styles.errors}>{errors.password2}</Text>
-                    )}
-
-                    {/* password toggle */}
-                    <TouchableWithoutFeedback
-                      onPress={() => setTypePass(!typePass)}
-                    >
-                      <View style={styles.eye}>
-                        {typePass ? (
-                          <Ionicons
-                            name="eye-off-outline"
-                            size={22}
-                            color={colors.textLight}
-                          />
-                        ) : (
-                          <Ionicons
-                            name="eye-outline"
-                            size={22}
-                            color={colors.textLight}
-                          />
-                        )}
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
-
-                  <TouchableOpacity
-                    onPress={handleSubmit}
-                    style={styles.profileButton}
-                  >
-                    {authloading ? (
-                      <ActivityIndicator size="small" color={colors.white} />
-                    ) : (
-                      <Text style={styles.profileButtonText}>
-                        Create Account
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-
-                  <Text style={styles.member}>
-                    Already a member?{" "}
-                    <Text
-                      style={styles.login}
-                      onPress={() => navigation.navigate("Login")}
-                    >
-                      Login
                     </Text>
-                  </Text>
+                  </View>
                 </View>
-              </View>
+              </KeyboardAvoidingView>
             </ScrollView>
           </View>
         );
@@ -370,14 +381,21 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 13 : 12,
   },
   error: {
-    color: colors.white,
+    color: "red",
     marginBottom: 20,
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    alignSelf: "center",
-    padding: 10,
-    backgroundColor: "orangered",
-    fontWeight: "bold",
+    backgroundColor: colors.white,
     width: "90%",
     textAlign: "center",
+    borderWidth: 0.2,
+    borderColor: "red",
+    borderLeftWidth: 5,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  errorText: {
+    color: "red",
   },
 });

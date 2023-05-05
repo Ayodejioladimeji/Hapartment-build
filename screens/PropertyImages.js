@@ -26,6 +26,7 @@ import {
   chooseImageSeven,
 } from "../utils/camera";
 import CreateListingStatusBar from "../common/CreateListingStatusBar";
+import { postData, postDataApis } from "../utils/fetchData";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,7 +42,10 @@ const PropertyImages = ({ route }) => {
   const [loadingFive, setLoadingFive] = useState(false);
   const [loadingSix, setLoadingSix] = useState(false);
   const [loadingSeven, setLoadingSeven] = useState(false);
+  const [item, setItem] = useState(null);
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const [removeLoading, setRemoveLoading] = useState(false);
 
   const {
     imageOne,
@@ -58,34 +62,53 @@ const PropertyImages = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
+      console.log(item);
 
-      dispatch({ type: GLOBALTYPES.IMAGE_ONE, payload: item.images[0].url });
+      dispatch({ type: GLOBALTYPES.IMAGE_ONE, payload: item.images[0] });
       dispatch({
         type: GLOBALTYPES.IMAGE_TWO,
-        payload: item.images[1].url,
+        payload: item.images[1],
       });
       dispatch({
         type: GLOBALTYPES.IMAGE_THREE,
-        payload: item.images[2].url,
+        payload: item.images[2],
       });
       dispatch({
         type: GLOBALTYPES.IMAGE_FOUR,
-        payload: item.images[3].url,
+        payload: item.images[3],
       });
       dispatch({
         type: GLOBALTYPES.IMAGE_FIVE,
-        payload: item.images[4].url,
+        payload: item.images[4],
       });
       dispatch({
         type: GLOBALTYPES.IMAGE_SIX,
-        payload: item.images[5].url,
+        payload: item.images[5],
       });
       dispatch({
         type: GLOBALTYPES.IMAGE_SEVEN,
-        payload: item.images[6].url,
+        payload: item.images[6],
       });
     }
   }, [isEdit]);
+
+  // remove Image
+  const removeImage = async (id) => {
+    const newData = {
+      public_id: id,
+    };
+
+    try {
+      setRemoveLoading(true);
+      const res = await postDataApis("/destroy", newData, token);
+      // console.log(res.data.msg);
+      setRemoveLoading(false);
+    } catch (error) {
+      console.log(error);
+      setRemoveLoading(false);
+    }
+  };
 
   // Handle submit
   const handleSubmit = () => {
@@ -105,7 +128,9 @@ const PropertyImages = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };
@@ -120,17 +145,17 @@ const PropertyImages = ({ route }) => {
           <Text style={styles.heading}>Add Property Images</Text>
           <Text style={styles.subheading}>Select seven (7) images</Text>
 
-          <TouchableOpacity
-            onPress={() => chooseImageOne(dispatch, setLoadingOne)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingOne ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageOne === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                    onPress={() => chooseImageOne(dispatch, setLoadingOne)}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
@@ -139,50 +164,72 @@ const PropertyImages = ({ route }) => {
                     <Text style={{ color: colors.textLight }}>
                       Add front View of the apartment
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageOne }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageOne.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({ type: GLOBALTYPES.IMAGE_ONE, payload: null })
-                      }
+                      onPress={() => {
+                        removeImage(imageOne.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_ONE,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
                       <FontAwesome name="trash-o" size={20} color="red" />
                     </TouchableOpacity>
+
+                    {removeLoading && (
+                      <ActivityIndicator
+                        color="red"
+                        size="small"
+                        style={styles.removeLoading}
+                      />
+                    )}
                   </>
                 )}
               </>
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageTwo(dispatch, setLoadingTwo)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingTwo ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageTwo === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageTwo(dispatch, setLoadingTwo)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageTwo }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageTwo.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({ type: GLOBALTYPES.IMAGE_TWO, payload: null })
-                      }
+                      onPress={() => {
+                        removeImage(imageTwo.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_TWO,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -194,34 +241,38 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageThree(dispatch, setLoadingThree)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingThree ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageThree === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageThree(dispatch, setLoadingThree)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageThree }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageThree.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({
-                          type: GLOBALTYPES.IMAGE_THREE,
-                          payload: null,
-                        })
-                      }
+                      onPress={() => {
+                        removeImage(imageThree.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_THREE,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -233,34 +284,38 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageFour(dispatch, setLoadingFour)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingFour ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageFour === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageFour(dispatch, setLoadingFour)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageFour }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageFour.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({
-                          type: GLOBALTYPES.IMAGE_FOUR,
-                          payload: null,
-                        })
-                      }
+                      onPress={() => {
+                        removeImage(imageFour.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_FOUR,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -272,34 +327,38 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageFive(dispatch, setLoadingFive)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingFive ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageFive === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageFive(dispatch, setLoadingFive)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageFive }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageFive.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({
-                          type: GLOBALTYPES.IMAGE_FIVE,
-                          payload: null,
-                        })
-                      }
+                      onPress={() => {
+                        removeImage(imageFive.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_FIVE,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -311,31 +370,38 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageSix(dispatch, setLoadingSix)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingSix ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageSix === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageSix(dispatch, setLoadingSix)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageSix }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageSix.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({ type: GLOBALTYPES.IMAGE_SIX, payload: null })
-                      }
+                      onPress={() => {
+                        removeImage(imageSix.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_SIX,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -347,34 +413,38 @@ const PropertyImages = ({ route }) => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => chooseImageSeven(dispatch, setLoadingSeven)}
-            activeOpacity={0.7}
-            style={styles.selfieBox}
-          >
+          <TouchableOpacity activeOpacity={0.7} style={styles.selfieBox}>
             {loadingSeven ? (
               <ActivityIndicator color={colors.primary} size="small" />
             ) : (
               <>
                 {imageSeven === null ? (
-                  <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => chooseImageSeven(dispatch, setLoadingSeven)}
+                    activeOpacity={0.7}
+                    style={{ alignItems: "center" }}
+                  >
                     <FontAwesome
                       name="image"
                       size={24}
                       color={colors.textLighter}
                     />
                     <Text style={{ color: colors.textLight }}>Click here</Text>
-                  </View>
+                  </TouchableOpacity>
                 ) : (
                   <>
-                    <Image source={{ uri: imageSeven }} style={styles.images} />
+                    <Image
+                      source={{ uri: imageSeven.url }}
+                      style={styles.images}
+                    />
                     <TouchableOpacity
-                      onPress={() =>
-                        dispatch({
-                          type: GLOBALTYPES.IMAGE_SEVEN,
-                          payload: null,
-                        })
-                      }
+                      onPress={() => {
+                        removeImage(imageSeven.id),
+                          dispatch({
+                            type: GLOBALTYPES.IMAGE_SEVEN,
+                            payload: null,
+                          });
+                      }}
                       activeOpacity={0.7}
                       style={styles.clear}
                     >
@@ -503,5 +573,9 @@ const styles = StyleSheet.create({
     color: colors.white,
     textTransform: "uppercase",
     fontWeight: "700",
+  },
+  removeLoading: {
+    position: "absolute",
+    left: "50%",
   },
 });

@@ -36,11 +36,6 @@ const DeleteModal = () => {
     }
   };
 
-  //   navigate method
-  const remove = () => {};
-
-  const cancel = () => {};
-
   //
 
   return (

@@ -14,29 +14,22 @@ import colors from "../assets/colors/colors";
 import { useNavigation } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import { Dropdown } from "react-native-element-dropdown";
-import axios from "axios";
 import propertyData from "../constants/propertyData";
-// import { BASE_URL, API_KEY } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import CreateListingStatusBar from "../common/CreateListingStatusBar";
+import statesData from "../constants/statesdata";
 
 SplashScreen.preventAutoHideAsync();
-
-const BASE_URL = "https://api.countrystatecity.in/v1";
-
-const API_KEY = "UnM1RmVPMFB0M09FN1RIWGZZM2Vyc2pvMzFrb3l5dDhQa3RzR1ZIbA==";
 
 //
 
 const BasicInformation = ({ route }) => {
   const navigation = useNavigation();
-  const [stateData, setStateData] = useState([]);
-  const [cityData, setCityData] = useState([]);
+  const [cities, setCities] = useState([]);
   const [isFocus, setIsFocus] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [stateloading, setStateloading] = useState(false);
-  const [cityloading, setCityloading] = useState(false);
+  const [item, setItem] = useState(null);
   const dispatch = useDispatch();
   const { address, property_type, state, statename, city, cityname, isEdit } =
     useSelector((state) => state.listing);
@@ -45,11 +38,16 @@ const BasicInformation = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
 
       dispatch({ type: GLOBALTYPES.ADDRESS, payload: item.address });
       dispatch({
         type: GLOBALTYPES.PROPERTY_TYPE,
         payload: item.property_type,
+      });
+      dispatch({
+        type: GLOBALTYPES.BEDROOMS,
+        payload: item.bedrooms,
       });
       dispatch({ type: GLOBALTYPES.STATE, payload: item.state });
       dispatch({ type: GLOBALTYPES.STATE_NAME, payload: item.statename });
@@ -58,70 +56,14 @@ const BasicInformation = ({ route }) => {
     }
   }, [isEdit]);
 
-  // load the states when the page renders
+  // get the city method
   useEffect(() => {
-    handleState("NG");
-  }, []);
-
-  const handleState = (countryCode) => {
-    setStateloading(true);
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let stateArray = [];
-        for (var i = 0; i < count; i++) {
-          stateArray.push({
-            value: response.data[i].iso2,
-            label: response.data[i].name,
-          });
-        }
-        setStateData(stateArray);
-        setStateloading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-        setStateloading(false);
-      });
-  };
-
-  const handleCity = (countryCode, stateCode) => {
-    setCityloading(true);
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let cityArray = [];
-        for (var i = 0; i < count; i++) {
-          cityArray.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-        setCityData(cityArray);
-        setCityloading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-        setCityloading(false);
-      });
-  };
+    statesData.filter((item) => {
+      if (item.value === statename) {
+        setCities(item.lgas);
+      }
+    });
+  }, [statename]);
 
   const handleSubmit = () => {
     if (address === "" || property_type === "" || state === "" || city === "") {
@@ -132,7 +74,9 @@ const BasicInformation = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };
@@ -183,7 +127,9 @@ const BasicInformation = ({ route }) => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={!isFocus ? "Select property type" : "..."}
+              placeholder={
+                property_type === "" ? "Select property type" : property_type
+              }
               searchPlaceholder="Search..."
               value={property_type}
               onFocus={() => setIsFocus(true)}
@@ -233,18 +179,12 @@ const BasicInformation = ({ route }) => {
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
-              data={stateData}
+              data={statesData}
               search
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={
-                state === ""
-                  ? "Select state"
-                  : stateloading
-                  ? "loading"
-                  : statename
-              }
+              placeholder={statename === " " ? "Select State" : statename}
               searchPlaceholder="Search..."
               value={state}
               onFocus={() => setIsFocus(true)}
@@ -252,8 +192,7 @@ const BasicInformation = ({ route }) => {
               onChange={(item) => {
                 dispatch({ type: GLOBALTYPES.STATE, payload: item.value });
                 dispatch({ type: GLOBALTYPES.STATE_NAME, payload: item.label });
-                handleCity("NG", item.value);
-                // handleState(country);
+
                 setIsFocus(false);
               }}
             />
@@ -274,20 +213,14 @@ const BasicInformation = ({ route }) => {
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={cityData}
+                data={cities}
                 search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={
-                  city === ""
-                    ? "Select city"
-                    : cityloading
-                    ? "loading"
-                    : cityname
-                }
+                placeholder={cityname === " " ? "Select City" : cityname}
                 searchPlaceholder="Search..."
-                value={city}
+                value={cities}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 onChange={(item) => {
@@ -374,7 +307,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    color: colors.textLight,
+    color: colors.textDark,
   },
   selectedTextStyle: {
     fontSize: Platform.OS === "ios" ? 15 : 14,

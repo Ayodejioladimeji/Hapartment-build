@@ -5,12 +5,16 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Share,
   Alert,
+  Linking,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import GoBack from "../common/GoBack";
 import Carousel from "../components/Carousel";
 import {
+  AntDesign,
   FontAwesome5,
   MaterialCommunityIcons,
   MaterialIcons,
@@ -30,8 +34,9 @@ import { safetytips } from "../constants/safetytips";
 
 const AgentDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
   const { callback } = useSelector((state) => state.property);
+  const { agent_details } = useSelector((state) => state.profile);
   const { favloading, reportlistingloading } = useSelector(
     (state) => state.loading
   );
@@ -46,12 +51,11 @@ const AgentDetailsScreen = ({ route }) => {
     toilets,
     price,
     images,
+    status,
     postedBy,
     reportedBy,
     updatedAt,
   } = route.params.item;
-
-  const id = postedBy._id;
 
   // add favourite method
   const saveProperty = () => {
@@ -76,7 +80,35 @@ const AgentDetailsScreen = ({ route }) => {
   };
 
   // check if a user has already reported a property
-  const check = reportedBy.find((item) => item.user === user._id);
+  const check = reportedBy.find((item) => item?.user === user?._id);
+
+  // onshare method -  for sharing on social media
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `https://hapartment.org/listings/${_id}`,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          //dismissed
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  // Chat agent on whatsapp
+  const openWhatsapp = () => {
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=234${postedBy?.verification[0]?.identity_mobile}&text=Hi, i'm interested in your property on Hapartment ${property_type} | ${address} | ${price} | https://hapartment.org/listings/${_id}`
+    );
+  };
 
   //
   return (
@@ -88,7 +120,7 @@ const AgentDetailsScreen = ({ route }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <Carousel images={images} />
+        <Carousel images={images} status={status} />
 
         <View style={styles.detailsName}>
           <Text style={styles.name}>{property_type}</Text>
@@ -123,34 +155,54 @@ const AgentDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="bath" size={16} color={colors.textLight} />
-            <Text style={styles.footerBoxText}>{bathrooms} Bathroom</Text>
+            <Text style={styles.footerBoxText}>
+              {bathrooms} {bathrooms === 1 ? "Bathroom" : "Bathrooms"}
+            </Text>
           </View>
           <View style={styles.cardFooterBox}>
             <FontAwesome5 name="toilet" size={16} color={colors.textLight} />
 
-            <Text style={styles.footerBoxText}>{toilets} Toilet</Text>
+            <Text style={styles.footerBoxText}>
+              {toilets} {toilets === "1" ? "Toilet" : "Toilets"}
+            </Text>
           </View>
         </View>
 
-        <TouchableOpacity
-          onPress={saveProperty}
-          activeOpacity={0.7}
-          style={styles.save}
-        >
-          {favloading ? (
-            <Text>Saving property...</Text>
-          ) : (
-            <>
-              <MaterialIcons
-                name="favorite-outline"
-                size={16}
-                color={colors.textLight}
-              />
-              <Text style={styles.saveText}>Save</Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {/* Save Property section */}
 
+        <View style={styles.saveSection}>
+          <TouchableOpacity
+            onPress={saveProperty}
+            activeOpacity={0.7}
+            style={styles.save}
+          >
+            {favloading ? (
+              <ActivityIndicator />
+            ) : (
+              <>
+                <MaterialIcons
+                  name="favorite-outline"
+                  size={16}
+                  color={colors.textLight}
+                />
+                <Text style={styles.saveText}>Save</Text>
+              </>
+            )}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={openWhatsapp}
+            activeOpacity={0.7}
+            style={styles.contactWrapper}
+          >
+            <FontAwesome5 name="whatsapp" size={20} color={colors.white} />
+            <Text style={styles.contactText}>
+              {postedBy?.verification[0].identity_mobile}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Tab section */}
         <Tab params={route.params.item} />
 
         <View style={styles.tipsWrapper}>
@@ -164,6 +216,15 @@ const AgentDetailsScreen = ({ route }) => {
           ))}
         </View>
 
+        {/* share */}
+        <TouchableOpacity
+          onPress={onShare}
+          activeOpacity={0.7}
+          style={styles.shareWrapper}
+        >
+          <Text style={styles.share}>Share Property</Text>
+        </TouchableOpacity>
+
         {/* date section */}
         <View style={styles.videoWrapper}>
           <View style={styles.dateWrapper}>
@@ -172,24 +233,6 @@ const AgentDetailsScreen = ({ route }) => {
             </Text>
           </View>
         </View>
-
-        {/* share */}
-        {/* <View style={styles.shareWrapper}>
-          <View style={styles.shareHeader}>
-            <AntDesign name="sharealt" size={18} color={colors.textDark} />
-            <Text style={styles.shareText}>Share this property</Text>
-          </View>
-
-          <View style={styles.shareIcons}>
-            <AntDesign name="facebook-square" size={26} color="#3b5998" />
-            <FontAwesome name="twitter-square" size={26} color="#00acee" />
-            <FontAwesome5
-              name="whatsapp-square"
-              size={26}
-              color={colors.primary}
-            />
-          </View>
-        </View> */}
 
         {/* report listing */}
         <TouchableOpacity
@@ -232,6 +275,7 @@ const styles = StyleSheet.create({
     fontFamily: "NunitoSans-Bold",
     color: colors.primary,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
   amount: {
     fontSize: 16,
@@ -257,6 +301,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginTop: 15,
     height: 50,
+    marginBottom: 40,
   },
   cardFooterBox: {
     alignItems: "center",
@@ -271,22 +316,79 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     fontSize: 12,
     fontFamily: "NunitoSans-Regular",
+    textTransform: "capitalize",
+  },
+  saveSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginBottom: 40,
   },
   save: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 10,
-    marginVertical: 20,
+    height: 40,
+    width: 150,
+    borderRadius: 40,
     borderWidth: 0.3,
     borderColor: colors.primary,
-    height: 40,
-    borderRadius: 3,
   },
   saveText: {
     color: colors.primary,
     textTransform: "uppercase",
     marginLeft: 5,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
+  },
+  contactWrapper: {
+    height: 40,
+    width: 150,
+    borderRadius: 40,
+    backgroundColor: colors.primary,
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  contactText: {
+    color: colors.white,
+    // fontFamily: "//NunitoSans-Bold",
+    marginLeft: 10,
+    fontSize: Platform.OS === "ios" ? 14 : 13,
+  },
+
+  verified: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    backgroundColor: "rgba(0, 128, 0, 0.088);",
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    color: colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  verifiedText: {
+    color: colors.primary,
+    marginLeft: 10,
+  },
+  pending: {
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    textAlign: "center",
+    color: "red",
+    backgroundColor: "rgba(255, 0, 0, 0.141)",
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  pendingText: {
+    color: "red",
+    marginLeft: 10,
   },
 
   map: {
@@ -347,6 +449,7 @@ const styles = StyleSheet.create({
   tipsWrapper: {
     paddingHorizontal: 20,
     marginVertical: 40,
+    marginBottom: 20,
     padding: 25,
     backgroundColor: colors.light,
     width: "100%",
@@ -386,28 +489,13 @@ const styles = StyleSheet.create({
   shareWrapper: {
     marginTop: 20,
     marginHorizontal: 15,
-    borderWidth: 0.3,
-    borderColor: colors.textLighter,
-    height: 100,
-  },
-  shareHeader: {
-    backgroundColor: colors.light,
-    paddingHorizontal: 15,
-    flexDirection: "row",
+    height: 50,
     alignItems: "center",
-    height: 40,
+    justifyContent: "center",
   },
-  shareText: {
-    marginLeft: 5,
-  },
-  shareIcons: {
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    alignItems: "center",
-    // alignSelf: "center",
-    height: 60,
-    width: 180,
+  share: {
+    color: colors.primary,
+    fontSize: 16,
   },
   reportWrapper: {
     padding: 12,

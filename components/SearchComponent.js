@@ -8,7 +8,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import colors from "../assets/colors/colors";
-import { Feather, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { searchListing } from "../redux/actions/listingAction";
@@ -46,7 +51,7 @@ const SearchComponent = () => {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Enter your city name"
+          placeholder="Enter your search & hit enter"
           value={cityname}
           onChangeText={(text) => setCityname(text)}
           onSubmitEditing={handleSubmit}
@@ -56,11 +61,16 @@ const SearchComponent = () => {
         />
       </View>
       <TouchableOpacity
+        disabled={!cityname ? true : false}
         activeOpacity={0.5}
         style={styles.searchFilter}
-        onPress={() => navigation.navigate("FilterScreen")}
+        onPress={handleSubmit}
       >
-        <FontAwesome name="sliders" size={23} color={colors.white} />
+        <MaterialCommunityIcons
+          name="send-circle-outline"
+          size={29}
+          color={colors.white}
+        />
       </TouchableOpacity>
     </View>
   );

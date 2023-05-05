@@ -3,6 +3,7 @@ import { GLOBALTYPES } from "../actions/globalTypes";
 const initialState = {
   my_notification: [],
   refreshing: false,
+  modal: false,
 };
 
 //
@@ -21,6 +22,12 @@ const notificationReducer = (state = initialState, action) => {
       return {
         ...state,
         refreshing: payload,
+      };
+
+    case GLOBALTYPES.MODAL:
+      return {
+        ...state,
+        modal: payload,
       };
 
     default:

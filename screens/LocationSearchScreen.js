@@ -31,8 +31,6 @@ const LocationSearchScreen = ({ navigation }) => {
     text = JSON.stringify(location);
   }
 
-  console.log(location);
-
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack navigation={navigation} title="Filtered Properties" />

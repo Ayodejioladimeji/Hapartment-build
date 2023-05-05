@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   Alert,
+  Dimensions,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -63,12 +66,12 @@ const FilterSearch = () => {
 
     navigation.navigate("FilterSearchScreen");
     const data = {
-      property_type: propertyType.toLowerCase(),
-      statename: statename.toLowerCase(),
-      cityname: cityname.toLowerCase(),
+      property_type: propertyType,
+      statename: statename,
+      cityname: cityname,
       bathrooms: bath,
       toilets: toilet,
-      furnishing: furnish.toLowerCase(),
+      furnishing: furnish,
       min_price: minPrice,
       max_price: maxPrice,
     };
@@ -87,193 +90,199 @@ const FilterSearch = () => {
         <Text style={styles.filterHeading}>
           Filter through your preferred preference
         </Text>
-        <View style={styles.country}>
-          <Text style={styles.selectHeading}>Select Property Type</Text>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              isFocus && { borderColor: colors.primary },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={propertyData}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder={!isFocus ? "Select property type" : "..."}
-            searchPlaceholder="Search..."
-            value={propertyType}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setPropertyType(item.value);
-              setIsFocus(false);
-            }}
-          />
-        </View>
 
-        <View style={styles.country}>
-          <Text style={styles.selectHeading}>Select Bathrooms</Text>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              isFocus && { borderColor: colors.primary },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={bathrooms}
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Select bathroom"
-            value={bath}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setBath(item.value);
-              setIsFocus(false);
-            }}
-          />
-        </View>
-
-        <View style={styles.country}>
-          <Text style={styles.selectHeading}>Select Toilets</Text>
-          <Dropdown
-            style={[
-              styles.dropdown,
-              isFocus && { borderColor: colors.primary },
-            ]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={bathrooms}
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Select toilet"
-            value={toilet}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setToilet(item.value);
-              setIsFocus(false);
-            }}
-          />
-        </View>
-
-        <View style={styles.states}>
-          <Text style={styles.selectHeading}>Select State</Text>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={statesData}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Select state"
-            searchPlaceholder="Search..."
-            value={statename}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setIsFocus(false);
-              setStatename(item.value);
-            }}
-          />
-        </View>
-
-        <View style={styles.city}>
-          <Text style={styles.selectHeading}>Select City</Text>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={city}
-            search
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Select city"
-            searchPlaceholder="Search..."
-            value={city}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setIsFocus(false);
-              setCityname(item.value);
-            }}
-          />
-        </View>
-
-        <View style={styles.country}>
-          <Text style={styles.selectHeading}>Furnishing</Text>
-          <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={furnishing}
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Choose Furnishing"
-            value={furnish}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            onChange={(item) => {
-              setFurnish(item.value);
-              setIsFocus(false);
-            }}
-          />
-        </View>
-
-        <View style={styles.inputBox}>
-          <Text style={styles.selectHeading}>Price </Text>
-          <View style={styles.inputDiv}>
-            <TextInput
-              placeholder="Min #12,000"
-              style={styles.textInputs}
-              onChangeText={(item) => setMinPrice(strictAddComma(item))}
-              value={minPrice}
-            />
-
-            <TextInput
-              placeholder="Max #50,000,000"
-              style={styles.textInputs}
-              onChangeText={(item) => setMaxPrice(strictAddComma(item))}
-              value={maxPrice}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+        >
+          <View style={styles.country}>
+            <Text style={styles.selectHeading}>Select Property Type</Text>
+            <Dropdown
+              style={[
+                styles.dropdown,
+                isFocus && { borderColor: colors.primary },
+              ]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={propertyData}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder={!isFocus ? "Select property type" : "..."}
+              searchPlaceholder="Search..."
+              value={propertyType}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setPropertyType(item.value);
+                setIsFocus(false);
+              }}
             />
           </View>
-        </View>
 
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.filterButton}
-          onPress={handleSubmit}
-        >
-          <Text
-            style={{
-              color: colors.white,
-              textTransform: "uppercase",
-              fontWeight: "700",
-            }}
+          <View style={styles.country}>
+            <Text style={styles.selectHeading}>Select Bathrooms</Text>
+            <Dropdown
+              style={[
+                styles.dropdown,
+                isFocus && { borderColor: colors.primary },
+              ]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={bathrooms}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Select bathroom"
+              value={bath}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setBath(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
+
+          <View style={styles.country}>
+            <Text style={styles.selectHeading}>Select Toilets</Text>
+            <Dropdown
+              style={[
+                styles.dropdown,
+                isFocus && { borderColor: colors.primary },
+              ]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={bathrooms}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Select toilet"
+              value={toilet}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setToilet(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
+
+          <View style={styles.states}>
+            <Text style={styles.selectHeading}>Select State</Text>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={statesData}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Select state"
+              searchPlaceholder="Search..."
+              value={statename}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setIsFocus(false);
+                setStatename(item.value);
+              }}
+            />
+          </View>
+
+          <View style={styles.city}>
+            <Text style={styles.selectHeading}>Select City</Text>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={city}
+              search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Select city"
+              searchPlaceholder="Search..."
+              value={city}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setIsFocus(false);
+                setCityname(item.value);
+              }}
+            />
+          </View>
+
+          <View style={styles.country}>
+            <Text style={styles.selectHeading}>Furnishing</Text>
+            <Dropdown
+              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={furnishing}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Choose Furnishing"
+              value={furnish}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChange={(item) => {
+                setFurnish(item.value);
+                setIsFocus(false);
+              }}
+            />
+          </View>
+
+          <View style={styles.inputBox}>
+            <Text style={styles.selectHeading}>Price </Text>
+            <View style={styles.inputDiv}>
+              <TextInput
+                placeholder="Min #12,000"
+                style={styles.textInputs}
+                onChangeText={(item) => setMinPrice(strictAddComma(item))}
+                value={minPrice}
+              />
+
+              <TextInput
+                placeholder="Max #50,000,000"
+                style={styles.textInputs}
+                onChangeText={(item) => setMaxPrice(strictAddComma(item))}
+                value={maxPrice}
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.filterButton}
+            onPress={handleSubmit}
           >
-            Search
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                color: colors.white,
+                textTransform: "uppercase",
+                fontWeight: "700",
+              }}
+            >
+              Search
+            </Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </View>
     </ScrollView>
   );
@@ -297,6 +306,7 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     paddingHorizontal: 30,
     fontWeight: "600",
+    lineHeight: 25,
   },
 
   selectHeading: {

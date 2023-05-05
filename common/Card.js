@@ -57,7 +57,16 @@ const Card = ({ item, navigation }) => {
           <View style={styles.cardFooter}>
             <View style={styles.cardFooterBox}>
               <Ionicons name="bed-outline" size={15} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>2 Bed</Text>
+              <Text style={styles.footerBoxText}>
+                {item.bedrooms === "singleroom"
+                  ? "1"
+                  : item.bedrooms === "room&parlour"
+                  ? "1"
+                  : item.bedrooms === "selfcontain"
+                  ? "1"
+                  : item.bedrooms}{" "}
+                Bed
+              </Text>
             </View>
             <View style={styles.cardFooterBox}>
               <FontAwesome5 name="bath" size={12} color={colors.textLight} />

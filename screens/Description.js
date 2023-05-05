@@ -28,6 +28,7 @@ const Description = ({ route }) => {
   const navigation = useNavigation();
   const [isFocus, setIsFocus] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [item, setItem] = useState(null);
   const { category, video, description, price, isEdit } = useSelector(
     (state) => state.listing
   );
@@ -37,6 +38,7 @@ const Description = ({ route }) => {
   useEffect(() => {
     if (isEdit) {
       const item = route.params.item;
+      setItem(item);
 
       dispatch({ type: GLOBALTYPES.CATEGORY, payload: item.category });
       dispatch({
@@ -62,7 +64,9 @@ const Description = ({ route }) => {
     setLoading(true);
 
     setTimeout(() => {
-      navigation.navigate("ListProperty");
+      isEdit
+        ? navigation.navigate("UpdateProperty", { item })
+        : navigation.navigate("ListProperty");
       setLoading(false);
     }, 2000);
   };
@@ -96,7 +100,7 @@ const Description = ({ route }) => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={!isFocus ? "Select category" : "..."}
+              placeholder={category === "" ? "Select category" : category}
               searchPlaceholder="Search..."
               value={category}
               onFocus={() => setIsFocus(true)}
@@ -146,7 +150,7 @@ const Description = ({ route }) => {
             />
           </View>
 
-          <View style={styles.country}>
+          {/* <View style={styles.country}>
             <Text style={styles.selectHeading}>Youtube Link (Optional)</Text>
             <TextInput
               placeholder="Paste youtube video link here"
@@ -162,7 +166,7 @@ const Description = ({ route }) => {
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
             />
-          </View>
+          </View> */}
 
           <TouchableOpacity
             activeOpacity={0.7}
@@ -247,6 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 8,
     fontSize: 12,
+    color: colors.textDark,
   },
   textInputs: {
     borderWidth: 0.5,
@@ -258,7 +263,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: Platform.OS === "ios" ? 15 : 14,
-    color: colors.textLight,
+    color: colors.textDark,
   },
   selectedTextStyle: {
     fontSize: Platform.OS === "ios" ? 15 : 14,

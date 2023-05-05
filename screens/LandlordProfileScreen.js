@@ -7,17 +7,21 @@ import {
   Platform,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import GoBack from "../common/GoBack";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../assets/colors/colors";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { agentDetails } from "../redux/actions/profileAction";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../common/Loading";
 import AgentSearchCard from "../common/AgentSearchCard";
+import LoadMore from "../common/LoadMore";
+import Loader2 from "../common/Loader2";
+import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
+import profileImg from "../assets/images/user.jpg";
 
 //
 
@@ -26,54 +30,49 @@ const LandlordProfileScreen = ({ route }) => {
   const id = route.params.id.toString();
   const dispatch = useDispatch();
   const { agent_details } = useSelector((state) => state.profile);
+  const { all_listings } = useSelector((state) => state.property);
   const { agentdetailsloading } = useSelector((state) => state.loading);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(5);
 
   //
+
+  const agentListing = all_listings.filter((item) => item.postedBy._id === id);
 
   useEffect(() => {
     dispatch(agentDetails(id));
   }, []);
 
-  // Open whatsapp
-  const openWhatsapp = () => {
-    // if (
-    //   agent_details.agent_details.verification[0].identity_mobile.length !== 11
-    // ) {
-    //   Alert.alert("Invalid mobile number");
-    //   return;
-    // } else {
-    Linking.openURL(
-      "http://api.whatsapp.com/send?phone=234" +
-        agent_details.agent_details.verification[0].identity_mobile
-    );
-    // }
+  // Call agent directly
+  const callAgent = () => {
+    const url = `tel://${agent_details.agent_details.verification[0].identity_mobile}`;
+    Linking.openURL(url);
   };
 
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack title="Agent Profile" navigation={navigation} />
-      {agentdetailsloading || agentdetailsloading === undefined ? (
-        <Loading />
-      ) : (
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.profileWrapper}>
+
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profileWrapper}>
+          {agentdetailsloading || agent_details.agent_listing === undefined ? (
+            <ProfileSkeletal />
+          ) : (
             <View style={styles.profileBox}>
-              {agent_details.agent_details.image === null ? (
-                <Image
-                  source={require("../assets/images/user.jpg")}
-                  style={styles.profileImage}
-                />
-              ) : (
-                <Image
-                  source={{ uri: agent_details.agent_details.image }}
-                  style={styles.profileImage}
-                />
-              )}
+              <Image
+                source={
+                  agent_details.agent_details.image
+                    ? { uri: agent_details.agent_details.image }
+                    : profileImg
+                }
+                style={styles.profileImage}
+              />
+
               <Text style={styles.nameText}>
                 {agent_details.agent_details.fullname}
               </Text>
@@ -82,35 +81,61 @@ const LandlordProfileScreen = ({ route }) => {
               </Text>
 
               <TouchableOpacity
-                onPress={openWhatsapp}
+                onPress={callAgent}
                 activeOpacity={0.7}
                 style={styles.contactWrapper}
               >
-                <FontAwesome5 name="whatsapp" size={24} color={colors.white} />
+                <Feather name="phone-call" size={22} color={colors.white} />
                 <Text style={styles.contactText}>
                   {agent_details.agent_details.verification[0].identity_mobile}
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          )}
+        </View>
 
-          <View style={styles.apartment}>
+        <View style={styles.apartment}>
+          {agentdetailsloading || agent_details.agent_listing === undefined ? (
+            ""
+          ) : (
             <Text style={styles.apartmentText}>
               ({agent_details.agent_listing.length}){" "}
-              {agent_details.agent_listing.length === 1
+              {agent_details.agent_listing.length <= 1
                 ? "Apartment"
                 : "Apartments"}{" "}
               posted by {agent_details.agent_details.username}
             </Text>
+          )}
 
-            <View>
-              {agent_details.agent_listing.map((item) => (
-                <AgentSearchCard item={item} key={item._id} />
-              ))}
-            </View>
+          <View>
+            {agentdetailsloading ? (
+              <>
+                <Loader2 />
+                <Loader2 />
+                <Loader2 />
+              </>
+            ) : (
+              <>
+                {agentListing.slice(0, visible).map((item) => (
+                  <AgentSearchCard item={item} key={item._id} />
+                ))}
+              </>
+            )}
           </View>
-        </ScrollView>
-      )}
+
+          {visible > agentListing.length ||
+          agentdetailsloading ||
+          agentListing.length === 0 ? (
+            ""
+          ) : (
+            <LoadMore
+              loading={loading}
+              setLoading={setLoading}
+              setVisible={setVisible}
+            />
+          )}
+        </View>
+      </ScrollView>
     </View>
   );
 };

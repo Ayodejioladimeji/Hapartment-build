@@ -1,12 +1,6 @@
-import React, { useEffect, useState } from "react";
-import * as Location from "expo-location";
+import React, { useState } from "react";
 
-import MapView, {
-  Callout,
-  Circle,
-  Marker,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
   Dimensions,
   StyleSheet,
@@ -15,20 +9,12 @@ import {
   View,
 } from "react-native";
 import colors from "../assets/colors/colors";
+import { useNavigation } from "@react-navigation/native";
 
-const Map = ({ map, address }) => {
-  const { latitude, longitude, city, region, country } = map;
+const Map = ({ map }) => {
+  const { latitude, longitude } = map;
   const [switchMap, setSwitchMap] = useState("terrain");
-
-  const homeAddress = "12 Ayodeji street, Oke Ejigbo, Abeokuta";
-
-  useEffect(() => {
-    const getMap = async () => {
-      const { latitude, longitude } = await Location.geocodeAsync(homeAddress);
-      console.log(latitude, longitude);
-    };
-    getMap();
-  }, []);
+  const navigation = useNavigation();
 
   //
   return (
@@ -79,14 +65,7 @@ const Map = ({ map, address }) => {
             longitude: longitude,
           }}
           pinColor="red"
-        >
-          <Callout>
-            {/* <Text style={styles.mapText}> {address}</Text> */}
-            <Text style={styles.mapText}> {city}</Text>
-            <Text style={styles.mapText}> {region}</Text>
-            <Text style={styles.mapText}>{country}</Text>
-          </Callout>
-        </Marker>
+        />
 
         <Circle
           center={{
@@ -95,11 +74,15 @@ const Map = ({ map, address }) => {
           }}
           radius={100}
         />
-
-        <View style={styles.overlay}>
-          <Text style={styles.text}>Touchable Opacity</Text>
-        </View>
       </MapView>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("MapScreen", map)}
+        activeOpacity={0.7}
+        style={styles.overlay}
+      >
+        <Text style={styles.text}>Click to open fullscreen</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -141,10 +124,17 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: "absolute",
-    // bottom: 50,
+    top: 0,
     backgroundColor: colors.light,
     zIndex: 1,
     height: 300,
     width: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  text: {
+    color: colors.black,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });

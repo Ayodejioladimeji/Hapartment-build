@@ -10,6 +10,7 @@ import {
 import React from "react";
 import {
   AntDesign,
+  FontAwesome,
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
@@ -51,7 +52,7 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("TermsOfUse")}
+          onPress={() => Linking.openURL("https://hapartment.org/terms")}
           activeOpacity={0.7}
           style={styles.settingsBox}
         >
@@ -74,7 +75,7 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("PrivacyPolicy")}
+          onPress={() => Linking.openURL("https://hapartment.org/privacy")}
           activeOpacity={0.7}
           style={styles.settingsBox}
         >
@@ -96,7 +97,11 @@ const SettingsScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
+        <TouchableOpacity
+          onPress={() => Linking.openURL("https://hapartment.org/advertise")}
+          activeOpacity={0.7}
+          style={styles.settingsBox}
+        >
           <View style={styles.settingsLeft}>
             <MaterialCommunityIcons
               name="view-gallery-outline"
@@ -115,7 +120,7 @@ const SettingsScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
+        {/* <TouchableOpacity activeOpacity={0.7} style={styles.settingsBox}>
           <View style={styles.settingsLeft}>
             <Ionicons
               name="star-half"
@@ -132,7 +137,7 @@ const SettingsScreen = ({ navigation }) => {
             color="black"
             style={styles.arrow}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:support@hapartment.org")}
@@ -156,6 +161,54 @@ const SettingsScreen = ({ navigation }) => {
             style={styles.arrow}
           />
         </TouchableOpacity>
+
+        <View style={styles.socialIconBox}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.facebook.com/profile.php?id=100085724386292&mibextid=ZbWKwL"
+              )
+            }
+          >
+            <AntDesign name="facebook-square" size={27} color="#1778f2" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.instagram.com/invites/contact/?i=1pqlgg45pg0nl&utm_content=pldblyb"
+              )
+            }
+          >
+            <AntDesign name="instagram" size={27} color="#405de6" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL(
+                "https://twitter.com/Hapartment11?t=cmOAR5aAypWeGzbLvebt-A&s=09"
+              )
+            }
+          >
+            <FontAwesome name="twitter-square" size={27} color="#1da1f2" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.icons}
+            onPress={() =>
+              Linking.openURL("https://www.linkedin.com/in/hapartment-rentals")
+            }
+          >
+            <AntDesign name="linkedin-square" size={27} color="#0a66c2" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -194,5 +247,13 @@ const styles = StyleSheet.create({
   },
   arrow: {
     color: colors.textDark,
+  },
+  socialIconBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: 200,
+    alignSelf: "center",
+    marginTop: 10,
   },
 });

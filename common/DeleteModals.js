@@ -74,7 +74,7 @@ const DeleteModal = () => {
               activeOpacity={0.5}
               style={styles.cancelButton}
             >
-              <Text style={styles.modalButtonText}>Cancel</Text>
+              <Text style={styles.modalCancelText}>Cancel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -85,7 +85,7 @@ const DeleteModal = () => {
               {deleteloading ? (
                 <ActivityIndicator />
               ) : (
-                <Text style={styles.modalButtonText}>Delete</Text>
+                <Text style={styles.modalDeleteText}>Delete</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -119,17 +119,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textHeading: {
-    marginTop: 30,
-    fontSize: 22,
+    fontSize: Platform.OS === "ios" ? 22 : 20,
     textAlign: "center",
     lineHeight: 25,
     color: "red",
-    fontWeight: "700",
   },
   text: {
     marginTop: 20,
-    marginBottom: 40,
-    fontSize: 20,
+    marginBottom: 20,
+    fontSize: 17,
     textAlign: "center",
     lineHeight: 25,
     color: colors.textDark,
@@ -140,23 +138,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   cancelButton: {
-    backgroundColor: colors.primary,
-    padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 5,
     width: 100,
   },
   deleteButton: {
-    backgroundColor: "red",
-    padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 5,
     width: 100,
   },
-  modalButtonText: {
-    color: colors.white,
+  modalCancelText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  modalDeleteText: {
+    color: "red",
     fontSize: 16,
     fontWeight: "bold",
   },

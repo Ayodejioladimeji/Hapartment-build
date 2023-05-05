@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -14,21 +14,23 @@ SplashScreen.preventAutoHideAsync();
 
 import colors from "../assets/colors/colors";
 import MyStatusBar from "../common/MyStatusBar";
-import AroundYou from "../components/AroundYou";
 import HomepageHeader from "../components/HomepageHeader";
-import LagosListings from "../components/LagosListings";
-import NewListings from "../components/NewListings";
 import SearchComponent from "../components/SearchComponent";
 import SearchCard from "../common/SearchCard";
 import UserApi from "../api/UserApi";
 import { useSelector } from "react-redux";
 import Loader2 from "../common/Loader2";
+import LoadMore from "../common/LoadMore";
+import NewListings from "../components/NewListings";
 
 //
 
 const HomeScreen = ({ navigation }) => {
   const { all_listings } = useSelector((state) => state.property);
   const { alllistingloading } = useSelector((state) => state.loading);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(10);
+
   // initialize font family
   const [fontsLoaded] = useFonts({
     "Lobster-Regular": require("../assets/fonts/Lobster-Regular.ttf"),
@@ -53,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.homeScreenWrapper} onLayout={onLayoutRootView}>
       <MyStatusBar backgroundColor={colors.primary} barStyle="light-content" />
       <HomepageHeader />
-      <UserApi />
+      <UserApi navigation={navigation} />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
@@ -62,7 +64,10 @@ const HomeScreen = ({ navigation }) => {
       >
         <SearchComponent />
 
+        <NewListings />
+
         <>
+          <Text style={styles.exploreText}>Explore</Text>
           {all_listings.length === 0 && !alllistingloading ? (
             <View style={styles.emptyWrapper}>
               <Image
@@ -73,42 +78,33 @@ const HomeScreen = ({ navigation }) => {
             </View>
           ) : (
             <>
-              <AroundYou navigation={navigation} />
-              <NewListings />
-              {/* <LagosListings /> */}
+              <View style={styles.explore}>
+                {alllistingloading ? (
+                  <>
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                    <Loader2 />
+                  </>
+                ) : (
+                  all_listings
+                    .slice(0, visible)
+                    .map((item) => <SearchCard item={item} key={item._id} />)
+                )}
 
-              {/* add banners here */}
-              {/* {!alllistingloading && (
-                <View style={styles.banners}>
-                  <Image
-                    style={styles.bannersImage}
-                    source={require("../assets/images/ads.png")}
+                {visible > all_listings.length ||
+                alllistingloading ||
+                all_listings.length === 0 ? (
+                  ""
+                ) : (
+                  <LoadMore
+                    loading={loading}
+                    setLoading={setLoading}
+                    setVisible={setVisible}
                   />
-                </View>
-              )} */}
-
-              {/* Explore more section */}
-              {alllistingloading ? (
-                <ActivityIndicator />
-              ) : (
-                <View style={styles.explore}>
-                  <Text style={styles.exploreText}>Explore more</Text>
-
-                  {all_listings
-                    .filter(
-                      (item) =>
-                        item.category !== "Recent apartment" &&
-                        item.category !== "New apartment"
-                    )
-                    .map((item) =>
-                      alllistingloading ? (
-                        <Loader2 key={item._id} />
-                      ) : (
-                        <SearchCard item={item} key={item._id} />
-                      )
-                    )}
-                </View>
-              )}
+                )}
+              </View>
             </>
           )}
         </>
@@ -145,10 +141,10 @@ const styles = StyleSheet.create({
   explore: {
     marginHorizontal: 15,
     marginBottom: 100,
-    marginTop: 30,
+    marginTop: 10,
   },
   exploreText: {
-    marginBottom: 10,
+    marginHorizontal: 15,
     fontSize: 15,
     color: colors.primary,
     fontWeight: "500",

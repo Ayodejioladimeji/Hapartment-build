@@ -8,6 +8,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Dimensions,
+  Linking,
 } from "react-native";
 import colors from "../assets/colors/colors";
 import * as ImagePicker from "expo-image-picker";
@@ -117,100 +121,134 @@ const EditProfileScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack navigation={navigation} title="Edit Profile" />
 
-      <View style={styles.profileWrapper}>
-        <View style={styles.profileBox}>
-          <TouchableOpacity onPress={pickImage}>
-            {!user.image && !image ? (
-              <View style={styles.profileImage}>
-                {loading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.primary}
-                    style={styles.activity}
-                  />
-                ) : (
-                  <Image
-                    source={require("../assets/images/user.jpg")}
-                    style={styles.Image}
-                  />
-                )}
-              </View>
-            ) : image ? (
-              <View style={styles.profileImage}>
-                {loading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.primary}
-                    style={styles.activity}
-                  />
-                ) : (
-                  <Image source={{ uri: image }} style={styles.Image} />
-                )}
-              </View>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profileWrapper}>
+          <View style={styles.profileBox}>
+            <TouchableOpacity onPress={pickImage}>
+              {!user.image && !image ? (
+                <View style={styles.profileImage}>
+                  {loading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.primary}
+                      style={styles.activity}
+                    />
+                  ) : (
+                    <View style={styles.ImageBox}>
+                      <Text>Click here</Text>
+                    </View>
+                    // <Image
+                    //   source={require("../assets/images/user.jpg")}
+                    //   style={styles.Image}
+                    // />
+                  )}
+                </View>
+              ) : image ? (
+                <View style={styles.profileImage}>
+                  {loading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.primary}
+                      style={styles.activity}
+                    />
+                  ) : (
+                    <Image source={{ uri: image }} style={styles.Image} />
+                  )}
+                </View>
+              ) : (
+                <View style={styles.profileImage}>
+                  {loading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.primary}
+                      style={styles.activity}
+                    />
+                  ) : (
+                    <Image source={{ uri: user.image }} style={styles.Image} />
+                  )}
+                </View>
+              )}
+            </TouchableOpacity>
+            <Text style={styles.nameText}>{fullname}</Text>
+            <Text style={styles.usernameText}>@{username}</Text>
+          </View>
+        </View>
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+        >
+          <View style={styles.editProfileBox}>
+            <Text style={styles.inputText}>FullName</Text>
+            <TextInput
+              style={[
+                styles.formInput,
+                isFocus && { borderColor: colors.primary },
+              ]}
+              value={fullname}
+              onChangeText={(text) => setFullname(text)}
+              selectTextOnFocus={false}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              editable={!isFocus && true}
+            />
+          </View>
+
+          <View style={styles.editProfileBox}>
+            <Text style={styles.inputText}>Email</Text>
+            <TextInput
+              style={styles.formInput}
+              value={user.email}
+              editable={false}
+              selectTextOnFocus={false}
+            />
+          </View>
+
+          <View style={styles.editProfileBox}>
+            <Text style={styles.inputText}>Username</Text>
+            <TextInput
+              style={[
+                styles.formInput,
+                isFocus && { borderColor: colors.primary },
+              ]}
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+              // selectTextOnFocus={false}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              editable={false}
+            />
+          </View>
+
+          {error && <Text style={styles.error}>{error}</Text>}
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.profileButton}
+            onPress={handleSubmit}
+          >
+            {profileloading ? (
+              <ActivityIndicator size="small" color={colors.white} />
             ) : (
-              <View style={styles.profileImage}>
-                {loading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.primary}
-                    style={styles.activity}
-                  />
-                ) : (
-                  <Image source={{ uri: user.image }} style={styles.Image} />
-                )}
-              </View>
+              <Text style={styles.profileButtonText}>Edit Profile</Text>
             )}
           </TouchableOpacity>
-          <Text style={styles.nameText}>{fullname}</Text>
-          <Text style={styles.usernameText}>@{username}</Text>
-        </View>
-      </View>
 
-      <View style={styles.editProfileBox}>
-        <Text style={styles.inputText}>FullName</Text>
-        <TextInput
-          style={[styles.formInput, isFocus && { borderColor: colors.primary }]}
-          value={fullname}
-          onChangeText={(text) => setFullname(text)}
-          selectTextOnFocus={false}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          // editable={!isFocus && true}
-        />
-      </View>
-
-      <View style={styles.editProfileBox}>
-        <Text style={styles.inputText}>Email</Text>
-        <TextInput
-          style={styles.formInput}
-          value={user.email}
-          editable={false}
-          selectTextOnFocus={false}
-        />
-      </View>
-
-      <View style={styles.editProfileBox}>
-        <Text style={styles.inputText}>Username</Text>
-        <TextInput
-          style={[styles.formInput, isFocus && { borderColor: colors.primary }]}
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-          // selectTextOnFocus={false}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          // editable={isFocus && true}
-        />
-      </View>
-
-      {error && <Text style={styles.error}>{error}</Text>}
-
-      <TouchableOpacity style={styles.profileButton} onPress={handleSubmit}>
-        {profileloading ? (
-          <ActivityIndicator size="small" color={colors.white} />
-        ) : (
-          <Text style={styles.profileButtonText}>Edit Profile</Text>
-        )}
-      </TouchableOpacity>
+          <Text style={styles.note}>
+            Send a mail to{" "}
+            <Text
+              style={{ color: colors.primary }}
+              onPress={() => Linking.openURL("mailto:support@hapartment.org")}
+            >
+              support@hapartment.org
+            </Text>{" "}
+            to edit your email and username
+          </Text>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </View>
   );
 };
@@ -246,6 +284,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 
+  ImageBox: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 100,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   nameText: {
     // fontFamily: "//NunitoSans-Black",
     fontSize: 17,
@@ -268,6 +314,7 @@ const styles = StyleSheet.create({
   inputText: {
     marginBottom: 5,
     fontSize: 13,
+
     // fontFamily: "//NunitoSans-Bold",
   },
 
@@ -303,5 +350,13 @@ const styles = StyleSheet.create({
     width: "90%",
     textAlign: "center",
     marginTop: 30,
+  },
+
+  note: {
+    marginHorizontal: 20,
+    marginTop: 20,
+    textAlign: "center",
+    color: colors.textLight,
+    lineHeight: 25,
   },
 });

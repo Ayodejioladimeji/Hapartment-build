@@ -23,10 +23,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
 import { addComma } from "comma-separator";
 import { saveProperties } from "../redux/actions/listingAction";
+import Modals from "./Modals";
+import CautionModal from "./CautionModal";
+import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 //
 
 const SearchCard = ({ item }) => {
+  const { modal } = useSelector((state) => state.notification);
+
   const {
     address,
     images,
@@ -36,6 +41,7 @@ const SearchCard = ({ item }) => {
     status,
     updatedAt,
     bathrooms,
+    bedrooms,
   } = item;
   const navigation = useNavigation();
 
@@ -64,81 +70,113 @@ const SearchCard = ({ item }) => {
 
   //
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      onPress={() => navigation.navigate("DetailsScreen", { item })}
-    >
-      <View style={styles.cardsWrapper}>
-        <View style={styles.imagesWrapper}>
-          <Image source={{ uri: images[0].url }} style={styles.cardImage} />
+    <>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => navigation.navigate("DetailsScreen", { item })}
+      >
+        <View style={styles.cardsWrapper}>
+          <View style={styles.imagesWrapper}>
+            <Image source={{ uri: images[0].url }} style={styles.cardImage} />
 
-          <View
-            style={[
-              styles.verify,
-              status === "pending" && { backgroundColor: "orange" },
-            ]}
-          >
-            <Text style={styles.verifyText}>
-              {status === "pending" ? "Pending" : "Verified"}
-            </Text>
+            <View
+              style={[
+                styles.verify,
+                status === "pending"
+                  ? { backgroundColor: "orange" }
+                  : status === "declined"
+                  ? { backgroundColor: "red" }
+                  : { backgroundColor: "green" },
+              ]}
+            >
+              <Text style={styles.verifyText}>
+                {status === "pending"
+                  ? "Pending"
+                  : status === "declined"
+                  ? "Declined"
+                  : "Verified"}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={saveProperty}
+              activeOpacity={0.5}
+              style={styles.favoriteWrapper}
+            >
+              {loading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : (
+                <MaterialIcons name="favorite" style={styles.favorite} />
+              )}
+            </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            onPress={saveProperty}
-            activeOpacity={0.5}
-            style={styles.favoriteWrapper}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
-              <MaterialIcons name="favorite" style={styles.favorite} />
-            )}
-          </TouchableOpacity>
+          <View style={styles.cardBox}>
+            <Text style={styles.nameText}>
+              {property_type.substring(0, 21) + "..."}
+            </Text>
+
+            <Text style={styles.amountText}>₦{addComma(price)}</Text>
+
+            <View style={styles.cardLocation}>
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={18}
+                color={colors.textLight}
+                style={{ marginLeft: -3 }}
+              />
+              <Text style={styles.locationText}>
+                {address.substring(0, 27) + "..."}
+              </Text>
+            </View>
+
+            <View style={styles.cardFooter}>
+              <View style={styles.cardFooterBox}>
+                <Ionicons
+                  name="bed-outline"
+                  size={14}
+                  color={colors.textLight}
+                />
+                <Text style={styles.footerBoxText}>
+                  {bedrooms === "singleroom"
+                    ? "1"
+                    : bedrooms === "room&parlour"
+                    ? "1"
+                    : bedrooms === "selfcontain"
+                    ? "1"
+                    : bedrooms}{" "}
+                  Bed
+                </Text>
+              </View>
+              <View style={styles.cardFooterBox}>
+                <FontAwesome5 name="bath" size={11} color={colors.textLight} />
+                <Text style={styles.footerBoxText}>{bathrooms} Bath</Text>
+              </View>
+              <View style={styles.cardFooterBox}>
+                <FontAwesome5
+                  name="toilet"
+                  size={11}
+                  color={colors.textLight}
+                />
+                <Text style={styles.footerBoxText}>{toilets} Toilet</Text>
+              </View>
+            </View>
+
+            <View style={styles.cardTimeWrapper}>
+              <Text style={styles.cardTime}>
+                Updated : {format(updatedAt).substring(0, 25) + " "}
+              </Text>
+            </View>
+          </View>
         </View>
+      </TouchableOpacity>
 
-        <View style={styles.cardBox}>
-          <Text style={styles.nameText}>
-            {property_type}
-            {/* {name.substring(0, 25) + "..."} */}
-          </Text>
-
-          <Text style={styles.amountText}>₦{addComma(price)}</Text>
-
-          <View style={styles.cardLocation}>
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={18}
-              color={colors.textLight}
-              style={{ marginLeft: -3 }}
-            />
-            <Text style={styles.locationText}>
-              {address.substring(0, 27) + "..."}
-            </Text>
-          </View>
-
-          <View style={styles.cardFooter}>
-            <View style={styles.cardFooterBox}>
-              <Ionicons name="bed-outline" size={14} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>2 Bed</Text>
-            </View>
-            <View style={styles.cardFooterBox}>
-              <FontAwesome5 name="bath" size={11} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>{bathrooms} Bath</Text>
-            </View>
-            <View style={styles.cardFooterBox}>
-              <FontAwesome5 name="toilet" size={11} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>{toilets} Toilet</Text>
-            </View>
-          </View>
-
-          <View style={styles.cardTimeWrapper}>
-            <Text style={styles.cardTime}>
-              Updated : {format(updatedAt).substring(0, 25) + " "}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
+      {modal && (
+        <Modals>
+          <CautionModal item={item} />
+        </Modals>
+      )}
+    </>
   );
 };
 

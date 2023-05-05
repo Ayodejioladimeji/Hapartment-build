@@ -46,7 +46,9 @@ const Identity = ({ navigation }) => {
               />
 
               <View style={styles.textView}>
-                <Text style={styles.heading}>Verify your identity</Text>
+                <Text style={styles.heading}>
+                  Steps to verify your identity
+                </Text>
                 <Text style={styles.subheading}>
                   Please match your face with a supported document in order to
                   get verified
@@ -70,13 +72,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Fullname & Mobile</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -94,13 +89,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Take a selfie</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -118,13 +106,6 @@ const Identity = ({ navigation }) => {
                     </View>
                     <Text style={styles.detailsText}>Add valid document</Text>
                   </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
                 </TouchableOpacity>
               </View>
 

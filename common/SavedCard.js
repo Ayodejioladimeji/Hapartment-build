@@ -6,26 +6,23 @@ import {
   Platform,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert,
-  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import {
   FontAwesome5,
   Ionicons,
   MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
 import { addComma } from "comma-separator";
-import { saveProperties } from "../redux/actions/listingAction";
+import { GLOBALTYPES } from "../redux/actions/globalTypes";
 
 //
 
-const SavedCard = ({ item }) => {
+const SavedCard = (props) => {
   const {
     address,
     images,
@@ -35,36 +32,40 @@ const SavedCard = ({ item }) => {
     status,
     updatedAt,
     bathrooms,
-  } = item;
+    bedrooms,
+  } = props.item;
+  const data = props.item;
+
   const navigation = useNavigation();
-
-  const { callback } = useSelector((state) => state.property);
-  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
-  // add favourite method
-  const saveProperty = () => {
-    if (token === "") {
-      Alert.alert("Kindly login to save properties");
-      return;
-    }
+  // open delete modal
+  const openModal = () => {
+    let arr = [];
 
-    setLoading(true);
+    saved_favorite.images.forEach((item) => {
+      arr.push(item.id);
+    });
 
-    const data = {
-      list_id: item._id,
-    };
-    dispatch(saveProperties(data, token, callback));
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    dispatch({
+      type: GLOBALTYPES.DELETE_ID,
+      payload: item._id,
+    });
+    dispatch({
+      type: GLOBALTYPES.PUBLIC_ID,
+      payload: arr,
+    });
+
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { deleteSaved: true },
+    });
   };
 
   //
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("SavedDetailsScreen", { item })}
+      onPress={() => navigation.navigate("SavedDetailsScreen", { data })}
     >
       <View style={styles.cardsWrapper}>
         <View style={styles.imagesWrapper}>
@@ -73,18 +74,26 @@ const SavedCard = ({ item }) => {
           <View
             style={[
               styles.verify,
-              status === "pending" && { backgroundColor: "orange" },
+              status === "pending"
+                ? { backgroundColor: "orange" }
+                : status === "declined"
+                ? { backgroundColor: "red" }
+                : { backgroundColor: "green" },
             ]}
           >
             <Text style={styles.verifyText}>
-              {status === "pending" ? "Pending" : "Verified"}
+              {status === "pending"
+                ? "Pending"
+                : status === "declined"
+                ? "Declined"
+                : "Verified"}
             </Text>
           </View>
         </View>
 
         <View style={styles.cardBox}>
           <Text style={styles.nameText}>
-            {property_type}
+            {property_type.substring(0, 21) + "..."}
             {/* {name.substring(0, 25) + "..."} */}
           </Text>
 
@@ -105,7 +114,16 @@ const SavedCard = ({ item }) => {
           <View style={styles.cardFooter}>
             <View style={styles.cardFooterBox}>
               <Ionicons name="bed-outline" size={14} color={colors.textLight} />
-              <Text style={styles.footerBoxText}>2 Bed</Text>
+              <Text style={styles.footerBoxText}>
+                {bedrooms === "singleroom"
+                  ? "1"
+                  : bedrooms === "room&parlour"
+                  ? "1"
+                  : bedrooms === "selfcontain"
+                  ? "1"
+                  : bedrooms}{" "}
+                Bed
+              </Text>
             </View>
             <View style={styles.cardFooterBox}>
               <FontAwesome5 name="bath" size={11} color={colors.textLight} />
@@ -122,6 +140,14 @@ const SavedCard = ({ item }) => {
               Updated : {format(updatedAt).substring(0, 25) + " "}
             </Text>
           </View>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={styles.remove}
+            onPress={openModal}
+          >
+            <FontAwesome5 name="times-circle" style={styles.removeIcon} />
+          </TouchableOpacity>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -160,6 +186,7 @@ const styles = StyleSheet.create({
     // padding: 10,
     paddingHorizontal: 5,
     width: "60%",
+    position: "relative",
   },
   cardName: {
     flexDirection: "row",
@@ -253,5 +280,15 @@ const styles = StyleSheet.create({
   favorite: {
     color: colors.white,
     fontSize: 17,
+  },
+  remove: {
+    color: "red",
+    position: "absolute",
+    right: Platform.OS === "ios" ? 0 : 25,
+    top: 0,
+  },
+  removeIcon: {
+    fontSize: Platform.OS === "ios" ? 20 : 20,
+    color: "red",
   },
 });

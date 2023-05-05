@@ -24,11 +24,11 @@ const NotificationScreen = ({ navigation }) => {
   const { token } = useSelector((state) => state.auth);
   const { callback } = useSelector((state) => state.property);
   const { my_notification } = useSelector((state) => state.notification);
-  const { getnotificationloading } = useSelector((state) => state.loading);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getNotifications(token));
+    dispatch(getNotifications(token, setLoading));
   }, [callback]);
 
   //
@@ -37,7 +37,7 @@ const NotificationScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <GoBack navigation={navigation} title="Notifications" />
 
-      {getnotificationloading ? (
+      {loading ? (
         <Loading />
       ) : (
         <ScrollView style={styles.notificationWrapper}>
@@ -51,7 +51,7 @@ const NotificationScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
 
-          {my_notification.length === 0 && !getnotificationloading ? (
+          {my_notification.length === 0 && !loading ? (
             <View style={styles.emptyWrapper}>
               <Image
                 style={styles.emptyImage}
@@ -104,7 +104,7 @@ const NotificationScreen = ({ navigation }) => {
                     <Text style={styles.text}>
                       ₦{min_price} - ₦{max_price}
                     </Text>
-                    <Text style={styles.text}>Created {format(createdAt)}</Text>
+                    <Text style={styles.time}>Created {format(createdAt)}</Text>
 
                     <FontAwesome
                       onPress={() =>
@@ -163,12 +163,22 @@ const styles = StyleSheet.create({
   },
   type: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize: 16,
+    textTransform: "uppercase",
+    color: colors.primary,
   },
   text: {
     lineHeight: 30,
     color: colors.textDark,
     fontSize: 15,
+    textTransform: "capitalize",
+  },
+  time: {
+    lineHeight: 30,
+    color: colors.textLight,
+    fontSize: 15,
+    alignSelf: "center",
+    marginTop: 20,
   },
 
   times: {

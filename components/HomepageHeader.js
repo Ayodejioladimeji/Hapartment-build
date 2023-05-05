@@ -6,18 +6,27 @@ import {
   StyleSheet,
   Platform,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
+import { useNavigation } from "@react-navigation/native";
 
 //
 
 const HomepageHeader = () => {
+  const navigation = useNavigation();
   const { user, token } = useSelector((state) => state.auth);
   const { userloading } = useSelector((state) => state.alert);
   const { refreshing } = useSelector((state) => state.notification);
+
   const dispatch = useDispatch();
 
   //
@@ -61,17 +70,24 @@ const HomepageHeader = () => {
       )}
 
       <View style={styles.headerRight}>
-        <Feather name="sun" size={22} color={colors.white} />
+        <TouchableOpacity onPress={() => navigation.navigate("FilterScreen")}>
+          <View style={styles.sun}>
+            <FontAwesome name="sliders" size={23} color={colors.white} />
+          </View>
+        </TouchableOpacity>
 
-        <Ionicons
-          name="md-reload-sharp"
-          size={22}
-          color={colors.white}
+        <TouchableOpacity
+          // activeOpacity={0.7}
           onPress={() =>
             dispatch({ type: GLOBALTYPES.REFRESHING, payload: !refreshing })
           }
-        />
-        <View style={styles.notify}>
+        >
+          <View style={styles.refresh}>
+            <Ionicons name="md-reload-sharp" size={22} color={colors.white} />
+          </View>
+        </TouchableOpacity>
+
+        {/* <View style={styles.notify}>
           <MaterialCommunityIcons
             name="bell-outline"
             size={22}
@@ -79,7 +95,7 @@ const HomepageHeader = () => {
           />
 
           <View style={styles.dots}></View>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -134,8 +150,8 @@ const styles = StyleSheet.create({
     backgroudColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
-    width: 130,
-    justifyContent: "space-around",
+    width: 70,
+    justifyContent: "space-between",
   },
 
   headerLocation: {
@@ -154,5 +170,17 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     borderRadius: 50,
     right: 0,
+  },
+  sun: {
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  refresh: {
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

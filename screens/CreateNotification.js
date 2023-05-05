@@ -1,43 +1,35 @@
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Platform,
   Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
-  ActivityIndicator,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
-import colors from "../assets/colors/colors";
-import { useNavigation } from "@react-navigation/native";
-import GoBack from "../common/GoBack";
 import { Dropdown } from "react-native-element-dropdown";
-import axios from "axios";
 // import { BASE_URL, API_KEY } from "@env";
+import colors from "../assets/colors/colors";
 import propertyData from "../constants/propertyData";
 import { strictAddComma } from "comma-separator";
 import bathrooms from "../constants/bathrooms";
 import furnishing from "../constants/furnishing";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import statesData from "../constants/statesdata";
+import GoBack from "../common/GoBack";
 import { createNotification } from "../redux/actions/notificationAction";
 
 //
-const BASE_URL = "https://api.countrystatecity.in/v1";
 
-const API_KEY = "UnM1RmVPMFB0M09FN1RIWGZZM2Vyc2pvMzFrb3l5dDhQa3RzR1ZIbA==";
-
-//
-
-const CreateNotification = () => {
-  const [stateData, setStateData] = useState([]);
-  const [cityData, setCityData] = useState([]);
-  const [state, setState] = useState(null);
-  const [city, setCity] = useState(null);
+const FilterSearch = () => {
+  const [city, setCity] = useState([]);
+  const [cityname, setCityname] = useState([]);
   const [statename, setStatename] = useState(null);
-  const [cityname, setCityname] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [propertyType, setPropertyType] = useState(null);
   const [furnish, setFurnish] = useState("");
@@ -51,66 +43,15 @@ const CreateNotification = () => {
   const { createnotificationloading } = useSelector((state) => state.loading);
   const { token } = useSelector((state) => state.auth);
 
-  // load the states when the page renders
+  // get the city method
   useEffect(() => {
-    handleState("NG");
-  }, []);
+    statesData.filter((item) => {
+      if (item.value === statename) {
+        setCity(item.lgas);
+      }
+    });
+  }, [statename]);
 
-  const handleState = (countryCode) => {
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let stateArray = [];
-        for (var i = 0; i < count; i++) {
-          stateArray.push({
-            value: response.data[i].iso2,
-            label: response.data[i].name,
-          });
-        }
-        setStateData(stateArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const handleCity = (countryCode, stateCode) => {
-    var config = {
-      method: "get",
-      url: `${BASE_URL}/countries/${countryCode}/states/${stateCode}/cities`,
-      headers: {
-        "X-CSCAPI-KEY": API_KEY,
-      },
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(JSON.stringify(response.data));
-        var count = Object.keys(response.data).length;
-        let cityArray = [];
-        for (var i = 0; i < count; i++) {
-          cityArray.push({
-            value: response.data[i].id,
-            label: response.data[i].name,
-          });
-        }
-        setCityData(cityArray);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  // handlesubmit
   const handleSubmit = () => {
     if (
       !propertyType ||
@@ -127,12 +68,12 @@ const CreateNotification = () => {
     }
 
     const data = {
-      property_type: propertyType,
-      statename,
-      cityname,
+      property_type: propertyType.toLowerCase(),
+      statename: statename.toLowerCase(),
+      cityname: cityname.toLowerCase(),
       bathrooms: bath,
       toilets: toilet,
-      furnishing: furnish,
+      furnishing: furnish.toLowerCase(),
       min_price: minPrice,
       max_price: maxPrice,
     };
@@ -154,189 +95,187 @@ const CreateNotification = () => {
             Fill the form below to create Notification
           </Text>
 
-          <View style={styles.country}>
-            <Text style={styles.selectHeading}>Select Property Type</Text>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                isFocus && { borderColor: colors.primary },
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={propertyData}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? "Select property type" : "..."}
-              searchPlaceholder="Search..."
-              value={propertyType}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setPropertyType(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View>
-
-          <View style={styles.country}>
-            <Text style={styles.selectHeading}>Select Bathrooms</Text>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                isFocus && { borderColor: colors.primary },
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={bathrooms}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Select bathroom"
-              value={bath}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setBath(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View>
-
-          <View style={styles.country}>
-            <Text style={styles.selectHeading}>Select Toilets</Text>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                isFocus && { borderColor: colors.primary },
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={bathrooms}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Select toilet"
-              value={toilet}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setToilet(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View>
-
-          <View style={styles.states}>
-            <Text style={styles.selectHeading}>Select State</Text>
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={stateData}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Select state"
-              searchPlaceholder="Search..."
-              value={state}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setState(item.value);
-                handleCity("NG", item.value);
-                setIsFocus(false);
-                setStatename(item.label);
-              }}
-            />
-          </View>
-
-          <View style={styles.city}>
-            <Text style={styles.selectHeading}>Select City</Text>
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={cityData}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Select city"
-              searchPlaceholder="Search..."
-              value={city}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setCity(item.value);
-                setIsFocus(false);
-                setCityname(item.label);
-              }}
-            />
-          </View>
-
-          <View style={styles.country}>
-            <Text style={styles.selectHeading}>Furnishing</Text>
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={furnishing}
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder="Choose Furnishing"
-              value={furnish}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setFurnish(item.value);
-                setIsFocus(false);
-              }}
-            />
-          </View>
-
-          <View style={styles.inputBox}>
-            <Text style={styles.selectHeading}>Price </Text>
-            <View style={styles.inputDiv}>
-              <TextInput
-                placeholder="Min #12,000"
-                style={styles.textInputs}
-                onChangeText={(item) => setMinPrice(strictAddComma(item))}
-                value={minPrice}
-              />
-
-              <TextInput
-                placeholder="Max #50,000,000"
-                style={styles.textInputs}
-                onChangeText={(item) => setMaxPrice(strictAddComma(item))}
-                value={maxPrice}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
+          >
+            <View style={styles.country}>
+              <Text style={styles.selectHeading}>Select Property Type</Text>
+              <Dropdown
+                style={[
+                  styles.dropdown,
+                  isFocus && { borderColor: colors.primary },
+                ]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={propertyData}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? "Select property type" : "..."}
+                searchPlaceholder="Search..."
+                value={propertyType}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setPropertyType(item.value);
+                  setIsFocus(false);
+                }}
               />
             </View>
-          </View>
 
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={styles.filterButton}
-            onPress={handleSubmit}
-          >
-            {createnotificationloading ? (
-              <ActivityIndicator size="small" color={colors.white} />
-            ) : (
+            <View style={styles.country}>
+              <Text style={styles.selectHeading}>Select Bathrooms</Text>
+              <Dropdown
+                style={[
+                  styles.dropdown,
+                  isFocus && { borderColor: colors.primary },
+                ]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={bathrooms}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select bathroom"
+                value={bath}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setBath(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+
+            <View style={styles.country}>
+              <Text style={styles.selectHeading}>Select Toilets</Text>
+              <Dropdown
+                style={[
+                  styles.dropdown,
+                  isFocus && { borderColor: colors.primary },
+                ]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={bathrooms}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select toilet"
+                value={toilet}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setToilet(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+
+            <View style={styles.states}>
+              <Text style={styles.selectHeading}>Select State</Text>
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={statesData}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select state"
+                searchPlaceholder="Search..."
+                value={statename}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setIsFocus(false);
+                  setStatename(item.value);
+                }}
+              />
+            </View>
+
+            <View style={styles.city}>
+              <Text style={styles.selectHeading}>Select City</Text>
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={city}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select city"
+                searchPlaceholder="Search..."
+                value={city}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setIsFocus(false);
+                  setCityname(item.value);
+                }}
+              />
+            </View>
+
+            <View style={styles.country}>
+              <Text style={styles.selectHeading}>Furnishing</Text>
+              <Dropdown
+                style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={furnishing}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Choose Furnishing"
+                value={furnish}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChange={(item) => {
+                  setFurnish(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
+
+            <View style={styles.inputBox}>
+              <Text style={styles.selectHeading}>Price </Text>
+              <View style={styles.inputDiv}>
+                <TextInput
+                  placeholder="Min #12,000"
+                  style={styles.textInputs}
+                  onChangeText={(item) => setMinPrice(strictAddComma(item))}
+                  value={minPrice}
+                />
+
+                <TextInput
+                  placeholder="Max #50,000,000"
+                  style={styles.textInputs}
+                  onChangeText={(item) => setMaxPrice(strictAddComma(item))}
+                  value={maxPrice}
+                />
+              </View>
+            </View>
+
+            <TouchableOpacity
+              activeOpacity={0.5}
+              style={styles.filterButton}
+              onPress={handleSubmit}
+            >
               <Text
                 style={{
                   color: colors.white,
@@ -346,15 +285,15 @@ const CreateNotification = () => {
               >
                 Create Notification
               </Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
         </View>
       </ScrollView>
     </View>
   );
 };
 
-export default CreateNotification;
+export default FilterSearch;
 
 const styles = StyleSheet.create({
   container: {
@@ -419,10 +358,11 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     backgroundColor: colors.primary,
-    padding: 20,
+    height: 50,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 30,
+    justifyContent: "center",
   },
   descriptionWrapper: {
     marginTop: 10,

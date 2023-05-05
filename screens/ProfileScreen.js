@@ -21,11 +21,15 @@ import colors from "../assets/colors/colors";
 import GoBack from "../common/GoBack";
 import { GLOBALTYPES } from "../redux/actions/globalTypes";
 import VerifyErrorModal from "../common/VerifyErrorModal";
+import ProfileSkeletal from "../common/skeletal_loader/ProfileSkeletal";
+import ListSkeletal from "../common/skeletal_loader/listSkeletal";
+import ProfileGoback from "../common/ProfileGoback";
 
 //
 
 const ProfileScreen = ({ navigation }) => {
   const { user } = useSelector((state) => state.auth);
+  const { userloading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const [verify, setVerify] = useState(false);
 
@@ -56,7 +60,7 @@ const ProfileScreen = ({ navigation }) => {
   //
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <GoBack navigation={navigation} title="User Profile" />
+      <ProfileGoback navigation={navigation} title="User Profile" />
 
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
@@ -64,213 +68,231 @@ const ProfileScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.profileWrapper}>
-          <View style={styles.profileBox}>
-            {!user.image ? (
-              <View style={styles.profileImage}>
-                <Image
-                  source={require("../assets/images/user.jpg")}
-                  style={styles.Image}
-                />
-              </View>
-            ) : (
-              <View style={styles.profileImage}>
-                <Image source={{ uri: user.image }} style={styles.Image} />
-              </View>
+          {userloading ? (
+            <ProfileSkeletal />
+          ) : (
+            <View style={styles.profileBox}>
+              {!user.image ? (
+                <View style={styles.profileImage}>
+                  <Image
+                    source={require("../assets/images/user.jpg")}
+                    style={styles.Image}
+                  />
+                </View>
+              ) : (
+                <View style={styles.profileImage}>
+                  <Image source={{ uri: user.image }} style={styles.Image} />
+                </View>
+              )}
+              <Text style={styles.nameText}>{user.fullname}</Text>
+              <Text style={styles.usernameText}>@{user.username}</Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.profileButton}
+                onPress={() => navigation.navigate("EditProfileScreen")}
+              >
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        {userloading ? (
+          <>
+            <ListSkeletal />
+            <ListSkeletal />
+            <ListSkeletal />
+          </>
+        ) : (
+          <View style={styles.profileDetailsWrapper}>
+            {user?.userType === "agent" && (
+              <>
+                {user?.verification?.length === 0 && (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.profileDetails}
+                    onPress={() => navigation.navigate("Identity")}
+                  >
+                    <View style={styles.profileLeft}>
+                      <View style={styles.detailsBox}>
+                        <MaterialIcons
+                          name="verified"
+                          size={20}
+                          color="black"
+                          style={styles.profileIcon}
+                        />
+                      </View>
+                      <Text style={styles.detailsText}>
+                        Verify Your Identity
+                      </Text>
+                    </View>
+
+                    <MaterialIcons
+                      name="chevron-right"
+                      size={24}
+                      color="black"
+                      style={styles.arrow}
+                    />
+                  </TouchableOpacity>
+                )}
+
+                {user?.verification[0]?.isVerified === "true" && (
+                  <>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.profileDetails}
+                      onPress={listProperty}
+                    >
+                      <View style={styles.profileLeft}>
+                        <View style={styles.detailsBox}>
+                          <MaterialIcons
+                            name="notifications-off"
+                            size={20}
+                            color="black"
+                            style={styles.profileIcon}
+                          />
+                        </View>
+                        <Text style={styles.detailsText}>List Property</Text>
+                      </View>
+
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={24}
+                        color="black"
+                        style={styles.arrow}
+                      />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.profileDetails}
+                      onPress={() => navigation.navigate("MyPropertiesScreen")}
+                    >
+                      <View style={styles.profileLeft}>
+                        <View style={styles.detailsBox}>
+                          <MaterialIcons
+                            name="house-siding"
+                            size={22}
+                            color="black"
+                            style={styles.profileIcon}
+                          />
+                        </View>
+                        <Text style={styles.detailsText}>My Properties</Text>
+                      </View>
+
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={24}
+                        color="black"
+                        style={styles.arrow}
+                      />
+                    </TouchableOpacity>
+                  </>
+                )}
+              </>
             )}
-            <Text style={styles.nameText}>{user.fullname}</Text>
-            <Text style={styles.usernameText}>@{user.username}</Text>
+
             <TouchableOpacity
               activeOpacity={0.7}
-              style={styles.profileButton}
-              onPress={() => navigation.navigate("EditProfileScreen")}
+              style={styles.profileDetails}
+              onPress={() => navigation.navigate("SavedPropertiesScreen")}
             >
-              <Text style={styles.buttonText}>Edit Profile</Text>
+              <View style={styles.profileLeft}>
+                <View style={styles.detailsBox}>
+                  <MaterialCommunityIcons
+                    name="home-city"
+                    size={16}
+                    color="black"
+                    style={styles.profileIcon}
+                  />
+                </View>
+                <Text style={styles.detailsText}>Saved Apartments</Text>
+              </View>
+
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color="black"
+                style={styles.arrow}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.profileDetails}
+              onPress={() => navigation.navigate("ChangePasswordScreen")}
+            >
+              <View style={styles.profileLeft}>
+                <View style={styles.detailsBox}>
+                  <Ionicons
+                    name="lock-open"
+                    size={18}
+                    color="black"
+                    style={styles.profileIcon}
+                  />
+                </View>
+                <Text style={styles.detailsText}>Change Password</Text>
+              </View>
+
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color="black"
+                style={styles.arrow}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.profileDetails}
+              onPress={() => navigation.navigate("NotificationScreen")}
+            >
+              <View style={styles.profileLeft}>
+                <View style={styles.detailsBox}>
+                  <Ionicons
+                    name="notifications-off-outline"
+                    size={18}
+                    color="black"
+                    style={styles.profileIcon}
+                  />
+                </View>
+                <Text style={styles.detailsText}>Notifications</Text>
+              </View>
+
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color="black"
+                style={styles.arrow}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.profileDetails}
+              onPress={logout}
+            >
+              <View style={styles.profileLeft}>
+                <View style={styles.detailsBox}>
+                  <FontAwesome
+                    name="power-off"
+                    size={16}
+                    color="black"
+                    style={styles.profileIcon}
+                  />
+                </View>
+                <Text style={styles.detailsText}>Logout</Text>
+              </View>
+
+              <MaterialIcons
+                name="chevron-right"
+                size={24}
+                color="black"
+                style={styles.arrow}
+              />
             </TouchableOpacity>
           </View>
-        </View>
-
-        <View style={styles.profileDetailsWrapper}>
-          {user.userType === "agent" && (
-            <>
-              {user.verification.length === 0 && (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.profileDetails}
-                  onPress={() => navigation.navigate("Identity")}
-                >
-                  <View style={styles.profileLeft}>
-                    <View style={styles.detailsBox}>
-                      <MaterialIcons
-                        name="verified"
-                        size={20}
-                        color="black"
-                        style={styles.profileIcon}
-                      />
-                    </View>
-                    <Text style={styles.detailsText}>Verify Your Identity</Text>
-                  </View>
-
-                  <MaterialIcons
-                    name="chevron-right"
-                    size={24}
-                    color="black"
-                    style={styles.arrow}
-                  />
-                </TouchableOpacity>
-              )}
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.profileDetails}
-                onPress={listProperty}
-              >
-                <View style={styles.profileLeft}>
-                  <View style={styles.detailsBox}>
-                    <MaterialIcons
-                      name="notifications-off"
-                      size={20}
-                      color="black"
-                      style={styles.profileIcon}
-                    />
-                  </View>
-                  <Text style={styles.detailsText}>List Property</Text>
-                </View>
-
-                <MaterialIcons
-                  name="chevron-right"
-                  size={24}
-                  color="black"
-                  style={styles.arrow}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.profileDetails}
-                onPress={() => navigation.navigate("MyPropertiesScreen")}
-              >
-                <View style={styles.profileLeft}>
-                  <View style={styles.detailsBox}>
-                    <MaterialIcons
-                      name="house-siding"
-                      size={22}
-                      color="black"
-                      style={styles.profileIcon}
-                    />
-                  </View>
-                  <Text style={styles.detailsText}>My Properties</Text>
-                </View>
-
-                <MaterialIcons
-                  name="chevron-right"
-                  size={24}
-                  color="black"
-                  style={styles.arrow}
-                />
-              </TouchableOpacity>
-            </>
-          )}
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.profileDetails}
-            onPress={() => navigation.navigate("SavedPropertiesScreen")}
-          >
-            <View style={styles.profileLeft}>
-              <View style={styles.detailsBox}>
-                <MaterialCommunityIcons
-                  name="home-city"
-                  size={16}
-                  color="black"
-                  style={styles.profileIcon}
-                />
-              </View>
-              <Text style={styles.detailsText}>Saved Apartments</Text>
-            </View>
-
-            <MaterialIcons
-              name="chevron-right"
-              size={24}
-              color="black"
-              style={styles.arrow}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.profileDetails}
-            onPress={() => navigation.navigate("ChangePasswordScreen")}
-          >
-            <View style={styles.profileLeft}>
-              <View style={styles.detailsBox}>
-                <Ionicons
-                  name="lock-open"
-                  size={18}
-                  color="black"
-                  style={styles.profileIcon}
-                />
-              </View>
-              <Text style={styles.detailsText}>Change Password</Text>
-            </View>
-
-            <MaterialIcons
-              name="chevron-right"
-              size={24}
-              color="black"
-              style={styles.arrow}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.profileDetails}
-            onPress={() => navigation.navigate("NotificationScreen")}
-          >
-            <View style={styles.profileLeft}>
-              <View style={styles.detailsBox}>
-                <Ionicons
-                  name="notifications-off-outline"
-                  size={18}
-                  color="black"
-                  style={styles.profileIcon}
-                />
-              </View>
-              <Text style={styles.detailsText}>Notifications</Text>
-            </View>
-
-            <MaterialIcons
-              name="chevron-right"
-              size={24}
-              color="black"
-              style={styles.arrow}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.profileDetails}
-            onPress={logout}
-          >
-            <View style={styles.profileLeft}>
-              <View style={styles.detailsBox}>
-                <FontAwesome
-                  name="power-off"
-                  size={16}
-                  color="black"
-                  style={styles.profileIcon}
-                />
-              </View>
-              <Text style={styles.detailsText}>Logout</Text>
-            </View>
-
-            <MaterialIcons
-              name="chevron-right"
-              size={24}
-              color="black"
-              style={styles.arrow}
-            />
-          </TouchableOpacity>
-        </View>
+        )}
       </ScrollView>
 
       {verify && <VerifyErrorModal />}

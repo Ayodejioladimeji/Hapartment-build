@@ -27,6 +27,7 @@ const IdentityThree = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const { identityloading } = useSelector((state) => state.alert);
   const { token } = useSelector((state) => state.auth);
+  const { profile_callback } = useSelector((state) => state.profile);
 
   const {
     identity_name,
@@ -63,8 +64,6 @@ const IdentityThree = ({ navigation }) => {
       setLoading(false);
       return;
     }
-
-    // console.log(result);
 
     if (!result.canceled) {
       dispatch({
@@ -110,19 +109,19 @@ const IdentityThree = ({ navigation }) => {
     documentData.append("file", documentFile);
     selfieData.append("file", selfieFile);
 
-    documentData.append("upload_preset", "hapartment");
-    selfieData.append("upload_preset", "hapartment");
+    documentData.append("upload_preset", "hapartment_marketplace");
+    selfieData.append("upload_preset", "hapartment_marketplace");
 
-    documentData.append("cloud_name", "hapartment");
-    selfieData.append("cloud_name", "hapartment");
+    documentData.append("cloud_name", "hapartment_marketplace");
+    selfieData.append("cloud_name", "hapartment_marketplace");
 
     const documentRes = await fetch(
-      "https://api.cloudinary.com/v1_1/hapartment/upload",
+      "https://api.cloudinary.com/v1_1/hapartments/upload",
       { method: "POST", body: documentData }
     );
 
     const selfieRes = await fetch(
-      "https://api.cloudinary.com/v1_1/hapartment/upload",
+      "https://api.cloudinary.com/v1_1/hapartments/upload",
       { method: "POST", body: selfieData }
     );
 
@@ -137,7 +136,9 @@ const IdentityThree = ({ navigation }) => {
       document_type,
     };
 
-    dispatch(identity(newData, token));
+    // console.log(newData);
+
+    dispatch(identity(newData, token, navigation, profile_callback));
   };
 
   //

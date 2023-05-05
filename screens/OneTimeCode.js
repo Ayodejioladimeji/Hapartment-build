@@ -30,8 +30,6 @@ const OneTimeCode = () => {
   const Ref = useRef(null);
   const [timer, setTimer] = useState("00:00");
 
-  // console.log(email);
-
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
@@ -114,6 +112,7 @@ const OneTimeCode = () => {
           />
 
           <TouchableOpacity
+            activeOpacity={0.7}
             onPress={handleSubmit}
             disabled={!isPinReady}
             style={{
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 40,
     backgroundColor: colors.white,
   },
   codeWrapper: {
