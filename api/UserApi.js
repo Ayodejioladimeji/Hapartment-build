@@ -44,7 +44,7 @@ const UserApi = ({ navigation }) => {
           }, 3000);
           //
         } catch (error) {
-          Alert.alert(error.response.data.msg);
+          Alert.alert(error?.response?.data?.msg);
           // console.log(error);
         }
       };

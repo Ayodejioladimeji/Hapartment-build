@@ -24,7 +24,7 @@ export const profile = (data, token, profile_callback) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -77,7 +77,7 @@ export const allAgent = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -105,10 +105,10 @@ export const agentDetails = (id) => async (dispatch) => {
       });
     }, 3000);
   } catch (error) {
-    // console.log(error.response.data.msg);
+    // console.log(error?.response?.data?.msg);
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {

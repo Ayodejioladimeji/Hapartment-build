@@ -25,7 +25,7 @@ export const register = (data, navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -50,7 +50,7 @@ export const authenticate = (data, navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -82,7 +82,7 @@ export const resendCode = (data) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -126,7 +126,7 @@ export const login = (data, navigation) => async (dispatch) => {
     // console.log(error.response);
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -156,7 +156,7 @@ export const forgotPassword = (data, navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -181,7 +181,7 @@ export const resetPassword = (data, navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -209,7 +209,7 @@ export const changePassword = (data, token, navigation) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {

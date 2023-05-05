@@ -31,8 +31,6 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(10);
 
-  // const randomData = all_listings.sort(() => Math.random() - 0.5);
-
   // initialize font family
   const [fontsLoaded] = useFonts({
     "Lobster-Regular": require("../assets/fonts/Lobster-Regular.ttf"),

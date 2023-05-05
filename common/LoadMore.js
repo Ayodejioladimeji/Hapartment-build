@@ -5,26 +5,28 @@ const LoadMore = ({ loading, setLoading, setVisible }) => {
   const showItems = () => {
     setLoading(true);
     setTimeout(() => {
-      setVisible((prevState) => prevState + 3);
+      setVisible((prevState) => prevState + 5);
       setLoading(false);
-    }, 2000);
+    }, 1000);
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={showItems}>
+    <TouchableOpacity onPress={showItems}>
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Text
-          style={{
-            color: "green",
-            alignSelf: "center",
-            marginVertical: 10,
-            textDecorationLine: "underline",
-          }}
-        >
-          See More
-        </Text>
+        <View>
+          <Text
+            style={{
+              color: "green",
+              alignSelf: "center",
+              marginVertical: 10,
+              textDecorationLine: "underline",
+            }}
+          >
+            See More
+          </Text>
+        </View>
       )}
     </TouchableOpacity>
   );

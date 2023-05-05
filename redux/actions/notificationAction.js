@@ -27,7 +27,7 @@ export const createNotification =
 
       navigation.navigate("NotificationScreen");
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
 
       setTimeout(() => {
         dispatch({
@@ -39,23 +39,15 @@ export const createNotification =
   };
 
 // GET NOTIFICATIONS CREATED
-export const getNotifications = (token) => async (dispatch) => {
+export const getNotifications = (token, setLoading) => async (dispatch) => {
   try {
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: { getnotificationloading: true },
-    });
-
     const res = await getDataApi("/my_notifications", token);
 
     dispatch({ type: GLOBALTYPES.MY_NOTIFICATION, payload: res.data });
 
-    dispatch({
-      type: GLOBALTYPES.LOADING,
-      payload: { getnotificationloading: false },
-    });
+    setLoading(false);
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({
@@ -85,7 +77,7 @@ export const deleteNotification = (id, token, callback) => async (dispatch) => {
       payload: { deletenotificationloading: false },
     });
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({

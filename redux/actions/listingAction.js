@@ -39,10 +39,10 @@ export const createListing =
         });
       }, 3000);
     } catch (error) {
-      console.log("this is the error", error.response.data.msg);
+      console.log("this is the error", error?.response?.data?.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { listingError: error.response.data.msg },
+        payload: { listingError: error?.response?.data?.msg },
       });
 
       setTimeout(() => {
@@ -91,10 +91,10 @@ export const updateListing =
         });
       }, 2000);
     } catch (error) {
-      console.log(error.response.data.msg);
+      console.log(error?.response?.data?.msg);
       dispatch({
         type: GLOBALTYPES.ALERT,
-        payload: { listingError: error.response.data.msg },
+        payload: { listingError: error?.response?.data?.msg },
       });
 
       setTimeout(() => {
@@ -124,7 +124,7 @@ export const myListings = (token) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -153,7 +153,7 @@ export const allListings = () => async (dispatch) => {
     // console.log(error);
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -183,7 +183,7 @@ export const listDetails = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GLOBALTYPES.ALERT,
-      payload: { error: error.response.data.msg },
+      payload: { error: error?.response?.data?.msg },
     });
 
     setTimeout(() => {
@@ -209,7 +209,7 @@ export const saveProperties = (data, token, callback) => async (dispatch) => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: { favloading: false } });
     }, 1000);
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: { favloading: false } });
@@ -233,8 +233,8 @@ export const getSavedProperties = (token) => async (dispatch) => {
       dispatch({ type: GLOBALTYPES.LOADING, payload: {} });
     }, 3000);
   } catch (error) {
-    // console.log(error.response.data.msg);
-    Alert.alert(error.response.data.msg);
+    // console.log(error?.response?.data?.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({ type: GLOBALTYPES.ALERT, payload: {} });
@@ -270,7 +270,7 @@ export const reportListing =
         });
       }, 1000);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
       setMessage("");
       setTimeout(() => {
         dispatch({
@@ -308,7 +308,7 @@ export const filterListing = (data) => async (dispatch) => {
       payload: { filterloading: false },
     });
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({
@@ -333,7 +333,7 @@ export const searchListing = (cityname) => async (dispatch) => {
       payload: { filterloading: false },
     });
   } catch (error) {
-    Alert.alert(error.response.data.msg);
+    Alert.alert(error?.response?.data?.msg);
 
     setTimeout(() => {
       dispatch({
@@ -375,7 +375,7 @@ export const deleteProperty =
       // delete images
       await postDataApis("/delete_images", publicId, token);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
 
       setTimeout(() => {
         dispatch({
@@ -417,7 +417,7 @@ export const deleteFavorite =
       // delete images
       await postDataApis("/delete_images", publicId, token);
     } catch (error) {
-      Alert.alert(error.response.data.msg);
+      Alert.alert(error?.response?.data?.msg);
 
       setTimeout(() => {
         dispatch({
