@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { format } from "timeago.js";
 import Loading from "../common/Loading";
+import NotificationSkeletal from "../common/skeletal_loader/NotificationSkeletal";
 
 //
 
@@ -38,7 +39,7 @@ const NotificationScreen = ({ navigation }) => {
       <GoBack navigation={navigation} title="Notifications" />
 
       {loading ? (
-        <Loading />
+        <NotificationSkeletal />
       ) : (
         <ScrollView style={styles.notificationWrapper}>
           {my_notification.length !== 0 && (

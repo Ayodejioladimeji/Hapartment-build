@@ -15,17 +15,12 @@ export const createNotification =
       Alert.alert(res.data.msg);
 
       dispatch({ type: GLOBALTYPES.CALLBACK, payload: !callback });
-      dispatch({
-        type: GLOBALTYPES.LOADING,
-        payload: { getnotificationloading: true },
-      });
+      navigation.navigate("NotificationScreen");
 
       dispatch({
         type: GLOBALTYPES.LOADING,
         payload: { createnotificationloading: false },
       });
-
-      navigation.navigate("NotificationScreen");
     } catch (error) {
       Alert.alert(error?.response?.data?.msg);
 
