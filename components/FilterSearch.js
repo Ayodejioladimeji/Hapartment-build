@@ -92,7 +92,7 @@ const FilterSearch = () => {
         </Text>
 
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" ? "height" : "height"}
           keyboardVerticalOffset={Platform.OS === "ios" ? 10 : -900}
         >
           <View style={styles.country}>

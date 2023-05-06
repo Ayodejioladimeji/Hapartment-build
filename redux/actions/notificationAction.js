@@ -12,10 +12,10 @@ export const createNotification =
       });
 
       const res = await postDataApis("/create_notification", data, token);
-      Alert.alert(res.data.msg);
 
       dispatch({ type: GLOBALTYPES.CALLBACK, payload: !callback });
       navigation.navigate("NotificationScreen");
+      Alert.alert(res.data.msg);
 
       dispatch({
         type: GLOBALTYPES.LOADING,
@@ -24,12 +24,10 @@ export const createNotification =
     } catch (error) {
       Alert.alert(error?.response?.data?.msg);
 
-      setTimeout(() => {
-        dispatch({
-          type: GLOBALTYPES.LOADING,
-          payload: { createnotificationloading: false },
-        });
-      }, 1000);
+      dispatch({
+        type: GLOBALTYPES.LOADING,
+        payload: { createnotificationloading: false },
+      });
     }
   };
 

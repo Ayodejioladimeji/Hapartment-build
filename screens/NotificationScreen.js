@@ -42,7 +42,7 @@ const NotificationScreen = ({ navigation }) => {
         <NotificationSkeletal />
       ) : (
         <ScrollView style={styles.notificationWrapper}>
-          {my_notification.length !== 0 && (
+          {my_notification.length !== 0 && !loading && (
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => navigation.navigate("CreateNotification")}
