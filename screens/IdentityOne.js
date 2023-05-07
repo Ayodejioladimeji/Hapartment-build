@@ -66,7 +66,7 @@ const IdentityOne = ({ navigation }) => {
                 onBlur={() => setIsFocus(false)}
               />
 
-              <Text>Mobile No</Text>
+              <Text>Your whatsApp No</Text>
               <TextInput
                 style={[
                   styles.formInput,
